@@ -1,0 +1,54 @@
+gwas=config["<summary-file>"]
+outname=config["--out"]
+geneloc=config["--geneloc"]
+ldfile=config["--ldfile"]
+nsamples=config["--nsamples"]
+genesets=config["--genesets"]
+
+# target
+rule all:
+    input:
+        outname + "_magma/" + outname + ".sets.out"
+
+# annotation
+rule magma_annot:
+    input:
+        geneloc = geneloc,
+        bim = ldfile + ".bim"
+    output:
+        outname + "_magma/" + outname + ".genes.annot"
+    params:
+        outfile= outname + "_magma/" + outname
+    shell:
+        "magma --annotate --snp-loc {input.bim} --gene-loc {input.geneloc} --out {params.outfile}"
+
+# gene level analysis
+rule magma_gene:
+    input:
+        annot=outname + "_magma/" + outname + ".genes.annot",
+        gwas = gwas,
+        ldfiles = expand(ldfile + ".{ext}", ext=["bim", "bed", "fam"])
+    output:
+        raw=outname + "_magma/" + outname + ".genes.raw",
+        genes=outname + "_magma/" + outname + ".genes.out"
+    params:
+        outname=outname + "_magma/" + outname,
+        ldfile=ldfile,
+        nsamples = nsamples
+    shell:
+        "magma --bfile {params.ldfile} --pval {input.gwas} N={params.nsamples} "
+        "--gene-annot {input.annot} "
+        "--out {params.outname}"
+
+# gene set analysis
+rule magma_geneset:
+    input:
+        raw=outname + "_magma/" + outname + ".genes.raw",
+        genesets=genesets
+    output:
+        outname + "_magma/" + outname + ".sets.out"
+    params:
+        outfile= outname + "_magma/" + outname
+    shell:
+        "magma --gene-results {input.raw} --set-annot {input.genesets} --out {params.outfile}"
+

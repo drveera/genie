@@ -1,0 +1,45 @@
+import sys
+
+gwas=config["<summary-file>"]
+outname=config["--out"]
+ldfile=config["--ldfile"]
+
+scriptdir = sys.path[0]
+
+# format summary
+rule format_gwas:
+    input:
+        gwas = gwas
+    output:
+        temp(outname + "_gcta_cojo/indep/" + outname + ".gwas_f")
+    params:
+        rscript = scriptdir + "/format.cojo.R"
+    shell:
+        "Rscript {params.rscript} {input} {output}"
+# run cojo
+rule gcta_indep:
+     input:
+	ldfile = ldfile
+	gwas = outname + "_gcta_cojo/indep/" + outname + ".gwas_f"
+     output:
+         temp(outname + "_gcta_cojo/indep/" + outname + '{chrom}.jma.cojo')         
+     params:
+         prefix=outname + "_gcta_cojo/indep/" + outname + '{chrom}'
+     shell:
+	"gcta64  --bfile {input.ldfile} --chr {wildcards.chrom}"
+        "--maf 0.01 --cojo-file {input.gwas}"
+        "--cojo-slct --out {params.prefix}"
+
+# combine all chromosomes
+rule cojo_combine:
+    input:
+        expand(outname + "_gcta_cojo/indep/" + outname + '{chrom}.jma.cojo', chrom = list(range(1,23)))
+    output:
+        protected(outname + "_gcta_cojo/indep/" + outname + '.jma.cojo')
+    run:
+        shell("head -1 " + input[1] + " > {output}")
+        for i in input:
+            shell("cat " + i + " | sed 1d >> {output}")
+
+# run conditional analysis over the top indep snps
+

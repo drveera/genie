@@ -1,0 +1,21 @@
+import sys
+import os
+pth = sys.path[0]
+
+outfile = f"{config['--out']}/results"
+indivfile = config['--indivfile']
+missfile = config['--missfile']
+covfile = config['--covfile']
+pcfile = config["--pcfile"]
+phenofile = config["--phenofile"]
+
+s = f"Rscript {pth}//scripts/roh_analysis.R {indivfile} {missfile} {covfile} {pcfile} {phenofile} {outfile}"
+
+rule analysis:
+    input:
+        indivfile, missfile, covfile, pcfile, phenofile
+    output:
+        outfile
+    shell:
+        s
+

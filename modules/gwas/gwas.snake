@@ -1,0 +1,40 @@
+import os.path
+
+DOSES=open(config["doselist"]).readlines()
+DOSES = [i.strip() for i in DOSES]
+dosedir=config["dosedir"]
+outname=config["outname"]
+
+rule all:
+    input:
+        outname + "/" + outname + ".gwas.summary.txt"
+        
+rule assoc:
+    input:
+        dose = dosedir + "/{sample}.gz",
+        fam = dosedir + "/{sample}.fam",
+        pheno = config["pheno"],
+        covar = config["covar"]
+    output:
+        a = temp(outname + "/{sample}.assoc.dosage"),
+        b = temp(outname + "/{sample}.log"),
+        c = temp(outname + "/{sample}.ok")
+    shell:
+        "plink --dosage {input.dose} case-control-freqs --fam {input.fam} "
+        "--pheno {input.pheno} --covar {input.covar} "
+        "--out " + outname + "/{wildcards.sample} && touch {output.c}"
+
+rule combine_assoc:
+    input:
+         a=expand(outname + '/{sample}.assoc.dosage', sample=DOSES),
+         b=expand(outname + '/{sample}.log', sample=DOSES),
+         c=expand(outname + '/{sample}.ok', sample=DOSES)
+    output:
+        protected(outname + "/"+ outname +".gwas.summary.txt")
+    run:
+        for i in input.b:
+            shell("cat " + i + " >> {output}.all.log")
+        shell("head -1 " + input.a[1] + " > {output}")
+        for i in input.a:
+            shell("cat " + i + " | sed 1d >> {output}")
+        
