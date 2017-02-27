@@ -1,0 +1,2 @@
+# genie
+GEnomic Integrated suitE
