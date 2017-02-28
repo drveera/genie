@@ -1,9 +1,9 @@
-gwas=config["<summary-file>"]
-outname=config["--out"]
-geneloc=config["--geneloc"]
-ldfile=config["--ldfile"]
-nsamples=config["--nsamples"]
-genesets=config["--genesets"]
+gwas = config["<summary-file>"]
+outname = config["--out"]
+geneloc = config["--geneloc"]
+ldfile = config["--ldfile"]
+nsamples = config["--nsamples"]
+genesets = config["--genesets"]
 
 # target
 rule all:
@@ -18,22 +18,22 @@ rule magma_annot:
     output:
         outname + "_magma/" + outname + ".genes.annot"
     params:
-        outfile= outname + "_magma/" + outname
+        outfile = outname + "_magma/" + outname
     shell:
         "magma --annotate --snp-loc {input.bim} --gene-loc {input.geneloc} --out {params.outfile}"
 
 # gene level analysis
 rule magma_gene:
     input:
-        annot=outname + "_magma/" + outname + ".genes.annot",
+        annot = outname + "_magma/" + outname + ".genes.annot",
         gwas = gwas,
         ldfiles = expand(ldfile + ".{ext}", ext=["bim", "bed", "fam"])
     output:
-        raw=outname + "_magma/" + outname + ".genes.raw",
-        genes=outname + "_magma/" + outname + ".genes.out"
+        raw = outname + "_magma/" + outname + ".genes.raw",
+        genes = outname + "_magma/" + outname + ".genes.out"
     params:
-        outname=outname + "_magma/" + outname,
-        ldfile=ldfile,
+        outname = outname + "_magma/" + outname,
+        ldfile = ldfile,
         nsamples = nsamples
     shell:
         "magma --bfile {params.ldfile} --pval {input.gwas} N={params.nsamples} "
@@ -43,12 +43,12 @@ rule magma_gene:
 # gene set analysis
 rule magma_geneset:
     input:
-        raw=outname + "_magma/" + outname + ".genes.raw",
-        genesets=genesets
+        raw = outname + "_magma/" + outname + ".genes.raw",
+        genesets = genesets
     output:
         outname + "_magma/" + outname + ".sets.out"
     params:
-        outfile= outname + "_magma/" + outname
+        outfile = outname + "_magma/" + outname
     shell:
         "magma --gene-results {input.raw} --set-annot {input.genesets} --out {params.outfile}"
 
