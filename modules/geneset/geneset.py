@@ -18,6 +18,8 @@ options:
 '''
 
 from docopt import docopt
+import sys
+sys.path.insert(1, sys.path[0] + '/../../library')
 import md
 
 if __name__ == '__main__':
