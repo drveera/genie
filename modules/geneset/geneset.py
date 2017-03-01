@@ -14,6 +14,8 @@ options:
  --nsamples=NUMBER  number of samples [default: 10000]
  --genesets=FILE    genesets file in gmt format [default: |resources/magma/msigdb.v5.2.symbols.gmt]
  --nojob            run on the front end
+ <summary-file>     a single summary file or a text file(with extension .list) containing the list of summary files
+
 
 '''
 
