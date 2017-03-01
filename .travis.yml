@@ -8,4 +8,7 @@ install:
  
 script:
  - python genie.py -h
+ - python genie.py geneset -h
+ - python genie.py gwas -h
+ - python genie.py rohs -h 
  
