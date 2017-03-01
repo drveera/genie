@@ -12,7 +12,7 @@ options:
     --covfile=FILE       covar file [default: |resources/rohs/covar_uni.ssv]
     --pcfile=FILE        pc file
     --phenofile=FILE     phenotype file
-    --nojob              if you want to run in front end
+    --nojob              run on the front end
 '''
 
 from docopt import docopt
