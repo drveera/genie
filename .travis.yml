@@ -3,7 +3,7 @@ language: python
 python:
  - "3.6"
 
-installs:
+install:
  - pip install docopt
  
 script:
