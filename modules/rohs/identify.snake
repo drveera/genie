@@ -1,0 +1,70 @@
+import os
+out = config['--out']
+data = config['<plink-data>']
+
+os.chdir(config['--outfolder'])
+
+qcdata = f"{out}_data-qc"
+pruned = f"{out}_pruned"
+prunefile = f"{out}.prune.in"
+missingfile = f"{out}.imiss"
+homfile = f"{out}.hom"
+indivfile = f"{out}.hom.indiv"
+
+
+def plink(data):
+    return expand(data + ".{ext}", ext=['bim', 'bed', 'fam'])
+
+
+rule all:
+    input:
+        homfile, indivfile
+
+
+rule qc:
+    input:
+        plink(data)
+    output:
+        plink(qcdata)
+    shell:
+        "plink --bfile {data} --maf 0.02 --mind 0.02 --make-bed --out {qcdata}"
+
+
+rule make_prunefile:
+    input:
+        plink(qcdata)
+    output:
+        prunefile
+    shell:
+        "plink --bfile {qcdata} --indep-pairwise 50 5 0.9 --out {out}"
+
+
+rule prune:
+    input:
+        plink(qcdata), prunefile
+    output:
+        plink(pruned)
+    shell:
+        "plink --bfile {qcdata} --extract {prunefile} --make-bed --out {pruned}"
+
+
+rule find_missing:
+    input:
+        plink(pruned)
+    output:
+        missingfile
+    shell:
+        "plink --bfile {qcdata} --missing --out {out}"
+
+
+rule find_rohs:
+    input:
+        plink(pruned)
+    output:
+        homfile, indivfile
+    shell:
+        "plink --bfile {pruned} --homozyg --homozyg-kb 500 --homozyg-snp 65 "
+         "--homozyg-density 200 --homozyg-gap 500 --homozyg-het 0 --out {out}"
+
+
+

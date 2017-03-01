@@ -1,6 +1,6 @@
 #!/bin/env python
 
-'''ipsych geneset <command> <arguments>
+'''genie geneset <command> <arguments>
 
 usage:
  genie geneset magma [--out=PREFIX] [--geneloc=FILE] [--ldfile=FILE] [--nsamples=NUMBER] [--genesets=FILE] [--nojob] [--] <summary-file>
@@ -13,8 +13,9 @@ options:
  --ldfile=FILE      reference file in plink format [default: |resources/magma/dbs1-23.bgs.merged.raw]
  --nsamples=NUMBER  number of samples [default: 10000]
  --genesets=FILE    genesets file in gmt format [default: |resources/magma/msigdb.v5.2.symbols.gmt]
- --nojob            if you want to run in front end
+ --nojob            run on the front end
  <summary-file>     a single summary file or a text file(with extension .list) containing the list of summary files
+
 
 '''
 
