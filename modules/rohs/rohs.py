@@ -2,14 +2,16 @@
 
 '''genie rohs <command> <arguments>
 
+
 usage:
-    genie rohs analyze [options] [--]
+    genie rohs identify [--out=PREFIX] [--nojob] <plink-data>
+    genie rohs analyze [--out=PREFIX] [--indivfile=FILe] [--missfile=FILE] [--covfile=FILE] [--pcfile=FILE] <phenofile>
 
 options:
-    --out=DIR            output directory [default: rohs]
-    --indivfile=FILE     indiv file [default: |resources/rohs/data.hom.indiv]
-    --missfile=FILE      miss file [default: |resources/rohs/pruned.imiss]
-    --covfile=FILE       covar file [default: |resources/rohs/covar_uni.ssv]
+    --out=PREFIX         outname prefix [default: rohs]
+    --indivfile=FILE     indiv file
+    --missfile=FILE      miss file
+    --covfile=FILE       covar file
     --pcfile=FILE        pc file
     --phenofile=FILE     phenotype file
     --nojob              run on the front end
@@ -21,5 +23,5 @@ sys.path.insert(1, sys.path[0] + '/../../library')
 import md
 
 if __name__ == '__main__':
-    md.main(docopt(__doc__), ['analyze'])
+    md.main(docopt(__doc__), ['analyze', 'identify'])
 
