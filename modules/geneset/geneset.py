@@ -8,7 +8,7 @@ usage:
  genie geneset fastbat [options] [--] <summary-file>
 
 options:
- --out=PREFIX       outname prefix[default: ipsych_magma]
+ --out=PREFIX       outname prefix[default: output]
  --geneloc=FILE     geneloc file [default: |resources/magma/NCBI37.3.gene.loc.formatted]
  --ldfile=FILE      reference file in plink format [default: |resources/magma/dbs1-23.bgs.merged.raw]
  --nsamples=NUMBER  number of samples [default: 10000]
@@ -23,8 +23,5 @@ sys.path.insert(1, sys.path[0] + '/../../library')
 import md
 
 if __name__ == '__main__':
-    args = docopt(__doc__)
-    methods = ['magma', 'vegas' 'fastbat']
-    method = next(arg for arg in methods if arg in args)
-    md.main(args, method)
+    md.main(docopt(__doc__), ['magma', 'vegas', 'fastbat'])
 

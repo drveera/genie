@@ -1,54 +1,48 @@
-gwas = config["<summary-file>"]
-outname = config["--out"]
-geneloc = config["--geneloc"]
-ldfile = config["--ldfile"]
-nsamples = config["--nsamples"]
-genesets = config["--genesets"]
+gwas = config['<summary-file>']
+outname = config['--out']
+outfolder = config['--outfolder']
+geneloc = config['--geneloc']
+ldfile = config['--ldfile']
+nsamples = config['--nsamples']
+genesets = config['--genesets']
+
+base = f"{outfolder}/{outname}"
+annot = f"{base}.genes.annot"
+raw = f"{base}.genes.raw"
+outfile = f"{base}.sets.out"
+genes = f"{base}.genes.out"
+ldfiles = expand(ldfile + ".{ext}", ext=["bim", "bed", "fam"])
+bim = f"{ldfile}.bim"
 
 
 rule all:
     input:
-        outname + "_magma/" + outname + ".sets.out"
+        outfile
 
 
 rule magma_annot:
     input:
-        geneloc = geneloc,
-        bim = ldfile + ".bim"
+        geneloc, bim
     output:
-        outname + "_magma/" + outname + ".genes.annot"
-    params:
-        outfile = outname + "_magma/" + outname
+        annot
     shell:
-        "magma --annotate --snp-loc {input.bim} --gene-loc {input.geneloc} --out {params.outfile}"
+        "magma --annotate --snp-loc {bim} --gene-loc {geneloc} --out {base}"
 
 
 rule magma_gene:
     input:
-        annot = outname + "_magma/" + outname + ".genes.annot",
-        gwas = gwas,
-        ldfiles = expand(ldfile + ".{ext}", ext=["bim", "bed", "fam"])
+        annot, gwas, ldfiles
     output:
-        raw = outname + "_magma/" + outname + ".genes.raw",
-        genes = outname + "_magma/" + outname + ".genes.out"
-    params:
-        outname = outname + "_magma/" + outname,
-        ldfile = ldfile,
-        nsamples = nsamples
+        raw, genes
     shell:
-        "magma --bfile {params.ldfile} --pval {input.gwas} N={params.nsamples} "
-        "--gene-annot {input.annot} "
-        "--out {params.outname}"
+        "magma --bfile {ldfile} --pval {gwas} N={nsamples} --gene-annot {annot} --out {base}"
 
 
 rule magma_geneset:
     input:
-        raw = outname + "_magma/" + outname + ".genes.raw",
-        genesets = genesets
+        raw, genesets
     output:
-        outname + "_magma/" + outname + ".sets.out"
-    params:
-        outfile = outname + "_magma/" + outname
+        outfile
     shell:
-        "magma --gene-results {input.raw} --set-annot {input.genesets} --out {params.outfile}"
+        "magma --gene-results {raw} --set-annot {genesets} --out {base}"
 
