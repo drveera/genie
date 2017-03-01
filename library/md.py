@@ -20,6 +20,7 @@ def main(args, method):
     cmds = "snakemake -j 999 " \
           f"--cluster-config {maindir}/library/cluster.json " \
           f"--configfile {debugdir}/config.json " \
+          f"--nolock " \
           f"-s {methoddir}/{method}.snake"
 
     if args['--nojob']:
