@@ -1,6 +1,6 @@
 #!/bin/env python
 
-'''ipsych geneset <command> <arguments>
+'''genie geneset <command> <arguments>
 
 usage:
  genie geneset magma [--out=PREFIX] [--geneloc=FILE] [--ldfile=FILE] [--nsamples=NUMBER] [--genesets=FILE] [--nojob] [--] <summary-file>
