@@ -6,10 +6,13 @@ methoddir = sys.path[0]
 maindir = methoddir + "/../../"
 
 
-def main(args, method):
+def main(args, methods):
+    method = next(arg for arg in methods if arg in args and args[arg])
+
     args = process_arguments(args)
 
-    outfolder = f"{args['--out']}_{method}" #[jp] It seems this is not required
+    outfolder = f"genie_{method}"
+    args['--outfolder'] = outfolder
     debugdir = f"_debug/{outfolder}"
 
     os.makedirs(debugdir, exist_ok=True)

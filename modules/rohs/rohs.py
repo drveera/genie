@@ -21,8 +21,5 @@ sys.path.insert(1, sys.path[0] + '/../../library')
 import md
 
 if __name__ == '__main__':
-    args = docopt(__doc__)
-    methods = ['analyze']
-    method = next(arg for arg in methods if arg in args)
-    md.main(args, method)
+    md.main(docopt(__doc__), ['analyze'])
 
