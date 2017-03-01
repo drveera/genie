@@ -1,3 +1,4 @@
 *.swp
+*~
 library/__pycache__/
 resources/
