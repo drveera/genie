@@ -11,7 +11,8 @@ def main(args, methods):
 
     args = process_arguments(args)
 
-    outfolder = f"genie_{method}"
+    outfolder = f"genie_{method}/{args['--out']}"
+    print(outfolder)
     args['--outfolder'] = outfolder
     debugdir = f"_debug/{outfolder}"
 
