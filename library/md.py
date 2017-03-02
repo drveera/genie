@@ -10,7 +10,6 @@ def main(args, methods):
     method = next(arg for arg in methods if arg in args and args[arg])
 
     args = process_arguments(args)
-
     outfolder = f"genie_{method}"
     args['--outfolder'] = outfolder
     debugdir = f"_debug/{outfolder}"
@@ -56,3 +55,8 @@ def run_job(debugdir, outname, scmds):
 
     os.system(f"sbatch --time=12:00:00 -e {debugdir}/master.error -o {debugdir}/master.out {jobscript}")
 
+def process_list(argument):
+    if ".list" in argument:
+        return [x.strip() for x in list(open(argument))]
+    else:
+        return [argument]

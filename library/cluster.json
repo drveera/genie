@@ -5,5 +5,5 @@
         "n" : 1,
         "partition" : "core",
 	"mem": "16g"
-    },
+    }
 }
