@@ -1,4 +1,8 @@
+import sys
+sys.path.insert(1, sys.path[0] + '/../../library')
+from md import process_list
 gwas = config['<summary-file>']
+gwas = process_list(gwas)
 outname = config['--out']
 outfolder = config['--outfolder']
 geneloc = config['--geneloc']
@@ -8,16 +12,16 @@ genesets = config['--genesets']
 
 base = f"{outfolder}/{outname}"
 annot = f"{base}.genes.annot"
-raw = f"{base}.genes.raw"
-outfile = f"{base}.sets.out"
-genes = f"{base}.genes.out"
+raw = expand(base + "{summary}.genes.raw", summary = gwas)
+outfile = expand(base + ".{summary}.sets.out", summary = gwas)
+genes = expand(base + ".{summary}.genes.out", summary = gwas)
 ldfiles = expand(ldfile + ".{ext}", ext=["bim", "bed", "fam"])
 bim = f"{ldfile}.bim"
 
 
 rule all:
     input:
-        outfile
+        expand(base + ".{summary}.sets.out", summary = gwas)
 
 
 rule magma_annot:
@@ -31,18 +35,22 @@ rule magma_annot:
 
 rule magma_gene:
     input:
-        annot, gwas, ldfiles
+        annot = annot,
+        gwas = "{summary}",
+        ldfiles = ldfiles
     output:
-        raw, genes
+        raw = base + ".{summary}.genes.raw",
+        genes = base + ".{summary}.genes.out"
     shell:
-        "magma --bfile {ldfile} --pval {gwas} N={nsamples} --gene-annot {annot} --out {base}"
+        "magma --bfile {ldfile} --pval {input.gwas} N={nsamples} --gene-annot {input.annot} --out {base}.{wildcards.summary}"
 
 
 rule magma_geneset:
     input:
-        raw, genesets
+        raw = base + ".{summary}.genes.raw",
+        genesets = genesets
     output:
-        outfile
+        base + ".{summary}.sets.out"
     shell:
-        "magma --gene-results {raw} --set-annot {genesets} --out {base}"
+        "magma --gene-results {input.raw} --set-annot {input.genesets} --out {base}.{wildcards.summary}"
 
