@@ -17,7 +17,7 @@ def main(args, methods):
     os.makedirs(debugdir, exist_ok=True)
     os.makedirs(outfolder, exist_ok=True)
 
-    write_json(args, debugdir)
+    write_config(args, debugdir)
 
     cmds = "snakemake -j 999 " \
           f"--cluster-config {maindir}/library/cluster.json " \
@@ -38,7 +38,7 @@ def process_arguments(args):
     return args
 
 
-def write_json(args, debugdir):
+def write_config(args, debugdir):
     with open(debugdir + '/config.json', 'w') as outfile:
         json.dump(args, outfile, indent=4)
 
