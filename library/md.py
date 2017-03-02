@@ -10,7 +10,9 @@ def main(args, methods):
     method = next(arg for arg in methods if arg in args and args[arg])
 
     args = process_arguments(args)
-    outfolder = f"genie_{method}"
+
+    outfolder = f"genie_{method}/{args['--out']}"
+
     args['--outfolder'] = outfolder
     debugdir = f"_debug/{outfolder}"
 
