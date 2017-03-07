@@ -19,13 +19,11 @@ options:
 
 from docopt import docopt
 import sys
-sys.path.insert(1, sys.path[0] + '/../../library')
+sys.path.insert(1, sys.path[0] + '/../../../library')
 import md
 from md import process_list
 
 arguments = docopt(__doc__)
-#arguments['<summary-file>'] = process_list(arguments['<summary-file>'])
-
 if __name__ == '__main__':
     md.main(arguments, ['magma', 'vegas', 'fastbat'])
 
