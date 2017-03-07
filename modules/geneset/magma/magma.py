@@ -25,5 +25,6 @@ from md import process_list
 
 arguments = docopt(__doc__)
 if __name__ == '__main__':
-    md.main(arguments, ['magma', 'vegas', 'fastbat'])
+    print(arguments)
+    #md.main(arguments, ['magma', 'vegas', 'fastbat'])
 

@@ -13,6 +13,7 @@ gwas      run gwas
 geneset   run gene/geneset analysis using gwas summary file
 cojo      run gcta conditional and joint analysis using summary file
 rohs      run analysis of runs of homozygosity
+prs       run polygenic risk score analysis
 
 See 'genie <command> --help' for more information on a specific command.
 For example, type 'ipsych geneset --help'
@@ -32,7 +33,7 @@ import sys
 ########################################################################################################
 #CHECK IF VALID COMMAND
 command = arguments['<command>']
-modules = ['gwas', 'geneset', 'rohs', 'cojo']
+modules = ['gwas', 'geneset', 'rohs', 'cojo', 'prs']
 if command not in modules:
     exit(command + " is a not valid command")
 ########################################################################################################
