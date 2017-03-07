@@ -1,9 +1,8 @@
 #!/bin/env python
 
 '''
-
 usage:
- genie geneset magma [options] <summary-file>
+ geneset magma [options] <summary-file>
 
 options:
  --out=PREFIX       outname prefix[default: output]
@@ -25,6 +24,5 @@ from md import process_list
 
 arguments = docopt(__doc__)
 if __name__ == '__main__':
-    print(arguments)
-    #md.main(arguments, ['magma', 'vegas', 'fastbat'])
+    md.main(arguments, ['magma', 'vegas', 'fastbat'])
 

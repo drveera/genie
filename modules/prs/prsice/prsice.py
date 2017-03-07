@@ -3,15 +3,20 @@
 '''
 
 usage:
- prs prsice [options] --base=FILE --target=FILE --pheno=FILE 
+ prs prsice [options] --base=FILE --target=FILE 
 
 options:
  --base=FILE       training sample
  --target=FILE     target sample
- --pheno=FILE      phenotype file of target sample
- --slower=NUMBER   if slower  [default: 0]
+ --pheno=FILE      external pheno file
+ --slower=NUMBER   lower limit  [default: 0]
+ --supper=NUMBER   upper limit [default: 0.5]
  --sinc=NUMBER     p-value increments  [default: 0.01]
- --covary          if covariates to be adjusted 
+ --out=PREFIX      outname prefix [default: prs]
+ --covary          if covariates to be adjusted
+ --clump           if clumping need to be done
+ --quantitative    if using quantitative target  
+ --nojob           if should be run in front end
 
 '''
 from docopt import docopt
@@ -22,4 +27,4 @@ from md import process_list
 
 arguments = docopt(__doc__)
 if __name__ == '__main__':
-    print(arguments)
+    md.main(arguments,['prsice'])

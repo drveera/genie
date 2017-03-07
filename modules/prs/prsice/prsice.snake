@@ -1,0 +1,54 @@
+import sys
+sys.path.insert(1, sys.path[0] + '/../../../library')
+from md import process_list
+from os.path import basename
+
+train = config['--base']
+train = process_list(train)
+train_base = [basename(x) for x in train]
+
+target = config['--target']
+slower = config['--slower']
+supper = config['--supper']
+sinc = config['--sinc']
+covary = config['--covary']
+clump = config['--clump']
+pheno = config['--pheno']
+if config['--quantitative']:
+    binary = 'F'
+else:
+    binary = 'T'
+
+outfolder = config['--outfolder']
+outname= config['--out']
+
+base = f"{outfolder}/{outname}"
+
+prsice_r = '/home/veera/faststorage/pipelines/genie/resources/prs/prsice/PRSice_v1.25.R'
+rule all:
+    input:
+        expand(base + "_{train_base}"+ "_BARPLOT_.png", train_base = train_base),
+        expand(base + "_{train_base}"+ "_HIGH-RES_PLOT_.png", train_base = train_base),
+        expand(base + "_{train_base}"+ "_RAW_RESULTS_DATA.txt", train_base = train_base),
+        expand(base + "_{train_base}"+ "_SCORES_AT_BEST-FIT-PRS.txt", train_base = train_base)
+        
+rule prs:
+    input:
+        train, expand(target + '.{ext}', ext = ['bed','bim','fam'])
+    output:
+        expand(base + "_{train_base}"+ "_BARPLOT_.png", train_base = train_base),
+        expand(base + "_{train_base}"+ "_HIGH-RES_PLOT_.png", train_base = train_base),
+        expand(base + "_{train_base}"+ "_RAW_RESULTS_DATA.txt", train_base = train_base),
+        expand(base + "_{train_base}"+ "_SCORES_AT_BEST-FIT-PRS.txt", train_base = train_base)
+    shell:
+        "Rscript {prsice_r} -q --args "
+        "plink /com/extra/plink/1.90-beta-2016-03/bin/plink "
+        "base {train} "
+        "target {target} "
+        "slower {slower} "
+        "supper {supper} "
+        "sinc {sinc} "
+        "covary {covary} "
+        "clump.snps {clump} "
+        "binary.target {binary} "
+        "figname {base}_{train_base}"

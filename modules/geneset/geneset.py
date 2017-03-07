@@ -6,7 +6,8 @@ usage:
  genie geneset <method> [<args>...]
 
 The following geneset methods are available:
-COMMAND
+
+COMMAND DESCRIPTION
 magma
 vegas
 fastbat

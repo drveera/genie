@@ -3,7 +3,7 @@ import os
 import json
 
 methoddir = sys.path[0]
-maindir = methoddir + "/../../"
+maindir = methoddir + "/../../../"
 
 
 def main(args, methods):
