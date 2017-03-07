@@ -2,7 +2,7 @@
 
 ## this main docopt file. This will call all the sub docopt files based on the commands.
 
-'''ipsych
+'''genie
 
 usage:
  genie <command> [<args>...]
@@ -14,8 +14,8 @@ geneset   run gene/geneset analysis using gwas summary file
 cojo      run gcta conditional and joint analysis using summary file
 rohs      run analysis of runs of homozygosity
 
-See 'ipsych help <command> --help' for more information on a specific command.
-For example, type 'ipsych magma --help'
+See 'genie <command> --help' for more information on a specific command.
+For example, type 'ipsych geneset --help'
 
 '''
 
