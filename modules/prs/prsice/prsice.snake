@@ -1,12 +1,14 @@
 import sys
 sys.path.insert(1, sys.path[0] + '/../../../library')
-from md import process_list
+from md import process_list 
 from os.path import basename
 
-train = config['--base']
-train = process_list(train)
-train_base = [basename(x) + "/" + basename(x) for x in train]
+outfolder = config['--outfolder']
+outname= config['--out']
 
+train = config['--base']
+train = process_list(train,outfolder)
+#train_base = [basename(x) + "/" + basename(x) for x in train]
 target = config['--target']
 slower = config['--slower']
 supper = config['--supper']
@@ -19,37 +21,39 @@ if config['--quantitative']:
 else:
     binary = 'T'
 
-outfolder = config['--outfolder']
-outname= config['--out']
+
 
 base = f"{outfolder}/{outname}"
 
 prsice_r = sys.path[0] + '/../../../resources/prs/prsice/PRSice_v1.25.R'
 rule all:
     input:
-        expand(base + "_{train_base}"+ "_BARPLOT_.png", train_base = train_base),
-        expand(base + "_{train_base}"+ "_HIGH-RES_PLOT_.png", train_base = train_base),
-        expand(base + "_{train_base}"+ "_RAW_RESULTS_DATA.txt", train_base = train_base),
-        expand(base + "_{train_base}"+ "_SCORES_AT_BEST-FIT-PRS.txt", train_base = train_base)
+        expand(base + "_{train}_BARPLOT_.png", train = train),
+        #base + "_{train}_HIGH-RES_PLOT_.png",
+        #base + "_{train}_RAW_RESULTS_DATA.txt",
+        #base + "_{train}_SCORES_AT_BEST-FIT-PRS.txt"
+        expand(base + "_{train}_HIGH-RES_PLOT_.png", train = train),
+        expand(base + "_{train}_RAW_RESULTS_DATA.txt", train = train),
+        expand(base + "_{train}_SCORES_AT_BEST-FIT-PRS.txt", train = train)
         
 rule prs:
     input:
-        train = train,
-        target = expand(target + '.{ext}', ext = ['bed','bim','fam'])
+        train_summary = outfolder + "/._infiles/{train}",
+        target_plink = expand(target + '.{ext}', ext = ['bed','bim','fam'])
     output:
-        expand(base + "_{train_base}"+ "_BARPLOT_.png", train_base = train_base),
-        expand(base + "_{train_base}"+ "_HIGH-RES_PLOT_.png", train_base = train_base),
-        expand(base + "_{train_base}"+ "_RAW_RESULTS_DATA.txt", train_base = train_base),
-        expand(base + "_{train_base}"+ "_SCORES_AT_BEST-FIT-PRS.txt", train_base = train_base)
+        base + "_{train}_BARPLOT_.png",
+        base + "_{train}_HIGH-RES_PLOT_.png",
+        base + "_{train}_RAW_RESULTS_DATA.txt",
+        base + "_{train}_SCORES_AT_BEST-FIT-PRS.txt", 
     shell:
         "Rscript {prsice_r} -q --args "
         "plink /com/extra/plink/1.90-beta-2016-03/bin/plink "
-        "base {input.train} "
-        "target {input.target} "
+        "base {input.train_summary} "
+        "target {target} "
         "slower {slower} "
         "supper {supper} "
         "sinc {sinc} "
         "covary {covary} "
         "clump.snps {clump} "
         "binary.target {binary} "
-        "figname {base}_{train_base}"
+        "figname {base}_{wildcards.train}"

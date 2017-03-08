@@ -1,5 +1,6 @@
 import sys
 import os
+from os.path import basename
 import json
 
 methoddir = sys.path[0]
@@ -57,8 +58,20 @@ def run_job(debugdir, outname, scmds):
 
     os.system(f"sbatch --time=12:00:00 -e {debugdir}/master.error -o {debugdir}/master.out {jobscript}")
 
-def process_list(argument):
-    if ".list" in argument:
-        return [x.strip() for x in list(open(argument))]
-    else:
-        return [argument]
+
+def process_list(argument, outfolder):
+        if ".list" in argument:
+            os.makedirs(f"{outfolder}/._infiles", exist_ok = True)
+            argument_list = [x.strip() for x in list(open(argument))]
+            for x in argument_list:
+                dest=f"{outfolder}/._infiles/{basename(x)}"
+                if not os.path.lexists(dest):
+                    os.symlink(x,dest)               
+            return [basename(x) for x in argument_list]
+
+        else:
+            dets=f"{outfolder}/._infiles/{basename(argument)}"
+            if not os.path.lexists(dest):
+                os.symlink(argument, dest)
+            return [basename(argument)]
+
