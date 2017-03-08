@@ -24,7 +24,7 @@ outname= config['--out']
 
 base = f"{outfolder}/{outname}"
 
-prsice_r = '/home/veera/faststorage/pipelines/genie/resources/prs/prsice/PRSice_v1.25.R'
+prsice_r = sys.path[0] + '/../../../resources/prs/prsice/PRSice_v1.25.R'
 rule all:
     input:
         expand(base + "_{train_base}"+ "_BARPLOT_.png", train_base = train_base),
