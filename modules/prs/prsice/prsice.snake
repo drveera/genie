@@ -34,7 +34,8 @@ rule all:
         
 rule prs:
     input:
-        train = train, expand(target + '.{ext}', ext = ['bed','bim','fam'])
+        train = train,
+        target = expand(target + '.{ext}', ext = ['bed','bim','fam'])
     output:
         expand(base + "_{train_base}"+ "_BARPLOT_.png", train_base = train_base),
         expand(base + "_{train_base}"+ "_HIGH-RES_PLOT_.png", train_base = train_base),
@@ -43,8 +44,8 @@ rule prs:
     shell:
         "Rscript {prsice_r} -q --args "
         "plink /com/extra/plink/1.90-beta-2016-03/bin/plink "
-        "base {train} "
-        "target {target} "
+        "base {input.train} "
+        "target {input.target} "
         "slower {slower} "
         "supper {supper} "
         "sinc {sinc} "
