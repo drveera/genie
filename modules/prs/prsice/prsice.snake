@@ -5,7 +5,7 @@ from os.path import basename
 
 train = config['--base']
 train = process_list(train)
-train_base = [basename(x) for x in train]
+train_base = [basename(x) + "/" + basename(x) for x in train]
 
 target = config['--target']
 slower = config['--slower']
@@ -34,7 +34,7 @@ rule all:
         
 rule prs:
     input:
-        train, expand(target + '.{ext}', ext = ['bed','bim','fam'])
+        train = train, expand(target + '.{ext}', ext = ['bed','bim','fam'])
     output:
         expand(base + "_{train_base}"+ "_BARPLOT_.png", train_base = train_base),
         expand(base + "_{train_base}"+ "_HIGH-RES_PLOT_.png", train_base = train_base),
