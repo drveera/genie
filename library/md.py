@@ -2,10 +2,13 @@ import sys
 import os
 from os.path import basename
 import json
+import re
 
 methoddir = sys.path[0]
-maindir = methoddir + "/../../../"
-
+#here we assume that the method is always 2 levels down mainfolder, ex, ./module/method/.
+#maindir = methoddir + "/../../../"
+#so we grep search genie instead
+maindir = re.search(r'.*genie/',methoddir).group()
 
 def main(args, methods):
     method = next(arg for arg in methods if arg in args and args[arg])
@@ -13,8 +16,11 @@ def main(args, methods):
     args = process_arguments(args)
 
     outfolder = f"genie_{method}/{args['--out']}"
+    pfix = f"{outfolder}/{args['--out']}"
 
+    args[f"--pfix_{method}"] = pfix
     args['--outfolder'] = outfolder
+
     debugdir = f"_debug/{outfolder}"
 
     os.makedirs(debugdir, exist_ok=True)

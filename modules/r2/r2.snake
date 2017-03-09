@@ -1,0 +1,15 @@
+#!/bin/env python
+
+r1_file = config['--r1']
+pfix = config['--pfix_r2']
+
+rule all_r2:
+    input: expand(f"{pfix}_" + '{ext}', ext = ['part1', 'part2'])
+
+rule r2_one:
+    input: r1_file
+           
+    output: expand(f"{pfix}_" + '{ext}', ext = ['part1', 'part2'])
+    run:
+        shell("cut -f -2 -d ' ' {input} > {output[0]}")
+        shell("cut -f 3- -d ' ' {input} > {output[1]}")

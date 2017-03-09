@@ -1,0 +1,13 @@
+{
+    "--r1": [
+        "genie_r1/test/test_r1"
+    ],
+    "--pfix_r2": "genie_r2/test/test",
+    "--pfix_r1": "genie_r1/test/test",
+    "_method": "r1",
+    "--fname": "blankfile",
+    "pipe_output": "_r1",
+    "pipe_input": "--r1",
+    "pipein": "None",
+    "--out": "r1"
+}

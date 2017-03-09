@@ -1,0 +1,8 @@
+{
+    "_method":"r2",
+    "--r1" : "ENTER",
+    "--out" : "r2",
+    "pipein" : ["r1"],
+    "pipe_input" : "--r1",
+    "pipe_output" : "_r1"
+}

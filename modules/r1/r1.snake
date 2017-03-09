@@ -1,0 +1,14 @@
+#!/bin/env python
+
+blankfile = config['--fname']
+pfix = config['--pfix_r1']
+
+rule all:
+    input: f"{pfix}_r1"
+rule one:
+    input: blankfile
+    output: f"{pfix}_r1"
+    run:
+        for i in range(10):
+            shell("echo 'a b c d' >> {output}")
+            
