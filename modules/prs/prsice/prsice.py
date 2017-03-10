@@ -23,7 +23,6 @@ from docopt import docopt
 import sys
 sys.path.insert(1, sys.path[0] + '/../../../library')
 import md
-from md import process_list
 
 arguments = docopt(__doc__)
 if __name__ == '__main__':

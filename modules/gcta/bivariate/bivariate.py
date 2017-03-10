@@ -15,6 +15,7 @@ options:
  --reml-bivar-prevalence=NUMBERS   For a bivariate analysis of two disease traits, 
                                    specify the prevalence rates of the two diseases 
  --nojob                           if should run in front end
+ --dry-run                         just show the execution codes
 
 '''
 

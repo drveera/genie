@@ -34,7 +34,9 @@ def main(args, methods):
           f"--nolock " \
           f"-s {methoddir}/{method}.snake"
 
-    if args['--nojob']:
+    if args['--dry-run']:
+        os.system(cmds + " -n")
+    elif args['--nojob']:
         os.system(cmds)
     else:
         run_job(debugdir, args['--out'], cmds)
@@ -56,8 +58,8 @@ def run_job(debugdir, outname, scmds):
 
     cmds = f"#!/bin/sh \n {scmds} " \
            f"--jobname {outname}.{{rulename}}.{{jobid}} " \
-           f"--cluster 'sbatch -e {debugdir}/e.error -o {debugdir}/o.out --mem={{cluster.mem}} 
---time={{cluster.time}} -c {{cluster.cores}}' " \
+           f"--cluster 'sbatch -e {debugdir}/e.error -o {debugdir}/o.out " \
+           f"--mem={{cluster.mem}} --time={{cluster.time}} -c {{cluster.cores}}' " 
 
     jobscript = debugdir + '/jobscript.sh'
     with open(jobscript, 'w') as outfile:
