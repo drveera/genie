@@ -1,0 +1,24 @@
+#!/bin/env python
+
+grm = config["--grm"]
+pfix = config["pfix_bivariate"]
+nocov = config["--reml-bivar-nocove"]
+hypo = config["--reml-bivar-lrt-rg"]
+preval = config["--reml-bivar-prevalence"]
+pheno = config["--pheno"]
+outfile = f"{pfix}.hsq"
+
+rule gcta_bivariate_all:
+    input: outfile
+
+rule gcta_bivariate_one:
+    input: f"{grm}.grm.bin", f"{grm}.grm.id",f"{grm}.grm.N.bin", pheno
+    output: outfile
+    run:
+        shell("gcta64 --reml-bivar  --grm {grm} --pheno {pheno} --out {pfix} --thread-num 16 {nocov} {hypo} {preval}"
+              .format(grm = grm,
+                      pheno = pheno,
+                      pfix = pfix,
+                      nocov = "--reml-bivar-nocove" if nocov  else "",
+                      hypo = "--reml-bivar-lrt-rg " + hypo if hypo is not None else "",
+                      preval = "--reml-bivar-prevalence " + preval if preval is not None else ""))

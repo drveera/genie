@@ -18,7 +18,7 @@ def main(args, methods):
     outfolder = f"genie_{method}/{args['--out']}"
     pfix = f"{outfolder}/{args['--out']}"
 
-    args[f"--pfix_{method}"] = pfix
+    args[f"pfix_{method}"] = pfix
     args['--outfolder'] = outfolder
 
     debugdir = f"_debug/{outfolder}"
