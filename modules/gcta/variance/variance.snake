@@ -1,0 +1,48 @@
+#!/bin/env snakemake
+sys.path.insert(1, sys.path[0] + '/../../../library')
+from md import process_list
+
+########SYS PARAMS##########
+pfix = config["pfix_variance"]
+outfolder = config['--outfolder']
+
+########USER PARAMS##########
+grm = config['--grm']
+covar = config['--covar']
+qcovar = config['--qcovar']
+keep = config['--keep']
+prevalence = config['--prevalence']
+gxe = config['--gxe']
+lrt = config['--reml-lrt']
+mpheno = config['--mpheno']
+########WILD CARD##########
+pheno = config["--pheno"]
+pheno = process_list(pheno,config['--outfolder'])
+wcard = f"{outfolder}/._infiles/{{pheno}}"
+outfile = f"{pfix}_{{pheno}}.hsq"
+outfile_base = f"{pfix}_{{pheno}}"
+
+
+rule gcta_variance_all:
+    input: expand(outfile, pheno = pheno)
+
+rule gcta_variance_one:
+    input:
+        a = f"{grm}.grm.bin",
+        b = f"{grm}.grm.id",
+        c = f"{grm}.grm.N.bin",
+        d = wcard
+    params: a = outfile_base
+    output: outfile
+    run:
+        shell("gcta64 --reml --grm {grm} --pheno {{input.d}} \
+        --out {{params.a}} --thread-num 16 \
+        {mpheno} {covar} {qcovar} {keep} {prevalence} {gxe} {lrt}"
+        .format(grm = grm,
+                mpheno = "--mpheno " + mpheno if mpheno is not None else "",
+                covar = "--covar " + covar if covar is not None else "",
+                qcovar = "--qvar " + qcovar if qcovar is not None else "",
+                keep = "--keep " + keep if keep is not None else "",
+                prevalence = prevalence if prevalence is not None else "",
+                gxe = "--gxe" if gxe else "",
+                lrt = "--lrt " + lrt if lrt is not None else ""))

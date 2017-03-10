@@ -8,7 +8,9 @@ usage:
 The following methods are available:
 
 COMMAND     DESCRIPTION
+variance    estimate heritability
 bivariate   GCTA bivariate GREML analysis
+
 
 type "genie gcta <method> --help for more information on specific method
 For example, type 'genie gcta bivariate --help'
@@ -27,7 +29,7 @@ argv = [arguments['<method>']] + arguments['<args>']
 ########################################################################################################
 # CHECK IF METHOD IS VALID
 method = arguments['<method>']
-methods = ['bivariate','-h','--help']
+methods = ['variance','bivariate','-h','--help']
 if method not in methods:
     exit("The gcta method " + method +  " is not available")
 ########################################################################################################

@@ -79,7 +79,8 @@ def process_list(argument, outfolder):
             return [basename(x) for x in argument_list]
 
         else:
-            dets=f"{outfolder}/._infiles/{basename(argument)}"
+            dest=f"{outfolder}/._infiles/{basename(argument)}"
+            os.makedirs(f"{outfolder}/._infiles", exist_ok = True)
             if not os.path.lexists(dest):
                 os.symlink(argument, dest)
             return [basename(argument)]
