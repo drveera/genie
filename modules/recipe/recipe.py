@@ -29,10 +29,11 @@ def prepare_recipe(arguments):
         methods_list = [x.strip() for x in list(open(arguments['--list']))]        
     else:
         methods_list = arguments['<method>']
+    write_snake(methods_list)
     arguments['--mlist'] = methods_list
     #load the json files
     d = [json.load(open(f"{sys.path[0]}/{i}.json")) for i in methods_list]
-    d = [update_inputs(x) for x in d]
+    d = [update_inputs(x,methods_list) for x in d]
     #merge
     d = dict(ChainMap(*d))
     ## this has to be changed
@@ -41,16 +42,38 @@ def prepare_recipe(arguments):
     with open("recipe.json",'w') as outfile:
         json.dump(d, outfile, indent = 4)
 
-def update_inputs(json):
-    method = json['_method'] 
-    json[f"--pfix_{method}"] = f"genie_{method}/{outstring}/{outstring}"
-    if not json['pipein'] == 'None':
-        json[json['pipe_input']] = [findout(x,json['pipe_output']) for x in json['pipein']]
-    return json
+def update_inputs(jsn,methods_list):
+    method = jsn['_method'] 
+    jsn[f"--pfix_{method}"] = f"genie_{method}/{outstring}/{outstring}"
+    if not jsn['pipein_methods'] == 'None':
+        pi = []
+        for x in jsn['pipein_methods']:            
+            if x in methods_list:
+                x_json = json.load(open(f"{sys.path[0]}/{x}.json"))
+                for y in [x_json['pipe_output_suffix']]:
+                    pi.append(findout(x,y))
+#                pi.append([findout(x,y) for y in [x_json['pipe_output_suffix']]])
+        jsn[jsn['pipe_input']] = pi
+        #json[json['pipe_input']] = [findout(x,json['pipe_output_suffix']) for x in json['pipein']]
+    return jsn
 
 def findout(method,ext):    
     return f"genie_{method}/{outstring}/{outstring}{ext}"
+
+def write_snake(methods_list):
+    with open("recipe.snake","w") as snake:
+        for x in methods_list:
+            snake.write(f"include: '{sys.path[0]}/../{x}/{x}.snake' \n")
+        snake.write(f"rule recipe_all: \n")
+        snake.write(f"\t input: \n")
+        for x in methods_list:
+            x_json = json.load(open(f"{sys.path[0]}/{x}.json"))            
+            x_out = [findout(x,y) for y in x_json["all_out_suffix"]]
+            for y in x_out:
+                snake.write(f"\t \t '{y}', \n")
+        
             
 if __name__ == '__main__':
     prepare_recipe(arguments)
+
         

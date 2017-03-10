@@ -2,7 +2,8 @@
     "_method":"r2",
     "--r1" : "ENTER",
     "--out" : "r2",
-    "pipein" : ["r1"],
+    "pipein_methods" : ["r1"],
     "pipe_input" : "--r1",
-    "pipe_output" : "_r1"
+    "pipe_output_suffix" : "None",
+    "all_out_suffix" : ["_part1","_part2"]
 }
