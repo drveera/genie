@@ -1,0 +1,46 @@
+#!/bin/env snakemake
+sys.path.insert(1, sys.path[0] + '/../../../library')
+from md import process_list
+
+########SYS PARAMS##########
+pfix = config["pfix_cojo"]
+outfolder = config['--outfolder']
+
+########USER PARAMS##########
+bfile = config['--bfile']
+cojo_slct = config['--cojo-slct']
+cojo_joint = config['--cojo-joint']
+cojo_cond = config['--cojo-cond']
+cojo_maf = config['--maf']
+cojo_chr = config['--chr']
+cojo_extract = config['--extract']
+
+########WILD CARD##########
+cojo_sum = config["--cojo-file"]
+cojo_sum = process_list(cojo_sum,config['--outfolder'])
+wcard = f"{outfolder}/._infiles/{{cojo_sum}}"
+outfile = f"{pfix}_{{cojo_sum}}.jma"
+outfile_base = f"{pfix}_{{cojo_sum}}"
+
+rule gcta_cojo_all:
+    input: expand(outfile,cojo_sum = cojo_sum)
+
+rule gcta_cojo_one:
+    input:
+        a = expand(bfile + ".{ext}", ext = ['bed','bim','fam']),
+        b = wcard
+    params: a = outfile_base
+    output: outfile
+    run:
+        shell("gcta64 --bfile {bfile} --cojo-file {{input.b}} \
+        --out {{params.a}} {cojo_slct} {cojo_joint} {cojo_cond} \
+        {cojo_maf} {cojo_chr} {cojo_extract}"
+              .format(
+                  bfile = bfile,
+                  cojo_slct = "--cojo-slct" if cojo_slct else "",
+                  cojo_joint = "--cojo-joint" if cojo_joint else "",
+                  cojo_cond = "--cojo_cond " + cojo_cond if cojo_cond else "",
+                  cojo_maf = "--maf " + cojo_maf if cojo_maf is not None else "",
+                  cojo_chr = "--chr " + cojo_chr if cojo_chr is not None else "",
+                  cojo_extract = "--extract " + cojo_extract if cojo_extract is not None else "",
+              ))

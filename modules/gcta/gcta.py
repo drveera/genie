@@ -10,6 +10,7 @@ The following methods are available:
 COMMAND     DESCRIPTION
 variance    estimate heritability
 bivariate   GCTA bivariate GREML analysis
+cojo        conditional and joint genome-wide association analysis
 
 
 type "genie gcta <method> --help for more information on specific method
@@ -29,7 +30,7 @@ argv = [arguments['<method>']] + arguments['<args>']
 ########################################################################################################
 # CHECK IF METHOD IS VALID
 method = arguments['<method>']
-methods = ['variance','bivariate','-h','--help']
+methods = ['variance','bivariate','cojo','-h','--help']
 if method not in methods:
     exit("The gcta method " + method +  " is not available")
 ########################################################################################################
