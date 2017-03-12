@@ -13,17 +13,22 @@ cojo_joint = config['--cojo-joint']
 cojo_cond = config['--cojo-cond']
 cojo_maf = config['--maf']
 cojo_chr = config['--chr']
+if cojo_chr is None:
+    cojo_chr = list(range(22))
+else:
+    cojo_chr = list(cojo_chr)
+    
 cojo_extract = config['--extract']
 
 ########WILD CARD##########
 cojo_sum = config["--cojo-file"]
 cojo_sum = process_list(cojo_sum,config['--outfolder'])
 wcard = f"{outfolder}/._infiles/{{cojo_sum}}"
-outfile = f"{pfix}_{{cojo_sum}}.jma"
-outfile_base = f"{pfix}_{{cojo_sum}}"
+outfile = f"{pfix}_{{cojo_sum}}_{{chr}}.jma"
+outfile_base = f"{pfix}_{{cojo_sum}}_{{chr}}"
 
 rule gcta_cojo_all:
-    input: expand(outfile,cojo_sum = cojo_sum)
+    input: expand(outfile,cojo_sum = cojo_sum, chr = cojo_chr)
 
 rule gcta_cojo_one:
     input:
@@ -33,14 +38,13 @@ rule gcta_cojo_one:
     output: outfile
     run:
         shell("gcta64 --bfile {bfile} --cojo-file {{input.b}} \
-        --out {{params.a}} {cojo_slct} {cojo_joint} {cojo_cond} \
-        {cojo_maf} {cojo_chr} {cojo_extract}"
+        --out {{params.a}} --chr {{wildcards.chr}} {cojo_slct} {cojo_joint} {cojo_cond} \
+        {cojo_maf} {cojo_extract}"
               .format(
                   bfile = bfile,
                   cojo_slct = "--cojo-slct" if cojo_slct else "",
                   cojo_joint = "--cojo-joint" if cojo_joint else "",
                   cojo_cond = "--cojo_cond " + cojo_cond if cojo_cond else "",
                   cojo_maf = "--maf " + cojo_maf if cojo_maf is not None else "",
-                  cojo_chr = "--chr " + cojo_chr if cojo_chr is not None else "",
                   cojo_extract = "--extract " + cojo_extract if cojo_extract is not None else "",
               ))
