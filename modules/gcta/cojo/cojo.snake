@@ -14,7 +14,7 @@ cojo_cond = config['--cojo-cond']
 cojo_maf = config['--maf']
 cojo_chr = config['--chr']
 if cojo_chr is None:
-    cojo_chr = list(range(22))
+    cojo_chr = list(range(1,23))
 else:
     cojo_chr = list(cojo_chr)
     

@@ -4,7 +4,8 @@
         "time" : "11:59:00",
         "n" : 1,
         "partition" : "core",
-	"mem": "16g"
+	"mem": "16g",
+	"cores": "1"
     },
     "gcta_bivariate_one":
     {

@@ -2,11 +2,11 @@
 
 '''
 usage:
- gcta cojo (--cojo-slct | --cojo-joint | --cojo-cond=FILE ) --cojo-file=SUMMARY --bfile=PLINK [options]
+ gcta cojo (--cojo-slct | --cojo-joint | --cojo-cond=FILE ) --cojo-file=SUMMARY  [options]
 
 options:
  --cojo-file=SUMMARY  Summary file
- --bfile=PLINK        Plink file
+ --bfile=PLINK        Plink file [default: |resources/magma/g1000_eur]
  --chr=NUMBER         Chromosome number 
  --maf=NUMBER         Minor allele frequency
  --out=PREFIX         Outname prefix [default: genie_cojo]
