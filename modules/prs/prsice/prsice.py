@@ -17,6 +17,7 @@ options:
  --clump           if clumping need to be done
  --quantitative    if using quantitative target  
  --nojob           if should be run in front end
+ --dry-run         dry run
 
 '''
 from docopt import docopt
