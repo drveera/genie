@@ -1,13 +1,15 @@
 import sys
 sys.path.insert(1, sys.path[0] + '/../../../library')
-from md import process_list 
+from md import process_list
 from os.path import basename
 
 outfolder = config['--outfolder']
 outname= config['--out']
 
 train = config['--base']
-train = process_list(train,outfolder)
+train = process_list(train)
+print(train)
+quit()
 #train_base = [basename(x) + "/" + basename(x) for x in train]
 target = config['--target']
 slower = config['--slower']

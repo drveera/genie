@@ -68,7 +68,7 @@ def run_job(debugdir, outname, scmds):
     os.system(f"sbatch --time=12:00:00 -e {debugdir}/master.error -o {debugdir}/master.out {jobscript}")
 
 
-def process_list(argument, outfolder):
+def process_list_deprecated(argument, outfolder):
         if ".list" in argument:
             os.makedirs(f"{outfolder}/._infiles", exist_ok = True)
             argument_list = [x.strip() for x in list(open(argument))]
@@ -85,3 +85,16 @@ def process_list(argument, outfolder):
                 os.symlink(argument, dest)
             return [basename(argument)]
 
+def process_list(argument):
+    if ".list" in argument:
+        d = {}
+        argument_list = [x.strip() for x in list(open(argument))]
+        argument_list = [x.split(" ") for x in argument_list]
+        for i in argument_list:
+            d[basename(i[0])] = i
+        return(d)
+    else:
+        argument_list = argument.split(" ")
+        d = {}
+        d[basename(argument_list[0])] = argument_list
+        return(d)
