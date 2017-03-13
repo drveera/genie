@@ -20,6 +20,8 @@ wcard = f"{outfolder}/._infiles/{{pheno}}"
 outfile = f"{pfix}_{{pheno}}.hsq"
 outfile_base = f"{pfix}_{{pheno}}"
 
+############SOFTWARE##########
+gcta = sys.path[0] + "/../../../resources/gcta/software/gcta64"
 
 rule gcta_bivariate_all:
     input: expand(outfile, pheno = pheno)
@@ -29,8 +31,9 @@ rule gcta_bivariate_one:
     output: outfile
     params: a = outfile_base
     run:
-        shell("gcta64 --reml-bivar  --grm {grm} --pheno {{input.d}} --out {{params.a}} --thread-num 8 {nocov} {hypo} {preval}"
-              .format(grm = grm,
+        shell("{gcta} --reml-bivar  --grm {grm} --pheno {{input.d}} --out {{params.a}} --thread-num 8 {nocov} {hypo} {preval}"
+              .format(gcta=gcta,
+                      grm = grm,
                       outfile_base = outfile_base,
                       nocov = "--reml-bivar-nocove" if nocov  else "",
                       hypo = "--reml-bivar-lrt-rg " + hypo if hypo is not None else "",
