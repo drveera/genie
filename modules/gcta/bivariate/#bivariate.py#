@@ -9,14 +9,11 @@ options:
  --grm=GRMFILE                     grm file
  --pheno=FILE                      pheno file 
  --out=PREFIX                      outname prefix [default: bivariate]
- --reml-bivar-lrt-rg=NUMBER        To test for the hypothesis of fixing the genetic 
+ --reml-bivar-lrt-rg=NUMBE        To test for the hypothesis of fixing the genetic 
                                    correlation at a particular value, 
                                    e.g. fixing genetic correlation at -1, 0 and 1
-
- --reml-bivar-prevalence='N1 N2'   For a bivariate analysis of two disease traits, 
+ --reml-bivar-prevalence=NUMBERS   For a bivariate analysis of two disease traits, 
                                    specify the prevalence rates of the two diseases 
-                                   Example: --reml-bivar-prevalence='0.7 0.3'
-
  --nojob                           if should run in front end
  --dry-run                         just show the execution codes
 
@@ -31,4 +28,4 @@ from md import process_list
 arguments = docopt(__doc__)
 if __name__ == '__main__':
     print(arguments)
-    md.main(arguments,['bivariate'])
+    #md.main(arguments,['bivariate'])
