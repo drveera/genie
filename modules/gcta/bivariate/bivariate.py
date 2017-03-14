@@ -30,5 +30,4 @@ from md import process_list
 
 arguments = docopt(__doc__)
 if __name__ == '__main__':
-    print(arguments)
     md.main(arguments,['bivariate'])

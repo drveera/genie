@@ -30,7 +30,7 @@ rule gcta_bivariate_one:
     input: a = f"{grm}.grm.bin", b = f"{grm}.grm.id",c = f"{grm}.grm.N.bin", d =  lambda wildcards: pheno[wildcards.pheno][0]
     output: outfile
     params: a = outfile_base
- x   run:
+    run:
         shell("{gcta} --reml-bivar  --grm {grm} --pheno {{input.d}} --out {{params.a}} --thread-num 8 {nocov} {hypo} {preval}"
               .format(gcta=gcta,
                       grm = grm,
