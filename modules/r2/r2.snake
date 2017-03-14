@@ -10,17 +10,17 @@ pfix = config['pfix_r2']
 r1_file = config['--r1']
 if not isinstance(r1_file,list):
     r1_file = process_list(r1_file)
-outfile = f"{pfix}_{{rfile}}_part1" 
-outfile_prefix = f"{pfix}_{{rfile}}"
+outfile_r2 = f"{pfix}_{{bfile}}_part1" 
+outfile_prefix = f"{pfix}_{{bfile}}"
 
 
 rule all_r2:
-    input: expand(outfile,rfile = r1_file)
+    input: expand(outfile_r2,bfile = r1_file)
 
 rule r2_one:
-    input: lambda wildcards: r1_file[wildcards.rfile]
+    input: lambda wildcards: r1_file[wildcards.bfile]
     params: outfile_prefix
-    output: outfile
+    output: outfile_r2
     run:
         shell("cut -f -2 -d ' ' {input} > {params}_part1")
         shell("cut -f 3- -d ' ' {input} > {params}_part2")

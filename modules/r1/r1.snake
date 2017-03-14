@@ -13,7 +13,7 @@ outfile_prefix = f"{pfix}_{{bfile}}"
 ##########
 
 
-rule all:
+rule r1_all:
     input: expand(outfile,bfile = blankfile)
 rule one:
     input: lambda wildcards: blankfile[wildcards.bfile][0]
