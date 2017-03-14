@@ -2,12 +2,13 @@
 
 '''
 usage:
- genie r1 --fname=FILE [--out=PREFIX] [--nojob]
+ genie r1 --fname=FILE [--out=PREFIX] [--nojob] [--dry-run]
 
 options:
  --fname=FILE  a blank file
  --out=PREFIX  outname prefix [default: r1]
- --nojob
+ --nojob       no job
+ --dry-run     dry run
 
 '''
 

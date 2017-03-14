@@ -2,12 +2,13 @@
 
 '''
 usage:
- genie r2 --r1=FILE [options]
+ genie r2 --r1=FILE [options] [--dry-run]
 
 options:
  --r1=FILE     a file
  --out=PREFIX  outname prefix [default: r2]
  --nojob       if front end
+ --dry-run
  
 '''
 

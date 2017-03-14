@@ -1,13 +1,23 @@
 #!/bin/env python
 
+sys.path.insert(1, sys.path[0] + '/../../library')
+from md import process_list
+
+
+pfix = config['pfix_r1']
+#####WILD CARD######
 blankfile = config['--fname']
-pfix = config['--pfix_r1']
+blankfile = process_list(blankfile)
+outfile = f"{pfix}_{{bfile}}_r1"
+outfile_prefix = f"{pfix}_{{bfile}}"
+##########
+
 
 rule all:
-    input: f"{pfix}_r1"
+    input: expand(outfile,bfile = blankfile)
 rule one:
-    input: blankfile
-    output: f"{pfix}_r1"
+    input: lambda wildcards: blankfile[wildcards.bfile][0]
+    output: outfile
     run:
         for i in range(10):
             shell("echo 'a b c d' >> {output}")

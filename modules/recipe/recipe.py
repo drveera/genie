@@ -44,21 +44,22 @@ def prepare_recipe(arguments):
 
 def update_inputs(jsn,methods_list):
     method = jsn['_method'] 
-    jsn[f"--pfix_{method}"] = f"genie_{method}/{outstring}/{outstring}"
+    jsn[f"pfix_{method}"] = f"genie_{method}/{outstring}/{outstring}"
     if not jsn['pipein_methods'] == 'None':
         pi = []
         for x in jsn['pipein_methods']:            
             if x in methods_list:
                 x_json = json.load(open(f"{sys.path[0]}/{x}.json"))
                 for y in [x_json['pipe_output_suffix']]:
-                    pi.append(findout(x,y))
+                    for wcard in x_json['wcard']:
+                        pi.append(findout(x,wcard,y)) 
 #                pi.append([findout(x,y) for y in [x_json['pipe_output_suffix']]])
         jsn[jsn['pipe_input']] = pi
         #json[json['pipe_input']] = [findout(x,json['pipe_output_suffix']) for x in json['pipein']]
     return jsn
 
-def findout(method,ext):    
-    return f"genie_{method}/{outstring}/{outstring}{ext}"
+def findout(method,wcard,ext):    
+    return f"genie_{method}/{outstring}/{outstring}_{{{wcard}}}{ext}"
 
 def write_snake(methods_list):
     with open("recipe.snake","w") as snake:
@@ -68,12 +69,10 @@ def write_snake(methods_list):
         snake.write(f"\t input: \n")
         for x in methods_list:
             x_json = json.load(open(f"{sys.path[0]}/{x}.json"))            
-            x_out = [findout(x,y) for y in x_json["all_out_suffix"]]
+            x_out = [findout(x,wcard,y) for y in x_json["all_out_suffix"] for wcard in x_json["wcard"]]
             for y in x_out:
                 snake.write(f"\t \t '{y}', \n")
         
             
 if __name__ == '__main__':
     prepare_recipe(arguments)
-
-        

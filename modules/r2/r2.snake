@@ -1,15 +1,26 @@
 #!/bin/env python
 
+sys.path.insert(1, sys.path[0] + '/../../library')
+from md import process_list
+
+
+pfix = config['pfix_r2']
+
+#####WILD CARD######
 r1_file = config['--r1']
-pfix = config['--pfix_r2']
+if not isinstance(r1_file,list):
+    r1_file = process_list(r1_file)
+outfile = f"{pfix}_{{rfile}}_part1" 
+outfile_prefix = f"{pfix}_{{rfile}}"
+
 
 rule all_r2:
-    input: expand(f"{pfix}_" + '{ext}', ext = ['part1', 'part2'])
+    input: expand(outfile,rfile = r1_file)
 
 rule r2_one:
-    input: r1_file
-           
-    output: expand(f"{pfix}_" + '{ext}', ext = ['part1', 'part2'])
+    input: lambda wildcards: r1_file[wildcards.rfile]
+    params: outfile_prefix
+    output: outfile
     run:
-        shell("cut -f -2 -d ' ' {input} > {output[0]}")
-        shell("cut -f 3- -d ' ' {input} > {output[1]}")
+        shell("cut -f -2 -d ' ' {input} > {params}_part1")
+        shell("cut -f 3- -d ' ' {input} > {params}_part2")
