@@ -16,6 +16,7 @@ preval = config["--reml-bivar-prevalence"]
 #################WILDCARD##########
 pheno = config["--pheno"]
 pheno = process_list(pheno)
+cov = config["--cov"]
 #wcard = f"{outfolder}/._infiles/{{pheno}}"
 outfile = f"{pfix}_{{pheno}}.hsq"
 outfile_base = f"{pfix}_{{pheno}}"
@@ -26,11 +27,12 @@ rule gcta_bivariate_all:
     input: expand(outfile, pheno = pheno)
 
 rule gcta_bivariate_one:
-    input: a = f"{grm}.grm.bin", b = f"{grm}.grm.id",c = f"{grm}.grm.N.bin", d =  lambda wildcards: pheno[wildcards.pheno][0]
+    input: a = f"{grm}.grm.bin", b = f"{grm}.grm.id",c = f"{grm}.grm.N.bin", d =  lambda wildcards: pheno[wildcards.pheno][0],
+           cov = cov
     output: outfile
     params: a = outfile_base
     run:
-        shell("gcta64 --reml-bivar  --grm {grm} --pheno {{input.d}} --out {{params.a}} --thread-num 8 {nocov} {hypo} {preval}"
+        shell("gcta64 --reml-bivar  --grm {grm} --pheno {{input.d}} --out {{params.a}} --thread-num 8 {nocov} {hypo} {preval} --covar {{input.cov}}"
               .format(grm = grm,
                       outfile_base = outfile_base,
                       nocov = "--reml-bivar-nocove" if nocov  else "",

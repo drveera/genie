@@ -8,6 +8,7 @@ options:
  --reml-bivar-nocove               exclude the residual variance
  --grm=GRMFILE                     grm file
  --pheno=FILE                      pheno file 
+ --cov=FILE                        covariate file
  --out=PREFIX                      outname prefix [default: bivariate]
  --reml-bivar-lrt-rg=NUMBER        To test for the hypothesis of fixing the genetic 
                                    correlation at a particular value, 
