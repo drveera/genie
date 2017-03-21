@@ -27,8 +27,7 @@ rule gcta_bivariate_all:
     input: expand(outfile, pheno = pheno)
 
 rule gcta_bivariate_one:
-    input: a = f"{grm}.grm.bin", b = f"{grm}.grm.id",c = f"{grm}.grm.N.bin", d =  lambda wildcards: pheno[wildcards.pheno][0],
-           cov = cov
+    input: a = f"{grm}.grm.bin", b = f"{grm}.grm.id",c = f"{grm}.grm.N.bin", d =  lambda wildcards: pheno[wildcards.pheno][0]
     output: outfile
     params: a = outfile_base
     run:
