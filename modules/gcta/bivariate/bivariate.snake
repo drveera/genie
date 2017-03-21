@@ -32,9 +32,10 @@ rule gcta_bivariate_one:
     output: outfile
     params: a = outfile_base
     run:
-        shell("gcta64 --reml-bivar  --grm {grm} --pheno {{input.d}} --out {{params.a}} --thread-num 8 {nocov} {hypo} {preval} --covar {{input.cov}}"
+        shell("gcta64 --reml-bivar  --grm {grm} --pheno {{input.d}} --out {{params.a}} --thread-num 8 {nocov} {hypo} {preval} {cov}"
               .format(grm = grm,
                       outfile_base = outfile_base,
                       nocov = "--reml-bivar-nocove" if nocov  else "",
                       hypo = "--reml-bivar-lrt-rg " + hypo if hypo is not None else "",
-                      preval = "--reml-bivar-prevalence " + preval if preval is not None else ""))
+                      preval = "--reml-bivar-prevalence " + preval if preval is not None else "",
+                      cov = "--covar " + cov if cov is not None else ""))
