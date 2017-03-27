@@ -33,7 +33,7 @@ import sys
 ########################################################################################################
 #CHECK IF VALID COMMAND
 command = arguments['<command>']
-modules = ['gwas', 'geneset', 'rohs', 'cojo', 'prs', 'r1', 'r2','recipe','gcta']
+modules = ['gwas', 'geneset', 'rohs', 'cojo', 'prs', 'r1', 'r2','recipe','gcta','eqtl']
 if command not in modules:
     exit(command + " is a not valid command")
 ########################################################################################################

@@ -1,0 +1,96 @@
+methoddir = sys.path[0]
+maindir = re.search(r'.*genie/',methoddir).group()
+sys.path.insert(1,maindir + "/library")
+import md
+from md import process_list, flen
+import sys
+from os.path import dirname
+import subprocess
+
+sumstats = config['--sumstats']
+sumstats = process_list(sumstats)
+
+sumstat = "{wcard}"
+
+if config['--chr'] is None:
+    chr_list = list(range(1,23))
+else:
+    chr_list = config['--chr'].split(",")
+pfix = config['pfix_fusion']
+outfile1 = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}-{chr}.dat.all"
+outfile1_grp = expand(pfix + "/{{wcard}}/{{wcard_wt}}/{{wcard}}-{{wcard_wt}}-{chr}.dat.all", chr = chr_list)
+outfile1_combined = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}.dat.all"
+
+outfile2 = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}-{chr}.top"
+outfile2_grp = expand(pfix + "/{{wcard}}/{{wcard_wt}}/{{wcard}}-{{wcard_wt}}-{chr}.top", chr = chr_list)
+outfile2_combined = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}.top"
+
+outfile3 = outfile2 + ".analysis.joint_dropped.dat"
+outfile3_grp = expand(pfix + "/{{wcard}}/{{wcard_wt}}/{{wcard}}-{{wcard_wt}}-{chr}.top.analysis.joint_dropped.dat", chr = chr_list)
+outfile3_combined = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}.drop"
+outfile3_prefix = outfile2 + ".analysis"
+
+outfile4 = outfile2 + ".analysis.joint_included.dat"
+outfile4_grp = expand(pfix + "/{{wcard}}/{{wcard_wt}}/{{wcard}}-{{wcard_wt}}-{chr}.top.analysis.joint_included.dat", chr = chr_list)
+outfile4_combined = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}.inc"
+###SCRIPTS###
+resources = sys.path[0] + "/../../../resources/fusion/"
+script1 = resources + "fusion_twas-master/FUSION.assoc_test.R"
+script2 = resources + "fusion_twas-master/FUSION.post_process.R"
+script3 = sys.path[0] + "/combinefusion.R"
+ldprefix = resources + "LDREF/1000G.EUR."
+ldfiles  = expand(ldprefix + "{{chr}}.{ext}", ext = ['bed','bim','fam'])
+
+wts = config['--weights']
+wts = process_list(wts)
+for i in wts:
+    wts[i] = resources + "weights/"+i
+
+wts_dir = resources + "weights/"
+
+wt = "{wcard_wt}"
+
+if not os.path.lexists('glist-hg19'):
+    os.symlink(resources + 'fusion_twas-master/glist-hg19','glist-hg19')
+
+
+rule fusion_all:
+    input: expand(outfile1_combined, wcard = sumstats, wcard_wt = wts), expand(outfile2_combined, wcard = sumstats, wcard_wt = wts),
+           expand(outfile3_combined, wcard = sumstats, wcard_wt = wts)
+
+
+rule fusion_impute:
+    input: a = lambda wildcards: sumstats[wildcards.wcard],
+           wt = lambda wildcards: wts[wildcards.wcard_wt], ld = ldfiles
+    params: rscript = script1, ld = ldprefix, wdir = wts_dir
+    output: temp(outfile1)
+    shell: "Rscript {params.rscript} --sumstats {input.a} "
+           "--weights {input.wt} --weights_dir {params.wdir} "
+           "--ref_ld_chr {params.ld} --chr {wildcards.chr} --out {output}"
+
+rule fusion_top:
+    input: outfile1
+    params: wt = lambda wildcards: wts[wildcards.wcard_wt]
+    output: temp(outfile2)
+    shell:
+        "cat {input} | awk -v count=\"$(wc -l {params.wt})\" 'NR == 1 || $NF < 0.05/count' > {output}"
+
+rule fusion_conditional:
+    input: b=outfile2, a=lambda wildcards: sumstats[wildcards.wcard]
+    params: rscript = script2, ld = ldprefix, out = outfile3_prefix
+    output: temp(outfile3), temp(outfile4)
+    run:
+        if flen(input.b) > 1:
+            shell("Rscript {params.rscript} --sumstats {input.a} --input {input.b} " \
+                  "--out {params.out} --ref_ld_chr {params.ld} --chr {wildcards.chr} " \
+                  "--plot --locus_win 100000")
+        else:
+            shell("touch {output}")
+
+rule fusion_combine_cwise:
+                  input: a = outfile1_grp, b = outfile2_grp, c = outfile3_grp, d = outfile4_grp
+                  output: a = outfile1_combined, b = outfile2_combined, d = outfile3_combined,
+                          c = outfile4_combined
+                  params: wdir = pfix + "/{wcard}/{wcard_wt}/",
+                          rscript = script3
+                  shell: "Rscript {params.rscript} {params.wdir} {output.a} {output.b} {output.c} {output.d}"
