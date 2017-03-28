@@ -14,10 +14,12 @@ dfmfiles <- readLines(dfmfilelist)
 dfmlist <- list()
 for(i in 1:length(dfmfiles)){
     d  <- read.table(dfmfiles[i], header = TRUE)
-    tname <- gsub(".pos.*$","",basename(dfmfiles[i]))
-    tname <- gsub("^.*-","",tname)
-    d$tname <- tname
-    dfmlist[[i]] <- d
+    if (nrow(d) > 0){
+        tname <- gsub(".pos.*$","",basename(dfmfiles[i]))
+        tname <- gsub("^.*-","",tname)
+        d$tname <- tname
+        dfmlist[[i]] <- d   
+    }
 }
 dfm <- do.call(rbind, dfmlist)
 
