@@ -7,40 +7,12 @@ import sys
 from os.path import dirname
 import subprocess
 
+resources = sys.path[0] + "/../../../resources/fusion/"
+
 sumstats = config['--sumstats']
 sumstats = process_list(sumstats)
 
 sumstat = "{wcard}"
-
-if config['--chr'] is None:
-    chr_list = list(range(1,23))
-else:
-    chr_list = config['--chr'].split(",")
-pfix = config['pfix_fusion']
-outfile1 = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}-{chr}.dat.all"
-outfile1_grp = expand(pfix + "/{{wcard}}/{{wcard_wt}}/{{wcard}}-{{wcard_wt}}-{chr}.dat.all", chr = chr_list)
-outfile1_combined = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}.dat.all"
-
-outfile2 = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}-{chr}.top"
-outfile2_grp = expand(pfix + "/{{wcard}}/{{wcard_wt}}/{{wcard}}-{{wcard_wt}}-{chr}.top", chr = chr_list)
-outfile2_combined = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}.top"
-
-outfile3 = outfile2 + ".analysis.joint_dropped.dat"
-outfile3_grp = expand(pfix + "/{{wcard}}/{{wcard_wt}}/{{wcard}}-{{wcard_wt}}-{chr}.top.analysis.joint_dropped.dat", chr = chr_list)
-outfile3_combined = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}.drop"
-outfile3_prefix = outfile2 + ".analysis"
-
-outfile4 = outfile2 + ".analysis.joint_included.dat"
-outfile4_grp = expand(pfix + "/{{wcard}}/{{wcard_wt}}/{{wcard}}-{{wcard_wt}}-{chr}.top.analysis.joint_included.dat", chr = chr_list)
-outfile4_combined = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}.inc"
-###SCRIPTS###
-resources = sys.path[0] + "/../../../resources/fusion/"
-script1 = resources + "fusion_twas-master/FUSION.assoc_test.R"
-script2 = resources + "fusion_twas-master/FUSION.post_process.R"
-script3 = sys.path[0] + "/combinefusion.R"
-ldprefix = resources + "LDREF/1000G.EUR."
-ldfiles  = expand(ldprefix + "{{chr}}.{ext}", ext = ['bed','bim','fam'])
-
 wts = config['--weights']
 wts = process_list(wts)
 for i in wts:
@@ -49,6 +21,51 @@ for i in wts:
 wts_dir = resources + "weights/"
 
 wt = "{wcard_wt}"
+if config['--chr'] is None:
+    chr_list = list(range(1,23))
+else:
+    chr_list = config['--chr'].split(",")
+pfix = config['pfix_fusion']
+outfile1 = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}-{chr}.dat.all"
+outfile1_grp = expand(pfix + "/{{wcard}}/{{wcard_wt}}/{{wcard}}-{{wcard_wt}}-{chr}.dat.all", chr = chr_list)
+outfile1_combined = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}.dat.all"
+outfile1_combined_grp = expand(pfix + "/{{wcard}}/{wcard_wt}/{{wcard}}-{wcard_wt}.dat.all", wcard_wt = wts)
+
+outfile2 = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}-{chr}.top"
+outfile2_grp = expand(pfix + "/{{wcard}}/{{wcard_wt}}/{{wcard}}-{{wcard_wt}}-{chr}.top", chr = chr_list)
+outfile2_combined = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}.top"
+outfile2_combined_grp = expand(pfix + "/{{wcard}}/{wcard_wt}/{{wcard}}-{wcard_wt}.top", wcard_wt = wts)
+
+
+outfile3 = outfile2 + ".analysis.joint_dropped.dat"
+outfile3_grp = expand(pfix + "/{{wcard}}/{{wcard_wt}}/{{wcard}}-{{wcard_wt}}-{chr}.top.analysis.joint_dropped.dat", chr = chr_list)
+outfile3_combined = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}.drop"
+outfile3_prefix = outfile2 + ".analysis"
+outfile3_combined_grp = expand(pfix + "/{{wcard}}/{wcard_wt}/{{wcard}}-{wcard_wt}.drop", wcard_wt = wts)
+
+
+outfile4 = outfile2 + ".analysis.joint_included.dat"
+outfile4_grp = expand(pfix + "/{{wcard}}/{{wcard_wt}}/{{wcard}}-{{wcard_wt}}-{chr}.top.analysis.joint_included.dat", chr = chr_list)
+outfile4_combined = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}.inc"
+outfile4_combined_grp = expand(pfix + "/{{wcard}}/{wcard_wt}/{{wcard}}-{wcard_wt}.inc", wcard_wt = wts)
+
+toplist = pfix + "/{wcard}/{wcard}.top.list"
+inclist = pfix + "/{wcard}/{wcard}.inc.list"
+droplist = pfix + "/{wcard}/{wcard}.drop.list"
+heatmap_top = pfix + "/{wcard}/{wcard}_top.heatmap.pdf"
+heatmap_inc = pfix + "/{wcard}/{wcard}_inc.heatmap.pdf"
+heatmap_drop = pfix + "/{wcard}/{wcard}_drop.heatmap.pdf"
+datlist = pfix + "/{wcard}/{wcard}.dat.list"
+manhattan = pfix + "/{wcard}/{wcard}_manhattan.pdf"
+###SCRIPTS###
+
+script1 = resources + "fusion_twas-master/FUSION.assoc_test.R"
+script2 = resources + "fusion_twas-master/FUSION.post_process.R"
+script3 = sys.path[0] + "/combinefusion.R"
+ldprefix = resources + "LDREF/1000G.EUR."
+ldfiles  = expand(ldprefix + "{{chr}}.{ext}", ext = ['bed','bim','fam'])
+
+
 
 if not os.path.lexists('glist-hg19'):
     os.symlink(resources + 'fusion_twas-master/glist-hg19','glist-hg19')
@@ -56,7 +73,8 @@ if not os.path.lexists('glist-hg19'):
 
 rule fusion_all:
     input: expand(outfile1_combined, wcard = sumstats, wcard_wt = wts), expand(outfile2_combined, wcard = sumstats, wcard_wt = wts),
-           expand(outfile3_combined, wcard = sumstats, wcard_wt = wts)
+           expand(outfile3_combined, wcard = sumstats, wcard_wt = wts), expand(heatmap_top, wcard = sumstats), expand(heatmap_inc, wcard = sumstats),
+           expand(heatmap_drop, wcard = sumstats), expand(manhattan, wcard = sumstats)
 
 
 rule fusion_impute:
@@ -94,3 +112,29 @@ rule fusion_combine_cwise:
                   params: wdir = pfix + "/{wcard}/{wcard_wt}/",
                           rscript = script3
                   shell: "Rscript {params.rscript} {params.wdir} {output.a} {output.b} {output.c} {output.d}"
+
+rule fusion_heatmap:
+    input: a = outfile2_combined_grp, b = outfile3_combined_grp, c = outfile4_combined_grp
+    output: a = heatmap_top, b = heatmap_drop, c = heatmap_inc, la = temp(toplist), lb = temp(droplist), lc = temp(inclist)
+    params: rscript_top = sys.path[0] + "/fusion.heatmap.R",
+            rscript_drop = sys.path[0] + "/fusion.heatmap.drop.R",
+            rscript_inc = sys.path[0] + "/fusion.heatmap.inc.R"
+    run:
+        for i in input.a:
+            shell("ls {i} >> {output.la}")
+        for i in input.b:
+            shell("ls {i} >> {output.lb}")
+        for i in input.c:
+            shell("ls {i} >> {output.lc}")
+        shell("Rscript {params.rscript_top} {output.la} {output.a}")
+        shell("Rscript {params.rscript_drop} {output.lb} {output.b}")
+        shell("Rscript {params.rscript_inc} {output.lc} {output.c}")
+
+rule fusion_manhattan:
+    input: outfile1_combined_grp
+    output: a = temp(datlist), b = manhattan
+    params: rscript = sys.path[0]+ '/fusion.manhattan.R'
+    run:
+        for i in input:
+            shell("ls {i} >> {output.a}")
+        shell("Rscript {params.rscript} {output.a} {output.b}")
