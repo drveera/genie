@@ -3,35 +3,37 @@
 GEnomic Integrated suitE
 ### Installation
 
-#### source the latest Anaconda package 
-```
-source /com/extra/Anaconda-Python/LATEST/load.sh
-```
+*You need to do this only once*
 
-#### Check proxy setting
-Make sure you have proper proxy settinggs. To check type,`echo $https_proxy` and you should see this value, `http://in:3128`. If its empty, then add this line to your `.bashrc`
-
+Download this script and run it
 ```
-echo "export https_proxy='http://in:3128'" >> ~/.bashrc
-source ~/.bashrc
+wget https://github.com/drveera/genie/edit/master/library/ipsych_installer.sh
+sh ipsych_installer.sh
 ```
-#### Create conda environment 
-then create a conda environment with name genie (or whatever u like). 
+Once you run this script, then everytime when u want to run genie, you should activate the genie environment by
 
 ```
-conda create -n genie python=3.6 docopt=0.6.2 
+source activate genie
 ```
-#### Install snakemake 
-then activate genie and install snakemake, 
+and you'll be good to go. Type `genie -h` and you'll see help message like this.
 
 ```
-source activate genie 
-pip install --cert /com/etc/ssl-proxy-cert.pem snakemake==3.11.2
+genie
+
+usage:
+ genie <command> [<args>...]
+
+The following commands are available:
+COMMAND   DESCRIPTION
+gwas      run gwas
+geneset   run gene/geneset analysis using gwas summary file
+rohs      run analysis of runs of homozygosity
+prs       run polygenic risk score analysis
+gcta      run GCTA analyses
+
+See 'genie <command> --help' for more information on a specific command.
+For example, type 'ipsych geneset --help'
+
 ```
 
-#### source genie scripts 
-
-```
-echo "alias genie='/project/IGdata/faststorage/userdata/iveera/pipelines/genie/genie.py' >> ~/.bashrc
-```
 
