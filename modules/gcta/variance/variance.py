@@ -27,7 +27,7 @@ description:
 The arguments here are exactly the same arguments used in GCTA software. 
 To know how to use these arguments, please see the GCTA web page (http://cnsgenomics.com/software/gcta/reml.html).
 A typical example submission command for a case-control trait would be like, 
-    genie gcta variance --grm=test --pheno test.phen --prevalence 0.01 --out test_null
+    genie gcta variance --grm=test --pheno=test.phen --prevalence 0.01 --out test_null
 
 '''
 

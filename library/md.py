@@ -16,7 +16,7 @@ def main(args, methods):
     args = process_arguments(args)
 
     outfolder = f"genie_{method}/{args['--out']}"
-    pfix = f"{outfolder}/{args['--out']}"
+    pfix = f"{outfolder}/{args['--out']}_"
 
     args[f"pfix_{method}"] = pfix
     args['--outfolder'] = outfolder

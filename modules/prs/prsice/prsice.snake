@@ -3,49 +3,49 @@ sys.path.insert(1, sys.path[0] + '/../../../library')
 from md import process_list
 from os.path import basename
 
-outfolder = config['--outfolder']
-outname= config['--out']
-
+pfix = config['pfix_prsice']
 train = config['--base']
 train = process_list(train)
-#train_base = [basename(x) + "/" + basename(x) for x in train]
 target = config['--target']
 slower = config['--slower']
 supper = config['--supper']
 sinc = config['--sinc']
-covary = config['--covary']
+covar = config['--covar']
+nocov = config['--nocov']
 clump = config['--clump']
 pheno = config['--pheno']
+ped = config['--ped']
+pcs = config['--pcs']
+pc_method = config['--pc_method']
+    
 if config['--quantitative']:
     binary = 'F'
 else:
     binary = 'T'
 
 
-
-base = f"{outfolder}/{outname}"
-
 prsice_r = sys.path[0] + '/../../../resources/prs/prsice/PRSice_v1.25.R'
-workdir: config['pfix_prsice']
+workdir: config['of_prsice']
 rule all:
     input:
-        expand(base + "_{train}_BARPLOT_.png", train = train),
-        #base + "_{train}_HIGH-RES_PLOT_.png",
-        #base + "_{train}_RAW_RESULTS_DATA.txt",
-        #base + "_{train}_SCORES_AT_BEST-FIT-PRS.txt"
-        expand(base + "_{train}_HIGH-RES_PLOT_.png", train = train),
-        expand(base + "_{train}_RAW_RESULTS_DATA.txt", train = train),
-        expand(base + "_{train}_SCORES_AT_BEST-FIT-PRS.txt", train = train)
+        expand(pfix + "{train}_BARPLOT_.png", train = train),
+        #base + "{train}_HIGH-RES_PLOT_.png",
+        #base + "{train}_RAW_RESULTS_DATA.txt",
+        #base + "{train}_SCORES_AT_BEST-FIT-PRS.txt"
+        expand(pfix + "{train}_HIGH-RES_PLOT_.png", train = train),
+        expand(pfix + "{train}_RAW_RESULTS_DATA.txt", train = train),
+        expand(pfix + "{train}_SCORES_AT_BEST-FIT-PRS.txt", train = train)
         
 rule prs:
     input:
         train_summary = lambda wildcards: train[wildcards.train],
         target_plink = expand(target + '.{ext}', ext = ['bed','bim','fam'])
     output:
-        base + "_{train}_BARPLOT_.png",
-        base + "_{train}_HIGH-RES_PLOT_.png",
-        base + "_{train}_RAW_RESULTS_DATA.txt",
-        base + "_{train}_SCORES_AT_BEST-FIT-PRS.txt", 
+        pfix + "{train}_BARPLOT_.png",
+        pfix + "{train}_HIGH-RES_PLOT_.png",
+        pfix + "{train}_RAW_RESULTS_DATA.txt",
+        pfix + "{train}_SCORES_AT_BEST-FIT-PRS.txt"
+    shadow: "shallow"
     shell:
         "Rscript {prsice_r} -q --args "
         "plink /com/extra/plink/1.90-beta-2016-03/bin/plink "
@@ -57,4 +57,4 @@ rule prs:
         "covary {covary} "
         "clump.snps {clump} "
         "binary.target {binary} "
-        "figname {base}_{wildcards.train}"
+        "figname {pfix}{wildcards.train}"

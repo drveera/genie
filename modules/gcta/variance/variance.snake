@@ -4,7 +4,6 @@ from md import process_list
 
 ########SYS PARAMS##########
 pfix = config["pfix_variance"]
-outfolder = config['--outfolder']
 
 ########USER PARAMS##########
 grm = config['--grm']
@@ -17,10 +16,10 @@ lrt = config['--reml-lrt']
 mpheno = config['--mpheno']
 ########WILD CARD##########
 pheno = config["--pheno"]
-pheno = process_list(pheno,config['--outfolder'])
-wcard = f"{outfolder}/._infiles/{{pheno}}"
-outfile = f"{pfix}_{{pheno}}.hsq"
-outfile_base = f"{pfix}_{{pheno}}"
+pheno = process_list(pheno)
+wcard = pheno
+outfile = f"{pfix}{{pheno}}.hsq"
+outfile_base = f"{pfix}{{pheno}}"
 
 
 rule gcta_variance_all:
