@@ -8,8 +8,6 @@ outname= config['--out']
 
 train = config['--base']
 train = process_list(train)
-print(train)
-quit()
 #train_base = [basename(x) + "/" + basename(x) for x in train]
 target = config['--target']
 slower = config['--slower']
@@ -28,6 +26,7 @@ else:
 base = f"{outfolder}/{outname}"
 
 prsice_r = sys.path[0] + '/../../../resources/prs/prsice/PRSice_v1.25.R'
+workdir: config['pfix_prsice']
 rule all:
     input:
         expand(base + "_{train}_BARPLOT_.png", train = train),
@@ -40,7 +39,7 @@ rule all:
         
 rule prs:
     input:
-        train_summary = outfolder + "/._infiles/{train}",
+        train_summary = lambda wildcards: train[wildcards.train],
         target_plink = expand(target + '.{ext}', ext = ['bed','bim','fam'])
     output:
         base + "_{train}_BARPLOT_.png",
