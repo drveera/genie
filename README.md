@@ -32,6 +32,6 @@ pip install --cert /com/etc/ssl-proxy-cert.pem snakemake==3.11.2
 #### source genie scripts 
 
 ```
-
+echo "alias genie='/project/IGdata/faststorage/userdata/iveera/pipelines/genie/genie.py' >> ~/.bashrc
 ```
 
