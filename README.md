@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/drveera/genie.svg?branch=master)](https://travis-ci.org/drveera/genie)
 # genie
 GEnomic Integrated suitE
+
+## INSTRUCTIONS FOR GENOME.DK USERS
 ### Installation
 
 *You need to do this only once*
