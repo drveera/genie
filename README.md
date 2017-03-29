@@ -7,7 +7,7 @@ GEnomic Integrated suitE
 
 Download this script and run it
 ```
-wget https://github.com/drveera/genie/edit/master/library/ipsych_installer.sh
+wget https://raw.githubusercontent.com/drveera/genie/master/library/ipsych_installer.sh
 sh ipsych_installer.sh
 ```
 Once you run this script, then everytime when u want to run genie, you should activate the genie environment by
