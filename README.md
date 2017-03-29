@@ -32,7 +32,7 @@ prs       run polygenic risk score analysis
 gcta      run GCTA analyses
 
 See 'genie <command> --help' for more information on a specific command.
-For example, type 'ipsych geneset --help'
+For example, type 'genie geneset --help'
 
 ```
 
