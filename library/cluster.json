@@ -14,7 +14,7 @@
 	"mem"  : "128g",
 	"cores": "8"
     },
-    "gcta_variance_one:"
+    "gcta_variance_one":
     {
 	"mem":"128g",
 	"cores":"16"
