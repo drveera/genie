@@ -30,7 +30,7 @@ rule gcta_variance_one:
         a = f"{grm}.grm.bin",
         b = f"{grm}.grm.id",
         c = f"{grm}.grm.N.bin",
-        d = wcard
+        d = lambda wcards: pheno[wildcards.wcard]
     params: a = outfile_base
     output: outfile
     run:
@@ -45,3 +45,4 @@ rule gcta_variance_one:
                 prevalence = prevalence if prevalence is not None else "",
                 gxe = "--gxe" if gxe else "",
                 lrt = "--lrt " + lrt if lrt is not None else ""))
+        

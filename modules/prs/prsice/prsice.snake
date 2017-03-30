@@ -47,14 +47,14 @@ rule prs:
         pfix + "{train}_SCORES_AT_BEST-FIT-PRS.txt"
     shadow: "shallow"
     shell:
-        "Rscript {prsice_r} -q --args "
-        "plink /com/extra/plink/1.90-beta-2016-03/bin/plink "
-        "base {input.train_summary} "
-        "target {target} "
-        "slower {slower} "
-        "supper {supper} "
-        "sinc {sinc} "
-        "covary {covary} "
-        "clump.snps {clump} "
-        "binary.target {binary} "
-        "figname {pfix}{wildcards.train}"
+        "Rscript {prsice_r} -q --args plink /com/extra/plink/1.90-beta-2016-03/bin/plink \
+        base {{input.train_summary}} target {target} binary.target {binary} \
+        slower {slower} supper {supper} sinc {sinc} covary {covary} \
+        clump.snps {clump} clump.p1 {clump_p1} clump.p2 {clump_p2} clump.r2 {clump_r2} \
+        clump.kb {clump_kb} figname {pfix}{wildcards.train}"
+        .format(
+            prsice_r = prsice_r,
+            target = target, binary = binary, slower = slower, supper = supper,
+            sinc - sinc, covary = covary, clump = clump, clump_p1 = clump_p1,
+            clump_p2 = clump_p2, clump_r2 = clump_r2, clump_kb = clump_kb
+        )
