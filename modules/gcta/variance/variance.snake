@@ -17,7 +17,6 @@ mpheno = config['--mpheno']
 ########WILD CARD##########
 pheno = config["--pheno"]
 pheno = process_list(pheno)
-wcard = pheno
 outfile = f"{pfix}{{pheno}}.hsq"
 outfile_base = f"{pfix}{{pheno}}"
 
@@ -30,7 +29,7 @@ rule gcta_variance_one:
         a = f"{grm}.grm.bin",
         b = f"{grm}.grm.id",
         c = f"{grm}.grm.N.bin",
-        d = lambda wcards: pheno[wildcards.wcard]
+        d = lambda wcards: pheno[wildcards.pheno]
     params: a = outfile_base
     output: outfile
     run:
