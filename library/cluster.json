@@ -2,7 +2,7 @@
 {
     "__default__":
     {
-        "time" : "11:59:00",
+        "time" : "12:00:00",
         "n" : 1,
         "partition" : "core",
 	"mem": "16g",
@@ -13,5 +13,10 @@
 	"time" : "12:00:00",
 	"mem"  : "128g",
 	"cores": "8"
+    },
+    "gcta_variance_one:"
+    {
+	"mem":"128g",
+	"cores":"16"
     }
 }
