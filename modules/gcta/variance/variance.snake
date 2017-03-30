@@ -39,7 +39,7 @@ rule gcta_variance_one:
         .format(grm = grm,
                 mpheno = "--mpheno " + mpheno if mpheno is not None else "",
                 covar = "--covar " + covar if covar is not None else "",
-                qcovar = "--qvar " + qcovar if qcovar is not None else "",
+                qcovar = "--qcovar " + qcovar if qcovar is not None else "",
                 keep = "--keep " + keep if keep is not None else "",
                 prevalence = prevalence if prevalence is not None else "",
                 gxe = "--gxe" if gxe else "",
