@@ -14,6 +14,9 @@ geneset   run gene/geneset analysis using gwas summary file
 rohs      run analysis of runs of homozygosity
 prs       run polygenic risk score analysis
 gcta      run GCTA analyses
+eqtl      run eqtl analysis in summary statistics
+ldsc      run ldsc analysis in summary statistics
+sumstats  various manipulations of summary statisitcs file
 
 See 'genie <command> --help' for more information on a specific command.
 For example, type 'ipsych geneset --help'
@@ -33,7 +36,7 @@ import sys
 ########################################################################################################
 #CHECK IF VALID COMMAND
 command = arguments['<command>']
-modules = ['gwas', 'geneset', 'rohs', 'cojo', 'prs', 'r1', 'r2','recipe','gcta','eqtl']
+modules = ['gwas', 'geneset', 'rohs', 'cojo', 'prs', 'r1', 'r2','recipe','gcta','eqtl','sumstats','ldsc']
 if command not in modules:
     exit(command + " is a not valid command")
 ########################################################################################################

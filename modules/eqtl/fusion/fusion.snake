@@ -70,15 +70,16 @@ ldfiles  = expand(ldprefix + "{{chr}}.{ext}", ext = ['bed','bim','fam'])
 if not os.path.lexists('glist-hg19'):
     os.symlink(resources + 'fusion_twas-master/glist-hg19','glist-hg19')
 
-
+config["pfix_munge"] = pfix.replace("fusion","munge")
+include: f"{maindir}/modules/ldsc/munge/munge.snake"
 rule fusion_all:
     input: expand(outfile1_combined, wcard = sumstats, wcard_wt = wts), expand(outfile2_combined, wcard = sumstats, wcard_wt = wts),
            expand(outfile3_combined, wcard = sumstats, wcard_wt = wts), expand(heatmap_top, wcard = sumstats), expand(heatmap_inc, wcard = sumstats),
            expand(heatmap_drop, wcard = sumstats), expand(manhattan, wcard = sumstats)
 
-
+#a = lambda wildcards: sumstats[wildcards.wcard],
 rule fusion_impute:
-    input: a = lambda wildcards: sumstats[wildcards.wcard],
+    input: a = munge_sumstats,
            wt = lambda wildcards: wts[wildcards.wcard_wt], ld = ldfiles
     params: rscript = script1, ld = ldprefix, wdir = wts_dir
     output: temp(outfile1)

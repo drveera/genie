@@ -11,20 +11,27 @@ slower = config['--slower']
 supper = config['--supper']
 sinc = config['--sinc']
 covar = config['--covar']
-nocov = config['--nocov']
 clump = config['--clump']
 pheno = config['--pheno']
 ped = config['--ped']
 pcs = config['--pcs']
 pc_method = config['--pc_method']
-    
+
+####if quantitative target 
 if config['--quantitative']:
     binary = 'F'
 else:
     binary = 'T'
-
+#####if covariates to be used
+if config['--nocov']:
+    covary = False
+else:
+    covary = True
+    
 
 prsice_r = sys.path[0] + '/../../../resources/prs/prsice/PRSice_v1.25.R'
+plink = '/com/extra/plink/1.90-beta-2016-03/bin/plink'
+
 workdir: config['of_prsice']
 rule all:
     input:
@@ -47,14 +54,17 @@ rule prs:
         pfix + "{train}_SCORES_AT_BEST-FIT-PRS.txt"
     shadow: "shallow"
     shell:
-        "Rscript {prsice_r} -q --args plink /com/extra/plink/1.90-beta-2016-03/bin/plink \
+        "Rscript {prsice_r} -q --args plink {plink} \
         base {{input.train_summary}} target {target} binary.target {binary} \
-        slower {slower} supper {supper} sinc {sinc} covary {covary} \
+        slower {slower} supper {supper} sinc {sinc} covary {covary} {covar} {pcs} \
         clump.snps {clump} clump.p1 {clump_p1} clump.p2 {clump_p2} clump.r2 {clump_r2} \
         clump.kb {clump_kb} figname {pfix}{wildcards.train}"
         .format(
-            prsice_r = prsice_r,
+            prsice_r = prsice_r, plink = plink,
             target = target, binary = binary, slower = slower, supper = supper,
-            sinc - sinc, covary = covary, clump = clump, clump_p1 = clump_p1,
+            sinc = sinc, covary = covary,
+            covar = "user.covariate.file " + {covar} if covar else "",
+            pcs = "covariates" + {pcs} if pcs else "",
+            clump = clump, clump_p1 = clump_p1,
             clump_p2 = clump_p2, clump_r2 = clump_r2, clump_kb = clump_kb
         )

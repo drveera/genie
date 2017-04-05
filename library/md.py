@@ -28,7 +28,7 @@ def main(args, methods):
 
     write_config(args, debugdir)
 
-    cmds = "snakemake -j 999 " \
+    cmds = "snakemake -j 999 --use-conda " \
           f"--cluster-config {maindir}/library/cluster.json " \
           f"--configfile {debugdir}/config.json " \
           f"--nolock " \
@@ -87,3 +87,5 @@ def flen(fname):
         for i, l in enumerate(f):
             pass
     return i + 1
+
+    
