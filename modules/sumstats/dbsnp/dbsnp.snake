@@ -59,11 +59,11 @@ rule genie_create_avinput2:
     shell: "Rscript {params.script} {input} {output}"
 
 rule genie_annotate2:
-    input: avinput2
+    input: a = avinput2
     output: temp(anno2)
     params: script = annovar, db = humandb, out = anno2_prefix
     run:
-        if flen(input) > 1:
+        if flen(input.a) > 1:
             shell("{params.script} {input} {params.db}  -buildver hg19 -out {params.out}  -remove -protocol avsnp147 -operation f -nastring NA")
         else:
             shell("touch {output}")
