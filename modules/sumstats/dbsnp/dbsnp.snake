@@ -4,35 +4,35 @@
 import sys
 import re
 
-methoddir = sys.path[0]
-maindir = re.search(r'.*genie/',methoddir).group()
+dbsnpdir = sys.path[0]
+maindir = re.search(r'.*genie/',dbsnpdir).group()
 sys.path.insert(1,maindir + "/library")
 import md
-from md import process_list
+from md import process_list, flen
 
 annovar = f"{maindir}/resources/annovar/software/annovar/table_annovar.pl"
 humandb = f"{maindir}/resources/annovar/software/annovar/humandb"
-rscript1 = f"{methoddir}/create.avinput.R"
-rscript2 = f"{methoddir}/create.avinput2.R"
-rscript3 = f"{methoddir}/update.summary.R"
+rscript1 = f"{dbsnpdir}/create.avinput.R"
+rscript2 = f"{dbsnpdir}/create.avinput2.R"
+rscript3 = f"{dbsnpdir}/update.summary.R"
 
 
 sumstats=config['--sumstats']
 sumstats = process_list(sumstats)
-pfix = config['pfix_dbsnp']
+pfix_dbsnp = config['pfix_dbsnp']
 outfolder = config['--outfolder']
 
 #script outputs
-avinput1=f"{pfix}{{wcard}}.annovar.avinput1"
-avinput2=f"{pfix}{{wcard}}.annovar.avinput2"
-withids = f"{pfix}{{wcard}}.withids"
-withoutids1 = f"{pfix}{{wcard}}.withoutids1"
-withoutids2 = f"{pfix}{{wcard}}.withoutids2"
-anno1 = f"{pfix}{{wcard}}.anno1.hg19_multianno.txt"
-anno1_prefix = f"{pfix}{{wcard}}.anno1"
-anno2 = f"{pfix}{{wcard}}.anno2.hg19_multianno.txt"
-anno2_prefix = f"{pfix}{{wcard}}.anno2"
-updated_summary = f"{pfix}{{wcard}}.ann"
+avinput1=f"{pfix_dbsnp}{{wcard}}.annovar.avinput1"
+avinput2=f"{pfix_dbsnp}{{wcard}}.annovar.avinput2"
+withids = f"{pfix_dbsnp}{{wcard}}.withids"
+withoutids1 = f"{pfix_dbsnp}{{wcard}}.withoutids1"
+withoutids2 = f"{pfix_dbsnp}{{wcard}}.withoutids2"
+anno1 = f"{pfix_dbsnp}{{wcard}}.anno1.hg19_multianno.txt"
+anno1_prefix = f"{pfix_dbsnp}{{wcard}}.anno1"
+anno2 = f"{pfix_dbsnp}{{wcard}}.anno2.hg19_multianno.txt"
+anno2_prefix = f"{pfix_dbsnp}{{wcard}}.anno2"
+updated_summary = f"{pfix_dbsnp}{{wcard}}.ann"
 
 
 
@@ -40,9 +40,9 @@ rule genie_dbsnp_all:
     input: expand(updated_summary, wcard = sumstats)
 
 rule genie_create_avinput:
-    input: sumstats
+    input: lambda wildcards: sumstats[wildcards.wcard]
     output: a = temp(avinput1), b = temp(withids), c = temp(withoutids1)
-    params: rscript1, f"{pfix}{{wcard}}"
+    params: rscript1, f"{pfix_dbsnp}{{wcard}}"
     shell: "Rscript {params[0]} {input} {params[1]}"
 
 rule genie_annotate1:
@@ -62,13 +62,16 @@ rule genie_annotate2:
     input: avinput2
     output: temp(anno2)
     params: script = annovar, db = humandb, out = anno2_prefix
-    shell:
-        "{params.script} {input} {params.db}  -buildver hg19 -out {params.out}  -remove -protocol avsnp147 -operation f -nastring NA"
+    run:
+        if flen(input) > 1:
+            shell("{params.script} {input} {params.db}  -buildver hg19 -out {params.out}  -remove -protocol avsnp147 -operation f -nastring NA")
+        else:
+            shell("touch {output}")
 
 rule update_summary:
-    input: sumstats, anno1, anno2, avinput1, avinput2
+    input: lambda wildcards: sumstats[wildcards.wcard], anno1, anno2, avinput1, avinput2
     output: protected(updated_summary)
-    params: rscript3,f"{pfix}{{wcard}}"
+    params: rscript3,f"{pfix_dbsnp}{{wcard}}"
     shell:
         "Rscript {params[0]} {input[0]} {params[1]} {output} && rm {params[1]}*invalid*"
     

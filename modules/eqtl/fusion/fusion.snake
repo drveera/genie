@@ -25,6 +25,11 @@ if config['--chr'] is None:
     chr_list = list(range(1,23))
 else:
     chr_list = config['--chr'].split(",")
+if config['--chr'] is None:
+    facet = "T"
+else:
+    facet = "F"
+
 pfix = config['pfix_fusion']
 outfile1 = pfix + "/{wcard}/{wcard_wt}/{wcard}-{wcard_wt}-{chr}.dat.all"
 outfile1_grp = expand(pfix + "/{{wcard}}/{{wcard_wt}}/{{wcard}}-{{wcard_wt}}-{chr}.dat.all", chr = chr_list)
@@ -62,9 +67,12 @@ manhattan = pfix + "/{wcard}/{wcard}_manhattan.pdf"
 script1 = resources + "fusion_twas-master/FUSION.assoc_test.R"
 script2 = resources + "fusion_twas-master/FUSION.post_process.R"
 script3 = sys.path[0] + "/combinefusion.R"
+script4 = sys.path[0] + "/fusion.heatmap.R"
+script5 = sys.path[0] + "/fusion.heatmap.drop.R"
+script6 = sys.path[0] + "/fusion.heatmap.inc.R"
+script7 = sys.path[0]+ "/fusion.manhattan.R"
 ldprefix = resources + "LDREF/1000G.EUR."
 ldfiles  = expand(ldprefix + "{{chr}}.{ext}", ext = ['bed','bim','fam'])
-
 
 
 if not os.path.lexists('glist-hg19'):
@@ -77,7 +85,7 @@ rule fusion_all:
            expand(outfile3_combined, wcard = sumstats, wcard_wt = wts), expand(heatmap_top, wcard = sumstats), expand(heatmap_inc, wcard = sumstats),
            expand(heatmap_drop, wcard = sumstats), expand(manhattan, wcard = sumstats)
 
-#a = lambda wildcards: sumstats[wildcards.wcard],
+
 rule fusion_impute:
     input: a = munge_sumstats,
            wt = lambda wildcards: wts[wildcards.wcard_wt], ld = ldfiles
@@ -117,9 +125,10 @@ rule fusion_combine_cwise:
 rule fusion_heatmap:
     input: a = outfile2_combined_grp, b = outfile3_combined_grp, c = outfile4_combined_grp
     output: a = heatmap_top, b = heatmap_drop, c = heatmap_inc, la = temp(toplist), lb = temp(droplist), lc = temp(inclist)
-    params: rscript_top = sys.path[0] + "/fusion.heatmap.R",
-            rscript_drop = sys.path[0] + "/fusion.heatmap.drop.R",
-            rscript_inc = sys.path[0] + "/fusion.heatmap.inc.R"
+    params: rscript_top = script4,
+            rscript_drop = script5,
+            rscript_inc = script6,
+            facet = facet
     run:
         for i in input.a:
             shell("ls {i} >> {output.la}")
@@ -127,14 +136,14 @@ rule fusion_heatmap:
             shell("ls {i} >> {output.lb}")
         for i in input.c:
             shell("ls {i} >> {output.lc}")
-        shell("Rscript {params.rscript_top} {output.la} {output.a}")
+        shell("Rscript {params.rscript_top} {output.la} {output.a} {params.facet}")
         shell("Rscript {params.rscript_drop} {output.lb} {output.b}")
         shell("Rscript {params.rscript_inc} {output.lc} {output.c}")
 
 rule fusion_manhattan:
     input: outfile1_combined_grp
     output: a = temp(datlist), b = manhattan
-    params: rscript = sys.path[0]+ '/fusion.manhattan.R'
+    params: rscript = script7
     run:
         for i in input:
             shell("ls {i} >> {output.a}")

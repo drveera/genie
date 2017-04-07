@@ -10,6 +10,8 @@ options:
  --weights=FILE        gene expression weights file or .list [default: |resources/fusion/weights.list]
  --chr=NUMBER          chromosome number
  --out=PREFIX          output prefix [default: genie_fusion]
+ --daner               if using daner (ricopilli) format
+ --Nsamples=NUMBER     if not using --daner, specifiy the sample size [default: 10000] 
  --nojob               nojob
  --dry-run             dry run
  

@@ -9,6 +9,7 @@ if (is.na(args[2])){
 dfmfilelist <- args[1]
 outpdf <- args[2]
 
+
 dfmfiles <- readLines(dfmfilelist)
 
 dfmlist <- list()
@@ -24,12 +25,13 @@ for(i in 1:length(dfmfiles)){
 dfm <- do.call(rbind, dfmlist)
 
 library(ggplot2)
-
-p1 <- ggplot(dfm, aes(x = ID, y = tname)) +
-    geom_tile(aes(fill = -log10(JOINT.P))) +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1), text = element_text(size=10)) +
-    scale_fill_gradient(low = "white", high = "red") 
-
+if (! is.null(dfm)){
+    p1 <- ggplot(dfm, aes(x = ID, y = tname)) +
+        geom_tile(aes(fill = -log10(JOINT.P))) +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1), text = element_text(size=10)) +
+        scale_fill_gradient(low = "white", high = "red") 
+}
 ggsave(outpdf, width = 20, height = 8)
+
 
 

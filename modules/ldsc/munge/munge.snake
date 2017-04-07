@@ -1,26 +1,30 @@
 import sys
 import re
 
-methoddir = sys.path[0]
-maindir = re.search(r'.*genie/',methoddir).group()
+mungedir = sys.path[0]
+maindir = re.search(r'.*genie/',mungedir).group()
 sys.path.insert(1,maindir + "/library")
 import md
 import json
 from md import process_list
 
-pfix = config["pfix_munge"]
-pfix_dbsnp = pfix.replace("munge","dbsnp")
+pfix_munge = config["pfix_munge"]
+pfix_dbsnp = pfix_munge.replace("munge","dbsnp")
 config['pfix_dbsnp'] = pfix_dbsnp
 
 sumstats = config['--sumstats']
 sumstats = process_list(sumstats)
-
-ann_sumstats = f"{pfix_dbsnp}{{wcard}}.ann"
-munge_sumstats = f"{pfix}{{wcard}}.munged.sumstats.gz"
-munge_sumstats_pre = f"{pfix}{{wcard}}.munged"
+daner = config['--daner']
+Nsamples = config['--Nsamples']
+if daner:
+    ann_sumstats = f"{pfix_dbsnp}{{wcard}}.ann"
+else:
+    ann_sumstats = sumstats
+    
+munge_sumstats = f"{pfix_munge}{{wcard}}.munged.sumstats.gz"
+munge_sumstats_pre = f"{pfix_munge}{{wcard}}.munged"
 ##scripts
 mungescript=f"{maindir}/resources/ldsc/software/munge_sumstats.py"
-
 include: f"{maindir}/modules/sumstats/dbsnp/dbsnp.snake"
 
 rule genie_munge_all:
@@ -32,5 +36,9 @@ rule genie_munge_one:
     params: script = mungescript, pre = munge_sumstats_pre
     conda: f"{maindir}/resources/ldsc/env/p2.yaml"
     shell:
-        "{params.script} --sumstats {input} --daner --out {params.pre}"
+        "{{params.script}} --sumstats {{input}} {daner} {Nsamples} --out {{params.pre}}"
+        .format(
+            daner = "--daner" if daner else "",
+            Nsamples = "--N " + Nsamples if Nsamples else ""
+        )
 
