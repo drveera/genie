@@ -10,7 +10,12 @@ outname <- args[3]
 library(data.table)
 ## read files
 anno1 <- fread(paste0(pfix,".anno1.hg19_multianno.txt"), header = TRUE, colClasses = "character")
-anno2 <- fread(paste0(pfix,".anno2.hg19_multianno.txt"), header = TRUE, colClasses = "character")
+if (! file.info(paste0(pfix,".anno2.hg19_multianno.txt")$size == 0){
+    anno2 <- fread(paste0(pfix,".anno2.hg19_multianno.txt"), header = TRUE, colClasses = "character")
+} else {
+    anno2 <- NULL
+}
+
 avinput1 <- fread(paste0(pfix,".annovar.avinput1"), header = FALSE, colClasses = "character")
 names(avinput1) <- c("Chr","Start","End","Ref","Alt","SNP")
 
