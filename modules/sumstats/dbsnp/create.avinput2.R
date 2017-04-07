@@ -14,6 +14,6 @@ if (! file.info(anno1)$size == 0){
     write.table(avinput2, outname, col.names = FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
 } else {
     a = "Nothing left to annotate"
-    writeLines(a,outname)
+    write(a,outname)
 }
 
