@@ -34,6 +34,7 @@ if (grepl("gz$",sumstatfile)){
 
 ##merge 
 ##f1
+library(plyr)
 avinput1$sno <- 1:nrow(avinput1)
 f1 <- join(avinput1, anno1)
 ##f1 <-  merge(anno1, avinput1, by = c("Chr","Start","End","Ref","Alt"))
@@ -56,11 +57,13 @@ sumstat$sno2 <- 1:nrow(sumstat)
 m1 <- join(sumstat,f1)
 m1 <- m1[!duplicated(sno2)]
 if (! is.null(avinput2)){
+    f2$sno3 <- 1:nrow(f2)
     m2 <- join(m1,f2)
+    print("done")
     m2 <- m2[!duplicated(sno2)]
-    m2 <- m2[order(sno2),]
     ##m1 <- merge(m1, f2, by = "SNP", all.x = TRUE, sort = FALSE)
     m1 <- m2
+    m1 <- m1[order(sno2),]
 }
 
 
