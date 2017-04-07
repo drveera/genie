@@ -66,7 +66,7 @@ rule genie_annotate2:
         if flen(input.a) > 1:
             shell("{params.script} {input} {params.db}  -buildver hg19 -out {params.out}  -remove -protocol avsnp147 -operation f -nastring NA")
         else:
-            shell("touch {output}")
+            shell("touch {output[0]}")
 
 rule update_summary:
     input: lambda wildcards: sumstats[wildcards.wcard], anno1, anno2, avinput1, avinput2

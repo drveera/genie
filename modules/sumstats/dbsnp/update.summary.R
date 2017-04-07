@@ -14,7 +14,7 @@ anno2 <- fread(paste0(pfix,".anno2.hg19_multianno.txt"), header = TRUE, colClass
 avinput1 <- fread(paste0(pfix,".annovar.avinput1"), header = FALSE, colClasses = "character")
 names(avinput1) <- c("Chr","Start","End","Ref","Alt","SNP")
 
-if (! file.info(avinput2)$size == 0){
+if (! file.info(paste0(pfix,".annovar.avinput2"))$size == 0){
     avinput2 <- fread(paste0(pfix,".annovar.avinput2"), header = FALSE, colClasses = "character")
     names(avinput2) <- c("Chr","Start","End","Ref","Alt","SNP")
 } else {
