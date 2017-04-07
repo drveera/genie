@@ -14,6 +14,6 @@ avinput2 <- avinput2[,c(1,2,3,5,4,6),with=FALSE]
 write.table(avinput2, outname, col.names = FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
 
 if (file.info(outname)$size == 0){
-    writeLines("Nothing left to annotate", outname, append = TRUE)
+    writeLines("Nothing left to annotate", outname)
 }
 
