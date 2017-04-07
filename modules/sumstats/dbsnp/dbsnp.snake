@@ -74,5 +74,5 @@ rule update_summary:
     output: protected(updated_summary)
     params: rscript3,f"{pfix_dbsnp}{{wcard}}"
     shell:
-        "Rscript {params[0]} {input[0]} {params[1]} {output} && rm {params[1]}*invalid*"
+        "Rscript {params[0]} {input[0]} {params[1]} {output}"
     

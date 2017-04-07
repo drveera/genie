@@ -79,5 +79,3 @@ updateids <- function(x,y){
 m1$SNP <- apply(m1,1, function(x) updateids(x[20],x[1]))
 #m1 <- m1[,1:19,with=FALSE]
 write.table(m1,outname, sep = "\t", row.names = FALSE, quote = FALSE)
-
-
