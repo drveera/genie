@@ -3,6 +3,7 @@
 #imports
 import sys
 import re
+import os
 
 dbsnpdir = sys.path[0]
 maindir = re.search(r'.*genie/',dbsnpdir).group()
@@ -63,7 +64,7 @@ rule genie_annotate2:
     output: temp(anno2)
     params: script = annovar, db = humandb, out = anno2_prefix
     run:
-        if flen(input.a) > 1:
+        if os.path.getsize(input.a) > 0:
             shell("{params.script} {input} {params.db}  -buildver hg19 -out {params.out}  -remove -protocol avsnp147 -operation f -nastring NA")
         else:
             shell("touch {output[0]}")
