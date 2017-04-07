@@ -31,21 +31,36 @@ if (grepl("gz$",sumstatfile)){
 }else {
     sumstat = fread(sumstatfile, header = TRUE, colClasses = "character")
 }
+
+##merge 
 ##f1
-f1 <-  merge(anno1, avinput1, by = c("Chr","Start","End","Ref","Alt"))
+avinput1$sno <- 1:nrow(avinput1)
+f1 <- join(avinput1, anno1)
+##f1 <-  merge(anno1, avinput1, by = c("Chr","Start","End","Ref","Alt"))
+f1 <- f1[!duplicated(sno)]
 f1 <- f1[,c("SNP","avsnp147"), with = FALSE]
 
 ##f2
 if (! is.null(avinput2)){
-    f2 <- merge(anno2, avinput2, by = c("Chr","Start","End","Ref","Alt"))
+    avinput2$sno <- 1:nrow(avinput2)
+    f2 <- join(avinput2, anno2)
+    f2 <- f2[!duplicated(sno)]
+    ##f2 <- merge(anno2, avinput2, by = c("Chr","Start","End","Ref","Alt"))
     f2 <- f2[,c("SNP","avsnp147")]
 }
 
 
 ## merge with summary
-m1 <- merge(sumstat, f1, by = "SNP", all.x = TRUE, sort = FALSE)
+##m1 <- merge(sumstat, f1, by = "SNP", all.x = TRUE, sort = FALSE)
+sumstat$sno2 <- 1:nrow(sumstat)
+m1 <- join(sumstat,f1)
+m1 <- m1[!duplicated(sno2)]
 if (! is.null(avinput2)){
-    m1 <- merge(m1, f2, by = "SNP", all.x = TRUE, sort = FALSE)
+    m2 <- join(m1,f2)
+    m2 <- m2[!duplicated(sno2)]
+    m2 <- m2[order(sno2),]
+    ##m1 <- merge(m1, f2, by = "SNP", all.x = TRUE, sort = FALSE)
+    m1 <- m2
 }
 
 
@@ -59,7 +74,7 @@ updateids <- function(x,y){
 }
 
 m1$SNP <- apply(m1,1, function(x) updateids(x[20],x[1]))
-m1 <- m1[,1:19,with=FALSE]
+#m1 <- m1[,1:19,with=FALSE]
 write.table(m1,outname, sep = "\t", row.names = FALSE, quote = FALSE)
 
 
