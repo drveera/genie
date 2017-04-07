@@ -13,6 +13,7 @@ if (! file.info(anno1)$size == 0){
     avinput2 <- avinput2[,c(1,2,3,5,4,6),with=FALSE]
     write.table(avinput2, outname, col.names = FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
 } else {
-    writeLines("Nothing left to annotate",outname)
+    a = "Nothing left to annotate"
+    writeLines(a,outname)
 }
 
