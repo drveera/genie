@@ -27,8 +27,19 @@ def main(args, methods):
     os.makedirs(outfolder, exist_ok=True)
 
     write_config(args, debugdir)
+    try:
+        if args['--nojob']:
+            njobs = args['-n']
+        else:
+            njobs = 100000
+    except LookupError:
+        if args['--nojob']:
+            njobs = 1
+        else:
+            njobs = 100000
+        
 
-    cmds = "snakemake -j 999 --use-conda " \
+    cmds = f"snakemake -j {njobs} --use-conda --keep-going " \
           f"--cluster-config {maindir}/library/cluster.json " \
           f"--configfile {debugdir}/config.json " \
           f"--nolock " \

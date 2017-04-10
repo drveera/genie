@@ -35,7 +35,7 @@ rule genie_munge_one:
     output: munge_sumstats            
     params: script = mungescript, pre = munge_sumstats_pre
     conda: f"{maindir}/resources/ldsc/env/p2.yaml"
-    shell:
+    shell:        
         "{{params.script}} --sumstats {{input}} {daner} {Nsamples} --out {{params.pre}}"
         .format(
             daner = "--daner" if daner else "",

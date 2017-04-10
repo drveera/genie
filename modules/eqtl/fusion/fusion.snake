@@ -108,9 +108,13 @@ rule fusion_conditional:
     output: temp(outfile3), temp(outfile4)
     run:
         if flen(input.b) > 1:
-            shell("Rscript {params.rscript} --sumstats {input.a} --input {input.b} " \
-                  "--out {params.out} --ref_ld_chr {params.ld} --chr {wildcards.chr} " \
-                  "--plot --locus_win 100000")
+            print(flen(input.b))
+            shell("Rscript {{params.rscript}} --sumstats {{input.a}} --input {{input.b}} " \
+                  "--out {{params.out}} --ref_ld_chr {{params.ld}} --chr {{wildcards.chr}} " \
+                  "--plot {window}"
+                  .format(
+                      window = "--locus_win 100 " if flen(input.b) > 2 else "--locus_win 100"
+                  ))
         else:
             shell("touch {output}")
 
@@ -123,26 +127,35 @@ rule fusion_combine_cwise:
                   shell: "Rscript {params.rscript} {params.wdir} {output.a} {output.b} {output.c} {output.d}"
 
 rule fusion_heatmap:
-    input: a = outfile2_combined_grp, b = outfile3_combined_grp, c = outfile4_combined_grp
-    output: a = heatmap_top, b = heatmap_drop, c = heatmap_inc, la = temp(toplist), lb = temp(droplist), lc = temp(inclist)
+    input: a = outfile2_combined_grp
+    output: a = heatmap_top,  la = temp(toplist)
     params: rscript_top = script4,
-            rscript_drop = script5,
-            rscript_inc = script6,
             facet = facet
     run:
         for i in input.a:
             shell("ls {i} >> {output.la}")
-        for i in input.b:
-            shell("ls {i} >> {output.lb}")
-        for i in input.c:
-            shell("ls {i} >> {output.lc}")
         shell("Rscript {params.rscript_top} {output.la} {output.a} {params.facet}")
-        shell("Rscript {params.rscript_drop} {output.lb} {output.b}")
-        shell("Rscript {params.rscript_inc} {output.lc} {output.c}")
+        
+rule fusion_heatmap2:
+    input: outfile3_combined_grp
+    output: a = heatmap_drop, list = temp(droplist)
+    params: script = script5
+    run:
+        for i in input:
+            shell("ls {i} >> {output.list}")
+        shell("Rscript {params.script} {output.list} {output.a}")
 
+rule fusion_heatmap3:
+    input: outfile4_combined_grp
+    output: a = heatmap_inc, list = temp(inclist)
+    params: script = script6
+    run:
+        for i in input:
+            shell("ls {i} >> output.list")
+        shell("Rscript {params.script} {output.list} {output.a}")
 rule fusion_manhattan:
     input: outfile1_combined_grp
-    output: a = temp(datlist), b = manhattan
+    output: a = datlist, b = manhattan
     params: rscript = script7
     run:
         for i in input:

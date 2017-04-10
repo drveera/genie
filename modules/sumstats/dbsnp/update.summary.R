@@ -76,6 +76,7 @@ updateids <- function(x,y){
     }
 }
 idpos <- grep("avsnp147",names(m1))
-m1$SNP <- apply(m1,1, function(x) updateids(x[as.numeric(idpos)],x[1]))
+snppos <- grep("SNP",names(m1))
+m1$SNP <- apply(m1,1, function(x) updateids(x[as.numeric(idpos)],x[as.numeric(snppos)]))
 #m1 <- m1[,1:19,with=FALSE]
 write.table(m1,outname, sep = "\t", row.names = FALSE, quote = FALSE)

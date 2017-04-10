@@ -8,6 +8,8 @@ usage:
 options:
  --sumstats=FILE     daner formatted summary file
  --out=PREFIX        outname prefix [default: out]
+ --Nsamples=NUMBER   sample size
+ --daner             if using daner format
  --nojob             run front end
  --dry-run           just see the analysis plan but not run
 

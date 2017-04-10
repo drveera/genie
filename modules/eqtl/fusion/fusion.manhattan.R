@@ -10,10 +10,11 @@ dfmfiles <- readLines(dfmfileslist)
 dfmlist <- list()
 for (i in 1:length(dfmfiles)){
     d  <- read.table(dfmfiles[i], header = TRUE)
+    print(table(is.na(d$TWAS.P)))
     d <- d[!is.na(d$TWAS.P),]
     dfmlist[[i]] <- d
 }
-
+#print(lapply(dfmlist,dim))
 library(ggman)
 
 plotlist <- list()

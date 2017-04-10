@@ -12,10 +12,14 @@ supper = config['--supper']
 sinc = config['--sinc']
 covar = config['--covar']
 clump = config['--clump']
+clump_p1 = config['--clump_p1']
+clump_p2 = config['--clump_p2']
+clump_r2 = config['--clump_r2']
+clump_kb = config['--clump_kb']
 pheno = config['--pheno']
 ped = config['--ped']
 pcs = config['--pcs']
-pc_method = config['--pc_method']
+allscores = config['--all_scores']
 
 ####if quantitative target 
 if config['--quantitative']:
@@ -32,7 +36,7 @@ else:
 prsice_r = sys.path[0] + '/../../../resources/prs/prsice/PRSice_v1.25.R'
 plink = '/com/extra/plink/1.90-beta-2016-03/bin/plink'
 
-workdir: config['of_prsice']
+#workdir: config['of_prsice']
 rule all:
     input:
         expand(pfix + "{train}_BARPLOT_.png", train = train),
@@ -41,7 +45,7 @@ rule all:
         #base + "{train}_SCORES_AT_BEST-FIT-PRS.txt"
         expand(pfix + "{train}_HIGH-RES_PLOT_.png", train = train),
         expand(pfix + "{train}_RAW_RESULTS_DATA.txt", train = train),
-        expand(pfix + "{train}_SCORES_AT_BEST-FIT-PRS.txt", train = train)
+        expand(pfix + "{train}_SCORES_AT_ALL_THRESHOLDS.txt", train = train)
         
 rule prs:
     input:
@@ -51,14 +55,14 @@ rule prs:
         pfix + "{train}_BARPLOT_.png",
         pfix + "{train}_HIGH-RES_PLOT_.png",
         pfix + "{train}_RAW_RESULTS_DATA.txt",
-        pfix + "{train}_SCORES_AT_BEST-FIT-PRS.txt"
+        pfix + "{train}_SCORES_AT_ALL_THRESHOLDS.txt",
     shadow: "shallow"
     shell:
         "Rscript {prsice_r} -q --args plink {plink} \
         base {{input.train_summary}} target {target} binary.target {binary} \
         slower {slower} supper {supper} sinc {sinc} covary {covary} {covar} {pcs} \
         clump.snps {clump} clump.p1 {clump_p1} clump.p2 {clump_p2} clump.r2 {clump_r2} \
-        clump.kb {clump_kb} figname {pfix}{wildcards.train}"
+        clump.kb {clump_kb} figname {pfix}{{wildcards.train}} {allscores}"
         .format(
             prsice_r = prsice_r, plink = plink,
             target = target, binary = binary, slower = slower, supper = supper,
@@ -66,5 +70,7 @@ rule prs:
             covar = "user.covariate.file " + {covar} if covar else "",
             pcs = "covariates" + {pcs} if pcs else "",
             clump = clump, clump_p1 = clump_p1,
-            clump_p2 = clump_p2, clump_r2 = clump_r2, clump_kb = clump_kb
+            clump_p2 = clump_p2, clump_r2 = clump_r2, clump_kb = clump_kb,
+            pfix = pfix,
+            allscores = "report.best.score.only F " if allscores else ""
         )

@@ -8,6 +8,7 @@ usage:
 The following prs methods are available:
 
 COMMAND  DESCRIPTION
+hub      generate summaries based on precomputed scores
 prsice   R package
 ldpred   ...
 
@@ -33,7 +34,7 @@ argv = [arguments['<method>']] + arguments['<args>']
 ########################################################################################################
 # CHECK IF METHOD IS VALID
 method = arguments['<method>']
-prsmethods = ['prsice','ldpred','-h','--help']
+prsmethods = ['prsice','ldpred','hub','-h','--help']
 if method not in prsmethods:
     exit(method + " is not valid")
 ########################################################################################################
