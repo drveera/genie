@@ -39,7 +39,14 @@ covariables <- names(covar)[3:ncol(covar)]
 
 ##merge 
 m1 <- join(pheno,covar, type = "inner")
+if(ncol(m1) == 0){
+    stop("Mismatch of IDs between pheno and covar files")
+}
 m2 <- join(prs,m1, type = "inner")
+if(ncol(m2) == 0){
+    stop("mismatch of IDs between pheno/covar and score files")
+}
+
 
 dfmlist <- list()
 for (i in 1:length(ts)){
