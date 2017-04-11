@@ -7,14 +7,14 @@ usage:
  prs hub [options] --pheno=FILE --covar=FILE 
 
 options:
- --pheno=FILE   phenotype file
- --covar=FILE   covariate file
- --score=FILE   score file or .list
- --out=PREFIX   outname prefix [deafult: hub_out]
- --nojob        run in front end
- --dry-run      just show the codes
- -n,--njobs     number of parallel jobs; applicable only when running 
-                in front end
+ --pheno=FILE       phenotype file
+ --covar=FILE       covariate file
+ --score=FILE       score file or .list
+ --out=PREFIX       outname prefix [deafult: hub_out]
+ --nojob            run in front end
+ --dry-run          just show the codes
+ --njobs=NUMBER     number of parallel jobs; applicable only when running 
+                    in front end
 
 '''
 
