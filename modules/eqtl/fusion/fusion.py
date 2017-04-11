@@ -14,6 +14,7 @@ options:
  --Nsamples=NUMBER     if not using --daner, specifiy the sample size [default: 10000] 
  --nojob               nojob
  --dry-run             dry run
+ --njobs=NUMBER    number of parallel jobs if running in front node [default: 1]
  
 '''
 

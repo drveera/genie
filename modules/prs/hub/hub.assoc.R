@@ -70,30 +70,29 @@ dfm$threshold <- factor(dfm$threshold, levels = dfm$threshold[mixedorder(dfm$thr
 dfm$pvalue <- as.numeric(as.character(dfm$pvalue))
 dfm <- dfm[mixedorder(dfm$threshold),]
 fwrite(dfm,paste0(outname,"results.txt"),sep = "\t", na = "NA")
-dfm_best <- dfm[dfm$R2 == max(dfm$R2),]
-
+r2max = max(dfm$R2, na.rm = TRUE)
+dfm_best <- dfm[dfm$R2 == r2max,]
+if (r2max > 0.1){
+    r2ymax = r2max + 0.01
+} else {
+    r2ymax = 0.1
+}
 ##plot r squared
+
 p1 <- ggplot(dfm, aes(threshold,as.numeric(R2))) + geom_point() + geom_line(aes(group = 1),alpha = 0.1) +
     geom_point(data = dfm_best, colour = "red") +
     geom_text_repel(aes(label = format(pvalue,scientific = TRUE)), size = 2) +
     geom_text(data = dfm_best,
                     aes(y = 0, label = paste0("best_threshold:",threshold)), colour = "blue") +
     theme(axis.text.x=element_text(angle=90, hjust=1)) +
-    labs(x = "P Value Thresholds", y = "Nagelkerke-R-Squared", title = paste0(basename(outname),"r2.plot"))
+    labs(x = "P Value Thresholds", y = "Nagelkerke-R-Squared", title = paste0(basename(outname),"r2.plot")) +
+    ylim(0,r2ymax)
 plotslist[[1]] <- p1
 ggsave(paste0(outname,"rsquaredValues.pdf"))
 
 ## determine the best fit score
 best_threshold <- as.character(dfm[dfm$R2 == max(dfm$R2),"threshold"])
 m2$bestscore <- m2[,names(m2) %in% best_threshold,with=F]
-m2 = m2 %>%
-    mutate(quantile = ntile(bestscore,10))
-m2$quantile <- as.factor(m2$quantile)
-qs <- model.matrix(~quantile, data = m2)
-print(head(qs))
-qs <- as.data.frame(qs)
-m2 <- cbind(m2,qs)
-m2$quantile <- ifelse(m2$quantile == 1,"base","other")
 
 qspecor <- function(dfm,qtile){
     dfm$qtile <- dfm[,qtile]
@@ -105,30 +104,48 @@ qspecor <- function(dfm,qtile){
     return(c(or,ci,qname=qtile))
 }
 
-orlist <- list()
-qtiles <- paste0("quantile",2:10)
-print(names(m2))
-for(i in 1:length(qtiles)){
-    orlist[[i]] <- qspecor(m2,qtiles[i])
+quantile_analysis <- function(m2,n,xlab="Quantiles"){
+    m2 = m2 %>%
+        mutate(quantile = ntile(bestscore,n))
+    m2$quantile <- as.factor(m2$quantile)
+    qs <- model.matrix(~quantile, data = m2)
+    qs <- as.data.frame(qs)
+    m2 <- cbind(m2,qs)
+    m2$quantile <- ifelse(m2$quantile == 1,"base","other")
+
+    orlist <- list()
+    qtiles <- paste0("quantile",2:n)
+    print(names(m2))
+    for(i in 1:length(qtiles)){
+        orlist[[i]] <- qspecor(m2,qtiles[i])
+    }
+    ordfm <- do.call(rbind,orlist)
+    ordfm <- rbind(c("1","1","1","quantile1"),ordfm)
+    ordfm <- as.data.frame(ordfm)
+
+
+    ordfm[,1] <- as.numeric(as.character(ordfm[,1]))
+    ordfm[,2] <- as.numeric(as.character(ordfm[,2]))
+    ordfm[,3] <- as.numeric(as.character(ordfm[,3]))
+    names(ordfm) <- c("or","lower","upper","quantile")
+    ordfm$quantile <- factor(ordfm$quantile, levels = paste0("quantile",1:10))
+    ormax = max(ordfm$or, na.rm = TRUE)[1]
+    if (ormax>2){
+        ymax = ormax + 1
+    } else {
+        ymax = 2
+    }
+
+    p2 <- ggplot(ordfm, aes(quantile,or)) + geom_point() +
+        geom_errorbar(aes(ymax = upper, ymin = lower), width = 0.2) +
+        geom_hline(aes(yintercept = 1), colour = "red") +
+        labs(x = xlab, y = "Odds ratio with 95% CI", title = paste0(basename(outname),".or.plot")) + ylim(0,ymax)
+    plotslist[[length(plotslist)+1]] <<- p2
+    ggsave(paste0(outname, "oddsratio_",xlab,".pdf"))
 }
-ordfm <- do.call(rbind,orlist)
-ordfm <- rbind(c("1","1","1","quantile1"),ordfm)
-ordfm <- as.data.frame(ordfm)
 
-
-ordfm[,1] <- as.numeric(as.character(ordfm[,1]))
-ordfm[,2] <- as.numeric(as.character(ordfm[,2]))
-ordfm[,3] <- as.numeric(as.character(ordfm[,3]))
-names(ordfm) <- c("or","lower","upper","quantile")
-ordfm$quantile <- factor(ordfm$quantile, levels = paste0("quantile",1:10))
-
-p2 <- ggplot(ordfm, aes(quantile,or)) + geom_point() +
-    geom_errorbar(aes(ymax = upper, ymin = lower), width = 0.2) +
-    geom_hline(aes(yintercept = 1), colour = "red") +
-    labs(x = "Quantiles", y = "Odds ratio with 95% CI", title = paste0(basename(outname),".or.plot"))
-plotslist[[2]] <- p2
-ggsave(paste0(outname, "oddsratio_decile.pdf"))
-
+quantile_analysis(m2,10,"Deciles")
+quantile_analysis(m2,5,"Quintiles")
 pdf(paste0(outname,"summary.pdf"))
 for (i in 1:length(plotslist)){
     print(plotslist[[i]])

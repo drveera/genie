@@ -17,7 +17,8 @@ pfix_hub = config['pfix_hub']
 pfix_hub = f"{pfix_hub}{{score}}/{{score}}_"
 outfile1 = f"{pfix_hub}results.txt"
 plot1 = f"{pfix_hub}rsquaredValues.pdf"
-plot2 = f"{pfix_hub}oddsratio_decile.pdf"
+plot2 = f"{pfix_hub}oddsratio_Deciles.pdf"
+plot3 = f"{pfix_hub}oddsratio_Quintiles.pdf"
 sumplot =f"{pfix_hub}summary.pdf"
 
 script1 = sys.path[0] + "/hub.assoc.R"
@@ -25,12 +26,13 @@ rule hub_all:
     input: expand(outfile1, score = score),
            expand(plot1, score = score),
            expand(plot2, score = score),
+           expand(plot3,score = score),
            expand(sumplot, score = score)
 
 rule hub_one:
     input: score = lambda wildcards: score[wildcards.score],
            pheno = pheno, covar = covar
-    output: outfile1, plot1, plot2, sumplot
+    output: outfile1, plot1, plot2, plot3, sumplot
     params: script = script1, out = pfix_hub
     shell:
         "Rscript {params.script} {input.score} {input.pheno} {input.covar} {params.out}"

@@ -113,7 +113,7 @@ rule fusion_conditional:
                   "--out {{params.out}} --ref_ld_chr {{params.ld}} --chr {{wildcards.chr}} " \
                   "--plot {window}"
                   .format(
-                      window = "--locus_win 100 " if flen(input.b) > 2 else "--locus_win 100"
+                      window = "--locus_win 10000 " if flen(input.b) > 2 else "--locus_win 0"
                   ))
         else:
             shell("touch {output}")
