@@ -68,7 +68,7 @@ dfm$R2 <- as.numeric(dfm$R2)
 dfm$threshold <- as.character(dfm$threshold)
 dfm$pvalue <- as.numeric(as.character(dfm$pvalue))
 dfm <- dfm[mixedorder(dfm$threshold),]
-
+fwrite(dfm,paste0(outname,"results.txt"),sep = "\t", na = "NA")
 dfm_best <- dfm[dfm$R2 == max(dfm$R2),]
 
 ##plot r squared
@@ -78,14 +78,13 @@ p1 <- ggplot(dfm, aes(threshold,as.numeric(R2))) + geom_point() + geom_line(aes(
     geom_text(data = dfm_best,
                     aes(y = 0, label = paste0("best_threshold:",threshold)), colour = "blue") +
     theme(axis.text.x=element_text(angle=90, hjust=1)) +
-    xlab("P Value Thresholds") + ylab("Nagelkerke-R-Squared")
+    labs(x = "P Value Thresholds", y = "Nagelkerke-R-Squared", title = paste0(basename(outname),"r2.plot"))
 plotslist[[1]] <- p1
 ggsave(paste0(outname,"rsquaredValues.pdf"))
 
 ## determine the best fit score
 best_threshold <- as.character(dfm[dfm$R2 == max(dfm$R2),"threshold"])
 m2$bestscore <- m2[,names(m2) %in% best_threshold,with=F]
-fwrite(m2,paste0(outname,"results.txt"),sep = "\t", na = "NA")
 m2 = m2 %>%
     mutate(quantile = ntile(bestscore,10))
 m2$quantile <- as.factor(m2$quantile)
@@ -115,6 +114,7 @@ ordfm <- do.call(rbind,orlist)
 ordfm <- rbind(c("1","1","1","quantile1"),ordfm)
 ordfm <- as.data.frame(ordfm)
 
+
 ordfm[,1] <- as.numeric(as.character(ordfm[,1]))
 ordfm[,2] <- as.numeric(as.character(ordfm[,2]))
 ordfm[,3] <- as.numeric(as.character(ordfm[,3]))
@@ -122,7 +122,8 @@ names(ordfm) <- c("or","lower","upper","quantile")
 ordfm$quantile <- factor(ordfm$quantile, levels = paste0("quantile",1:10))
 
 p2 <- ggplot(ordfm, aes(quantile,or)) + geom_point() +
-    geom_errorbar(aes(ymax = upper, ymin = lower), width = 0.2)
+    geom_errorbar(aes(ymax = upper, ymin = lower), width = 0.2) +
+    labs(x = "Quantiles", y = "Odds ratio with 95% CI", title = paste0(basename(outname),".or.plot"))
 plotslist[[2]] <- p2
 ggsave(paste0(outname, "oddsratio_decile.pdf"))
 
