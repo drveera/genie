@@ -29,7 +29,10 @@ def main(args, methods):
     write_config(args, debugdir)
     try:
         if args['--nojob']:
-            njobs = args['--njobs']
+            if args['--njobs']:
+                njobs = args['--njobs']
+            else:
+                njobs = 1
         else:
             njobs = 100000
     except LookupError:
