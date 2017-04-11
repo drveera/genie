@@ -151,7 +151,7 @@ rule fusion_heatmap3:
     params: script = script6
     run:
         for i in input:
-            shell("ls {i} >> output.list")
+            shell("ls {i} >> {output.list}")
         shell("Rscript {params.script} {output.list} {output.a}")
 rule fusion_manhattan:
     input: outfile1_combined_grp
