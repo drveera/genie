@@ -18,6 +18,7 @@ library(fmsb)
 library(ggplot2)
 library(ggrepel)
 library(tidyverse)
+library(gtools)
 
 ##reads
 prs <- fread(scorefile,header=TRUE)
@@ -66,6 +67,7 @@ names(dfm) <- c("Estimate","SE","Z_score","pvalue","N","R2","threshold")
 dfm$R2 <- as.numeric(dfm$R2)
 dfm$threshold <- as.character(dfm$threshold)
 dfm$pvalue <- as.numeric(as.character(dfm$pvalue))
+dfm <- dfm[mixedorder(dfm$threshold),]
 
 dfm_best <- dfm[dfm$R2 == max(dfm$R2),]
 
