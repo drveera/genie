@@ -66,6 +66,7 @@ dfm <- as.data.frame(dfm)
 names(dfm) <- c("Estimate","SE","Z_score","pvalue","N","R2","threshold")
 dfm$R2 <- as.numeric(dfm$R2)
 dfm$threshold <- as.character(dfm$threshold)
+dfm$threshold <- factor(dfm$threshold, levels = dfm$threshold[mixedorder(dfm$threshold)])
 dfm$pvalue <- as.numeric(as.character(dfm$pvalue))
 dfm <- dfm[mixedorder(dfm$threshold),]
 fwrite(dfm,paste0(outname,"results.txt"),sep = "\t", na = "NA")
@@ -123,6 +124,7 @@ ordfm$quantile <- factor(ordfm$quantile, levels = paste0("quantile",1:10))
 
 p2 <- ggplot(ordfm, aes(quantile,or)) + geom_point() +
     geom_errorbar(aes(ymax = upper, ymin = lower), width = 0.2) +
+    geom_hline(aes(yintercept = 1), colour = "red") +
     labs(x = "Quantiles", y = "Odds ratio with 95% CI", title = paste0(basename(outname),".or.plot"))
 plotslist[[2]] <- p2
 ggsave(paste0(outname, "oddsratio_decile.pdf"))
