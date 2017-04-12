@@ -27,4 +27,4 @@ p1 <- ggplot(sumdfm,aes(threshold,R2, group = pheno)) + geom_line(alpha = 0.1) +
     geom_line(data = sumpheno, aes(colour = pheno))
 
 ggsave(paste0(outname,"rsquaredValues.allpheno.pdf"), width = 8, height = 4)
-#ggsave("temp.pdf", width = 8, height = 4)
+                         
