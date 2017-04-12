@@ -69,6 +69,7 @@ dfm$threshold <- as.character(dfm$threshold)
 dfm$threshold <- factor(dfm$threshold, levels = dfm$threshold[mixedorder(dfm$threshold)])
 dfm$pvalue <- as.numeric(as.character(dfm$pvalue))
 dfm <- dfm[mixedorder(dfm$threshold),]
+dfm$pheno <- basename(outname)
 fwrite(dfm,paste0(outname,"results.txt"),sep = "\t", na = "NA")
 r2max = max(dfm$R2, na.rm = TRUE)
 dfm_best <- dfm[dfm$R2 == r2max,]

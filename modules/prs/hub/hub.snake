@@ -17,14 +17,19 @@ pfix_hub = config['pfix_hub']
 pfix_hub = f"{pfix_hub}{{score}}/{{score}}_"
 outfile1 = f"{pfix_hub}results.txt"
 plot1 = f"{pfix_hub}rsquaredValues.pdf"
+plot1a = f"{pfix_hub}rsquaredValues.allpheno.pdf"
 plot2 = f"{pfix_hub}oddsratio_Deciles.pdf"
 plot3 = f"{pfix_hub}oddsratio_Quintiles.pdf"
 sumplot =f"{pfix_hub}summary.pdf"
+r2_list = f"{pfix_hub}r2.list"
 
 script1 = sys.path[0] + "/hub.assoc.R"
+script2 = sys.path[0] + "/hub.summary.R"
+
 rule hub_all:
     input: expand(outfile1, score = score),
            expand(plot1, score = score),
+           expand(plot1a, score = score),
            expand(plot2, score = score),
            expand(plot3,score = score),
            expand(sumplot, score = score)
@@ -36,3 +41,17 @@ rule hub_one:
     params: script = script1, out = pfix_hub
     shell:
         "Rscript {params.script} {input.score} {input.pheno} {input.covar} {params.out}"
+
+rule hub_create_list:
+    input: expand(outfile1, score = score)
+    output: temp(r2_list)
+    run:
+        for i in input:
+            shell("ls {i} >> {output}")
+
+rule hub_combine:
+    input: r2_list
+    output: plot1a
+    params: script = script2, out = pfix_hub
+    shell:
+        "Rscript {params.script} {input} {params.out}"
