@@ -103,7 +103,7 @@ rule fusion_top:
         "cat {input} | awk -v count=\"$(wc -l {params.wt})\" 'NR == 1 || $NF < 0.05/count' > {output}"
 
 rule fusion_conditional:
-    input: b=outfile2, a=lambda wildcards: sumstats[wildcards.wcard]
+    input: b=outfile2, a=munge_sumstats
     params: rscript = script2, ld = ldprefix, out = outfile3_prefix
     output: temp(outfile3), temp(outfile4)
     run:
@@ -111,10 +111,7 @@ rule fusion_conditional:
             print(flen(input.b))
             shell("Rscript {{params.rscript}} --sumstats {{input.a}} --input {{input.b}} " \
                   "--out {{params.out}} --ref_ld_chr {{params.ld}} --chr {{wildcards.chr}} " \
-                  "--plot {window}"
-                  .format(
-                      window = "--locus_win 10000 " if flen(input.b) > 2 else "--locus_win 0"
-                  ))
+                  "--plot --locus_win 100000".format())
         else:
             shell("touch {output}")
 

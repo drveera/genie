@@ -19,14 +19,13 @@ Nsamples = config['--Nsamples']
 if daner:
     ann_sumstats = f"{pfix_dbsnp}{{wcard}}.ann"
 else:
-    ann_sumstats = sumstats
+    ann_sumstats = lambda wildcards: sumstats[wildcards.wcard]
     
 munge_sumstats = f"{pfix_munge}{{wcard}}.munged.sumstats.gz"
 munge_sumstats_pre = f"{pfix_munge}{{wcard}}.munged"
 ##scripts
 mungescript=f"{maindir}/resources/ldsc/software/munge_sumstats.py"
 include: f"{maindir}/modules/sumstats/dbsnp/dbsnp.snake"
-
 rule genie_munge_all:
     input: expand(munge_sumstats, wcard = sumstats)
 
