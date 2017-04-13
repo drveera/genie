@@ -93,7 +93,8 @@ ggsave(paste0(outname,"rsquaredValues.pdf"))
 
 ## determine the best fit score
 best_threshold <- as.character(dfm[dfm$R2 == max(dfm$R2),"threshold"])
-m2$bestscore <- m2[,names(m2) %in% best_threshold,with=F]
+bscolumn <- names(m2)[names(m2) %in% best_threshold][1]
+m2$bestscore <- m2[,bscolumn,with=F]
 
 qspecor <- function(dfm,qtile){
     dfm$qtile <- dfm[,qtile]
