@@ -21,8 +21,8 @@ sumdfm <- do.call(rbind, sumlist)
 threshold <- as.character(sumdfm$threshold)
 threshold <- threshold[!duplicated(threshold)]
 sumdfm$threshold <- factor(sumdfm$threshold, levels = threshold[mixedorder(threshold)])
-p1 <- ggplot(sumdfm, aes(threshold,pheno)) + geom_tile(aes(fill = R2)) +
-    theme(axis.text.x=element_text(angle=90, hjust=1)) +
-    scale_fill_gradient(low = "white", high = "red")
+sumdfm$R2disc <- cut(sumdfm$R2, breaks = c(0,0.01,0.05,0.1), right = FALSE)
+p1 <- ggplot(sumdfm, aes(threshold,pheno)) + geom_tile(aes(fill = R2disc)) +
+    theme(axis.text.x=element_text(angle=90, hjust=1)) + scale_fill_brewer(palette = "Purples")
 
 ggsave(outname, width = 12, height = 5)

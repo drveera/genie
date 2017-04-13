@@ -86,8 +86,7 @@ p1 <- ggplot(dfm, aes(threshold,as.numeric(R2))) + geom_point() + geom_line(aes(
     geom_text(data = dfm_best,
                     aes(y = 0, label = paste0("best_threshold:",threshold)), colour = "blue") +
     theme(axis.text.x=element_text(angle=90, hjust=1)) +
-    labs(x = "P Value Thresholds", y = "Nagelkerke-R-Squared", title = paste0(basename(outname),"r2.plot")) +
-    ylim(0,r2ymax)
+    labs(x = "P Value Thresholds", y = "Nagelkerke-R-Squared", title = paste0(basename(outname),"r2.plot")) 
 plotslist[[1]] <- p1
 ggsave(paste0(outname,"rsquaredValues.pdf"))
 
@@ -141,7 +140,7 @@ quantile_analysis <- function(m2,n,xlab="Quantiles"){
     p2 <- ggplot(ordfm, aes(quantile,or)) + geom_point() +
         geom_errorbar(aes(ymax = upper, ymin = lower), width = 0.2) +
         geom_hline(aes(yintercept = 1), colour = "red") +
-        labs(x = xlab, y = "Odds ratio with 95% CI", title = paste0(basename(outname),".or.plot")) + ylim(0,ymax)
+        labs(x = xlab, y = "Odds ratio with 95% CI", title = paste0(basename(outname),".or.plot")) 
     plotslist[[length(plotslist)+1]] <<- p2
     ggsave(paste0(outname, "oddsratio_",xlab,".pdf"))
 }
