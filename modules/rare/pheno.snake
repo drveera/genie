@@ -1,0 +1,14 @@
+import sys
+pheno = ['file']
+rarePheno = "{pheno}.rpheno"
+phenoScript = f"{sys.path[0]}/convert.rarePheno.R"
+
+rule rare_pheno_all:
+    input: expand(rarePheno, pheno = pheno)
+
+rule rare_pheno:
+    input: "{pheno}"
+    output: rarePheno
+    params: script = phenoScript
+    shell:
+        "Rscript {params.script} {input} {output}"
