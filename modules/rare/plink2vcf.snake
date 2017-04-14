@@ -1,0 +1,16 @@
+
+plinkfile_prefix = ['file']
+bim = "{wcard}.bim"
+bed = "{wcard}.bed"
+fam = "{wcard}.fam"
+vcffile = "{wcard}.vcf"
+
+rule plink2vcf_all:
+    input: expand(vcffile, wcard = plinkfile_prefix)
+
+rule plink2vcf_convert:
+    input: bed, bim, fam
+    params: plinkfile_prefix
+    output: vcffile
+    shell:
+        "plink --bfile {wildcards.wcard} --recode vcf --out {wildcards.wcard}"

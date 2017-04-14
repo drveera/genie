@@ -27,7 +27,7 @@ sumdfm$pvalue1 <- cut(sumdfm$pvalue, breaks = c(0,0.000001,0.00001,0.0001,0.001,
 #    theme(axis.text.x=element_text(angle=90, hjust=1)) + scale_fill_brewer(palette = "Purples")
 
 p2 <- ggplot(sumdfm, aes(threshold,pheno)) + geom_tile(aes(fill = pvalue1)) +
-    geom_text(aes(label = round(R2,2)), size = 2) +
+    geom_text(aes(label = round(R2,3)), size = 2) +
     theme(axis.text.x=element_text(angle=90, hjust=1)) + scale_fill_brewer(palette = "Purples", direction = -1)
 
 pdf(outname, width = 12, height = 5)

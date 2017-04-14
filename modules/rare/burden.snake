@@ -1,0 +1,17 @@
+
+burden = config['burden']
+burden_prefix = f"{pfix_rare}/burden/{{wcard}}_{{wcardB}}"
+outfile_burden = f"{burden_prefix}.assoc.ok"
+
+rule rare_burden:
+    input: vcf = infile, pheno = pheno
+    output: outfile_burden
+    params: script = rvtest, out = burden_prefix, geneflat = geneflat
+    shell:
+        "{{params.script}} --inVcf {{input.vcf}} --pheno {{input.pheno}} \
+        --out {{params.out}} --geneFile {{params.geneflat}} \
+        --burden {{wildcards.wcardB}} {covar} {covarName} && touch {{output}}"
+        .format(
+            covar = "--covar " + covar if covar else "",
+	    covarName = "--covar-name " + covarName if covarName else ""
+        )

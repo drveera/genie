@@ -1,0 +1,17 @@
+
+kernel = config['kernel']
+kernel_prefix = f"{pfix_rare}/kernel/{{wcard}}_{{wcardK}}"
+outfile_kernel = f"{kernel_prefix}.assoc.ok"
+
+rule rare_kernel:
+    input: vcf = infile, pheno = pheno
+    output: outfile_kernel
+    params: script = rvtest, out = kernel_prefix, geneflat = geneflat
+    shell:
+        "{{params.script}} --inVcf {{input.vcf}} --pheno {{input.pheno}} \
+        --out {{params.out}} --geneFile {{params.geneflat}} \
+        --kernel {{wildcards.wcardK}} {covar} {covarName} && touch {{output}}"
+        .format(
+            covar = "--covar " + covar if covar else "",
+	    covarName = "--covar-name " + covarName if covarName else ""
+        )

@@ -1,0 +1,17 @@
+
+single = config['single']
+single_prefix = f"{pfix_rare}/single/{{wcard}}_{{wcard2}}"
+
+outfile_single = f"{single_prefix}.assoc.ok"
+
+rule rare_single_test:
+    input: vcf = infile, pheno = pheno
+    output: outfile_single
+    params: script = rvtest, out = single_prefix
+    shell:
+        "{{params.script}} --inVcf {{input.vcf}} --pheno {{input.pheno}} \
+	--out {{params.out}} --single {{wildcards.wcard2}} {covar} {covarName} && touch {{output}}"
+        .format(
+            covar = "--covar " + covar if covar else "",
+	    covarName = "--covar-name " + covarName if covarName else ""
+        )

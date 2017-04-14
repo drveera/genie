@@ -1,0 +1,19 @@
+import sys
+methoddir = sys.path[0]
+include: f"{methoddir}/vars.snake"
+include: f"{methoddir}/single.snake"
+include: f"{methoddir}/burden.snake"
+include: f"{methoddir}/vt.snake"
+include: f"{methoddir}/kernel.snake"
+
+outfiles = []
+if config['--single']:
+    outfiles.append(expand(outfile_single, wcard = vcf, wcard2 = single))
+if config['--burden']:
+    outfiles.append(expand(outfile_burden, wcard = vcf, wcardB = burden))
+if config['--vt']:
+    outfiles.append(expand(outfile_vt, wcard = vcf, wcardV = vt))
+if config['--kernel']:
+    outfiles.append(expand(outfile_kernel, wcard = vcf, wcardK = kernel))
+rule rvtests_all:
+    input:  outfiles

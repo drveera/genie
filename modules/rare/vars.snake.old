@@ -1,0 +1,22 @@
+import sys
+methoddir = sys.path[0]
+maindir = re.search(r'.*genie/',methoddir).group()
+sys.path.insert(1,maindir + "/library")
+import md
+from md import process_list
+
+vcf = config['--vcf']
+vcf = process_list(vcf)
+infile = lambda wildcards: vcf[wildcards.wcard]
+
+pheno = config['--pheno']
+
+pfix_rare = config['pfix_rare']
+pfix_rare = f"{pfix_rare}{{wcard}}"
+
+
+##scripts
+rvtest = f"{maindir}/resources/rare/software/rvtests/executable/rvtest"
+geneflat = f"{maindir}/resources/rare/refFlat_hg19.txt.gz"
+gencode = f"{maindir}/resources/rare/refFlat_hg19.txt.gz"
+
