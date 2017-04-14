@@ -21,5 +21,8 @@ pheno$matid <- 0
 pheno$sex <- 0
 n = ncol(pheno)
 pheno <- pheno[,c(1,2,n-2,n-1,n,3:(n-3)),with=FALSE]
+if (!2 %in% pheno$y1){
+    pheno$y1 <- with(pheno, ifelse(y1 == 1, 2, 1))
+}
 write.table(pheno, outname, sep = "\t", row.names = FALSE, quote = FALSE)
 
