@@ -8,6 +8,7 @@ library(data.table)
 pheno <- fread(phenofile,header = FALSE)
 if(any(grepl("fid",unlist(pheno[1,]), ignore.case = TRUE))){
     names(pheno) <- unlist(pheno[1,])
+    names(pheno)[3] <- "y1"
     pheno <- pheno[-1]
 } else {
     names(pheno) <- c("fid","iid",paste0("y",1:(ncol(pheno)-2)))
