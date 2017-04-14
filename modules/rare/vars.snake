@@ -10,7 +10,7 @@ vcf = config['--vcf']
 vcf = process_list(vcf)
 infile = lambda wildcards: vcf[wildcards.wcard]
 
-pheno = config['--pheno']
+pheno = config['--pheno']+".rpheno"
 covar = config['--covar']
 covarName = config['--covar-name']
 
