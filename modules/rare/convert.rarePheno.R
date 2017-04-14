@@ -16,7 +16,8 @@ if(any(grepl("fid",unlist(pheno[1,]), ignore.case = TRUE))){
 
 pheno$fatid <- 0
 pheno$matid <- 0
+pheno$sex <- 0
 n = ncol(pheno)
-pheno <- pheno[,c(1,2,n-1,n,3:(n-2)),with=FALSE]
+pheno <- pheno[,c(1,2,n-2,n-1,n,3:(n-3)),with=FALSE]
 write.table(pheno, outname, sep = "\t", row.names = FALSE, quote = FALSE)
 

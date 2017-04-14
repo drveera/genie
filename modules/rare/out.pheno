@@ -1,4 +1,4 @@
-FID	IID	fatid	matid	AFFSTAT
-id1	id1	0	0	1
-id2	id2	0	0	1
-id3	id3	0	0	1
+FID	IID	fatid	matid	sex	y1
+id1	id1	0	0	0	1
+id2	id2	0	0	0	1
+id3	id3	0	0	0	1
