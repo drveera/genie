@@ -25,4 +25,4 @@ rule rare_metal:
     shell:
         "{raremetal} --summaryFiles {input.slist} --covFiles {input.clist} --groupFile {input.groupfile} "
         "--SKAT --burden --MB --VT --longOutput --tabulateHits --hitsCutoff 1e-05 "
-        "--prefix {params.out} --hwe 1.0e-05 --callRate 0.95 -"
+        "--prefix {params.out} --hwe 1.0e-05 --callRate 0.95 "

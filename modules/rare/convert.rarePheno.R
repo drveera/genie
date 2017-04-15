@@ -13,7 +13,7 @@ if(any(grepl("fid",unlist(pheno[1,]), ignore.case = TRUE))){
 } else {
     names(pheno) <- c("fid","iid",paste0("y",1:(ncol(pheno)-2)))
 }
-pheno$fid <- gsub("^cas.*\\*","",pheno$fid)
+pheno$fid <- gsub("^c.*\\*","",pheno$fid)
 pheno$fid <- paste(pheno$fid,pheno$iid,sep = "_")
 pheno$iid <- pheno$fid
 pheno$fatid <- 0
