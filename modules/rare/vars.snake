@@ -10,9 +10,16 @@ vcf = config['--vcf']
 vcf = process_list(vcf)
 infile = lambda wildcards: vcf[wildcards.wcard]
 
-pheno = config['--pheno']+".rpheno"
+if config['--fam']:
+    pheno = config['--fam']
+else:
+    pheno = config['--pheno']+".rpheno"
+
 covar = config['--covar']
 covarName = config['--covar-name']
+
+gene = config['--gene']
+geneFile = config['--geneFile']
 
 pfix_rare = config['pfix_rare']
 pfix_rare = f"{pfix_rare}{{wcard}}"

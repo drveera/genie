@@ -2,12 +2,14 @@
 
 '''
 usage:
- genie rare [options] (--vcf=FILE|--bfile=PLINKFILE) --pheno=FILE
+ genie rare [options] (--vcf=FILE|--bfile=PLINKFILE) (--pheno=FILE|--fam=FILE)
 
 options:
  --vcf=FILE                  vcf file
  --bfile=PLINKFILE           plink file without extenstion
- --pheno=FILE                phenotype ped file
+ --pheno=FILE                plink pheno file in 2+n column(fid/iid/p1,p2..) format
+ --fam=FILE                  plink fam file,  5+n column(fid,iid,motherid,fatherid,sex,p1,p2..) format
+                             you can provide only either pheno or fam, not both. 
  --covar=FILE                covariate file (refer to rvtest doc for
  --covar-name=NAMES          comma seperated list of col names in covar file to adjust
                              which tests covar is applicable)
@@ -32,6 +34,8 @@ options:
                             available-binary-kernels:skat,skato
                             available-q-kernels:skat,skato,kbac,famSkat 
                             
+ --geneFile=RANGE           in refFlat format
+ --gene=GENENAMES           comma seperated list of GENE ids
  --out=PREFIX               outname prefix [default: rare_out]
  --nojob                    front end
  --njobs=NUMBER             number of parallel jobs if running in front end
