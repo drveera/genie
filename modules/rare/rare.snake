@@ -1,6 +1,7 @@
 import sys
 methoddir = sys.path[0]
 include: f"{methoddir}/pheno.snake"
+include: f"{methoddir}/covar.snake"
 include: f"{methoddir}/vars.snake"
 include: f"{methoddir}/single.snake"
 include: f"{methoddir}/burden.snake"
