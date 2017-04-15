@@ -4,6 +4,9 @@ if meta:
     meta_nocov = meta[:]
     if "cov" in meta:
         meta_nocov.remove("cov")
+else:
+    meta_nocov = None
+        
 
 meta_prefix = f"{pfix_rare}/meta/{{wcard}}_{{wcardM}}"
 outfile_meta = f"{pfix_rare}/meta/.{{wcard}}_{{wcardM}}.assoc.ok"
