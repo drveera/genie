@@ -16,7 +16,7 @@ rule rare_meta:
         --out {{params.out}} --geneFile {{params.geneflat}} \
         --meta {{wildcards.wcardM}} {covar} {covarName} {gene} {geneFile} {pheno_name} \
         --inverseNormal --useResidualAsPhenotype \
-        && touch {{output}}"
+        && touch {{output}} || touch {{output}}"
         .format(
             covar = "--covar " + covar if covar else "",
 	    covarName = "--covar-name " + covarName if covarName else "",
