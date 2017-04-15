@@ -14,7 +14,7 @@ if config['--fam']:
     pheno = config['--fam']
 else:
     pheno = config['--pheno']+".rpheno"
-
+pheno_name = config['--pheno-name']
 covar = config['--covar']
 covarName = config['--covar-name']
 
@@ -22,11 +22,13 @@ gene = config['--gene']
 geneFile = config['--geneFile']
 
 pfix_rare = config['pfix_rare']
+pfix_raremetal = f"{pfix_rare}RAREMETAL"
 pfix_rare = f"{pfix_rare}{{wcard}}"
 
 
 ##scripts
 rvtest = f"{maindir}/resources/rare/software/rvtests/executable/rvtest"
+raremetal = f"{maindir}/resources/rare/software/Raremetal/bin/raremetal"
 
 ##files
 geneflat = f"{maindir}/resources/rare/refFlat_hg19.txt.gz"

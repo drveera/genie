@@ -10,6 +10,8 @@ options:
  --pheno=FILE                plink pheno file in 2+n column(fid/iid/p1,p2..) format
  --fam=FILE                  plink fam file,  5+n column(fid,iid,motherid,fatherid,sex,p1,p2..) format
                              you can provide only either pheno or fam, not both. 
+ --pheno-name=NAME           name of the pheno column to analyze
+                             applicable to both --pheno and --fam arguments
  --covar=FILE                covariate file (refer to rvtest doc for
  --covar-name=NAMES          comma seperated list of col names in covar file to adjust
                              which tests covar is applicable)
@@ -39,6 +41,7 @@ options:
                             available-binary-tests:score,dominant,recessive,cov
                             available-q-tests:score,dominant,recessive,cov
 
+ --raremetal                If meta analysis of results from multiple vcf files are desired
  --geneFile=RANGE           in refFlat format
  --gene=GENENAMES           comma seperated list of GENE ids
  --out=PREFIX               outname prefix [default: rare_out]

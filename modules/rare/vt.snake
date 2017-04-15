@@ -9,11 +9,12 @@ rule rare_vt:
     shell:
         "{{params.script}} --inVcf {{input.vcf}} --pheno {{input.pheno}} \
         --out {{params.out}} --geneFile {{params.geneflat}} \
-        --vt {{wildcards.wcardV}} {covar} {covarName} {gene} {geneFile} \
+        --vt {{wildcards.wcardV}} {covar} {covarName} {gene} {geneFile} {pheno_name} \
         && touch {{output}}"
         .format(
             covar = "--covar " + covar if covar else "",
 	    covarName = "--covar-name " + covarName if covarName else "",
             gene = "--gene " + gene if gene else "",
-            geneFile = "--geneFile " + geneFile if geneFile else ""
+            geneFile = "--geneFile " + geneFile if geneFile else "",
+            pheno_name = "--pheno-name "+ pheno_name if pheno_name else ""
         )

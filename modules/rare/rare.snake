@@ -7,6 +7,7 @@ include: f"{methoddir}/burden.snake"
 include: f"{methoddir}/vt.snake"
 include: f"{methoddir}/kernel.snake"
 include: f"{methoddir}/meta.snake"
+include: f"{methoddir}/metal.snake"
 
 outfiles = []
 if config['--single']:
@@ -19,5 +20,7 @@ if config['--kernel']:
     outfiles.append(expand(outfile_kernel, wcard = vcf, wcardK = kernel))
 if config['--meta']:
     outfiles.append(expand(outfile_meta, wcard = vcf, wcardM = meta))
+if config['--raremetal']:
+    outfiles.append(expand(outfile_rmetal, wcardM = meta_nocov))
 rule rvtests_all:
     input:  outfiles

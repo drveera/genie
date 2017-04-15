@@ -10,8 +10,10 @@ rule rare_single_test:
     params: script = rvtest, out = single_prefix
     shell:
         "{{params.script}} --inVcf {{input.vcf}} --pheno {{input.pheno}} \
-	--out {{params.out}} --single {{wildcards.wcard2}} {covar} {covarName} && touch {{output}}"
+	--out {{params.out}} --single {{wildcards.wcard2}} {covar} {covarName} {pheno_name}\
+        && touch {{output}}"
         .format(
             covar = "--covar " + covar if covar else "",
-	    covarName = "--covar-name " + covarName if covarName else ""
+	    covarName = "--covar-name " + covarName if covarName else "",
+            pheno_name = "--pheno-name " + pheno_name if pheno_name else ""
         )

@@ -1,0 +1,28 @@
+
+slist = f"{pfix_raremetal}/{{wcardM}}.study.list"
+clist = f"{pfix_raremetal}/cov.list"
+metalout_pfix = f"{pfix_raremetal}/meta_{{wcardM}}"
+outfile_rmetal = f"{metalout_pfix}.singlevar.results"
+
+rule rare_metal_slist:
+    input: s = expand(outfile_meta, wcard = vcf, wcardM = meta_nocov)
+    output: slist = slist
+    run:
+        for i in input.s:
+            shell("ls {i} >> {output.slist}")
+
+rule rare_metal_clist:
+    input: c = expand(outfile_meta, wcard = vcf, wcardM = "cov")
+    output: clist = clist
+    run:
+        for j in input.c:
+            shell("ls {j} >> {output.clist}")
+
+rule rare_metal:
+    input: slist = slist, clist = clist, groupfile = geneflat
+    output: outfile_rmetal
+    params: script = raremetal, out = metalout_pfix
+    shell:
+        "{raremetal} --summaryFiles {input.slist} --covFiles {input.clist} --groupFile {input.groupfile} "
+        "--SKAT --burden --MB --VT --longOutput --tabulateHits --hitsCutoff 1e-05 "
+        "--prefix {params.out} --hwe 1.0e-05 --callRate 0.95 -"
