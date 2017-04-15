@@ -4,7 +4,7 @@ kernel_prefix = f"{pfix_rare}/kernel/{{wcard}}_{{wcardK}}"
 outfile_kernel = f"{pfix_rare}/kernel/.{{wcard}}_{{wcardK}}.assoc.ok"
 
 rule rare_kernel:
-    input: vcf = infile, pheno = pheno
+    input: vcf = infile, pheno = phenocov
     output: outfile_kernel
     params: script = rvtest, out = kernel_prefix, geneflat = geneflat
     shell:

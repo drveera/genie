@@ -27,7 +27,10 @@ if covar and not covarName:
 
 if covar:
     covar = covar + ".rarecov"
-    pheno = [pheno,covar]
+    phenocov = [pheno,covar]
+else:
+    phenocov = pheno
+    
     
 gene = config['--gene']
 geneFile = config['--geneFile']

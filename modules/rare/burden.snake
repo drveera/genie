@@ -4,7 +4,7 @@ burden_prefix = f"{pfix_rare}/burden/{{wcard}}_{{wcardB}}"
 outfile_burden = f"{pfix_rare}/burden/.{{wcard}}_{{wcardB}}.assoc.ok"
 
 rule rare_burden:
-    input: vcf = infile, pheno = pheno
+    input: vcf = infile, pheno = phenocov
     output: outfile_burden
     params: script = rvtest, out = burden_prefix, geneflat = geneflat
     shell:

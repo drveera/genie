@@ -12,7 +12,7 @@ meta_prefix = f"{pfix_rare}/meta/{{wcard}}_{{wcardM}}"
 outfile_meta = f"{pfix_rare}/meta/.{{wcard}}_{{wcardM}}.assoc.ok"
 
 rule rare_meta:
-    input: vcf = infile, pheno = pheno
+    input: vcf = infile, pheno = phenocov
     output: outfile_meta
     params: script = rvtest, out = meta_prefix, geneflat = geneflat
     shell:

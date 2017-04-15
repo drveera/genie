@@ -5,7 +5,7 @@ single_prefix = f"{pfix_rare}/single/{{wcard}}_{{wcard2}}"
 outfile_single = f"{pfix_rare}/single/.{{wcard}}_{{wcard2}}.assoc.ok"
 
 rule rare_single_test:
-    input: vcf = infile, pheno = pheno
+    input: vcf = infile, pheno = phenocov
     output: outfile_single
     params: script = rvtest, out = single_prefix
     shell:
