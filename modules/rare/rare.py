@@ -12,7 +12,7 @@ options:
                              you can provide only either pheno or fam, not both. 
  --pheno-name=NAME           name of the pheno column to analyze
                              applicable to both --pheno and --fam arguments
- --covar=FILE                covariate file (refer to rvtest doc for
+ --covar=FILE                covariate file (refer to rvtest doc) 
  --covar-name=NAMES          comma seperated list of col names in covar file to adjust
                              which tests covar is applicable)
  -q                          if phenotype is quantitative

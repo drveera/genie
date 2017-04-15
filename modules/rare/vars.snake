@@ -18,6 +18,12 @@ pheno_name = config['--pheno-name']
 covar = config['--covar']
 covarName = config['--covar-name']
 
+if covar and not covarName:
+    c = open(covar,"r").readline().strip()
+    c = c.split("\t")
+    d = c[5:]
+    covarName = ",".join(d)
+    
 gene = config['--gene']
 geneFile = config['--geneFile']
 
