@@ -1,16 +1,17 @@
 
-burden = config['burden']
-burden_prefix = f"{pfix_rare}/burden/{{wcard}}_{{wcardB}}"
-outfile_burden = f"{pfix_rare}/burden/.{{wcard}}_{{wcardB}}.assoc.ok"
+meta = config['meta']
+meta_prefix = f"{pfix_rare}/meta/{{wcard}}_{{wcardM}}"
+outfile_meta = f"{pfix_rare}/meta/.{{wcard}}_{{wcardM}}.assoc.ok"
 
-rule rare_burden:
+rule rare_meta:
     input: vcf = infile, pheno = pheno
-    output: outfile_burden
-    params: script = rvtest, out = burden_prefix, geneflat = geneflat
+    output: outfile_meta
+    params: script = rvtest, out = meta_prefix, geneflat = geneflat
     shell:
         "{{params.script}} --inVcf {{input.vcf}} --pheno {{input.pheno}} \
         --out {{params.out}} --geneFile {{params.geneflat}} \
-        --burden {{wildcards.wcardB}} {covar} {covarName} {gene} {geneFile} \
+        --meta {{wildcards.wcardM}} {covar} {covarName} {gene} {geneFile} \
+        --inverseNormal --useResidualAsPhenotype \
         && touch {{output}}"
         .format(
             covar = "--covar " + covar if covar else "",
@@ -18,3 +19,4 @@ rule rare_burden:
             gene = "--gene " + gene if gene else "",
             geneFile = "--geneFile " + geneFile if geneFile else ""
         )
+

@@ -1,6 +1,6 @@
 vt = config['vt']
 vt_prefix = f"{pfix_rare}/vt/{{wcard}}_{{wcardV}}"
-outfile_vt = f"{vt_prefix}.assoc.ok"
+outfile_vt = f"{pfix_rare}/vt/.{{wcard}}_{{wcardV}}.assoc.ok"
 
 rule rare_vt:
     input: vcf = infile, pheno = pheno

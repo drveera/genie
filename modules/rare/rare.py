@@ -33,7 +33,12 @@ options:
                             if all, write '--kernel=all'
                             available-binary-kernels:skat,skato
                             available-q-kernels:skat,skato,kbac,famSkat 
-                            
+
+ --meta=NAMES               comma seperated list of meta names
+                            if all, write '--meta=all'
+                            available-binary-tests:score,dominant,recessive,cov
+                            available-q-tests:score,dominant,recessive,cov
+
  --geneFile=RANGE           in refFlat format
  --gene=GENENAMES           comma seperated list of GENE ids
  --out=PREFIX               outname prefix [default: rare_out]
@@ -51,7 +56,11 @@ import md
 arguments = docopt(__doc__)
 
 if not any([
-        arguments['--single'],arguments['--burden'],arguments['--vt'],arguments['--kernel']]):
+        arguments['--single'],
+        arguments['--burden'],
+        arguments['--vt'],
+        arguments['--kernel'],
+        arguments['--meta']]):
     sys.exit("Exiting; No tests requested")
 stests_binary = ["score","wald","exact","dominantExact","firth"]
 stests_quant = ['score','wald','famLRT','famScore','famGrammarGamma']
@@ -64,6 +73,9 @@ vt_quant = ['price','analytic']
 
 kernel_binary = ['skat','skato']
 kernel_quant = ['skat','skato','kbac','famSkat']
+
+meta_binary = ['score','dominant','recessive','cov']
+meta_quant = ['score','dominant','recessive','cov']
 
 def assign_all(test,allvalues):
     if 'all' in test:
@@ -86,6 +98,10 @@ if arguments['--vt']:
 if arguments['--kernel']:
     kernel = arguments['--kernel']
     kernel = kernel.split(",")
+
+if arguments['--meta']:
+    meta = arguments['--meta']
+    meta = meta.split(",")
 
 def testcheck(ttype,test,t1,t2,):
     if arguments['-q']:
@@ -125,6 +141,10 @@ if arguments['--kernel']:
 else:
     arguments['kernel'] = None
 
+if arguments['--meta']:
+    arguments['meta'] = testcheck("meta tests",meta,meta_quant,meta_binary)
+else:
+    arguments['meta'] = None
 
 if __name__ == '__main__':
     md.main(arguments,['rare'])

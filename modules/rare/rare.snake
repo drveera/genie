@@ -6,6 +6,7 @@ include: f"{methoddir}/single.snake"
 include: f"{methoddir}/burden.snake"
 include: f"{methoddir}/vt.snake"
 include: f"{methoddir}/kernel.snake"
+include: f"{methoddir}/meta.snake"
 
 outfiles = []
 if config['--single']:
@@ -16,5 +17,7 @@ if config['--vt']:
     outfiles.append(expand(outfile_vt, wcard = vcf, wcardV = vt))
 if config['--kernel']:
     outfiles.append(expand(outfile_kernel, wcard = vcf, wcardK = kernel))
+if config['--meta']:
+    outfiles.append(expand(outfile_meta, wcard = vcf, wcardM = meta))
 rule rvtests_all:
     input:  outfiles

@@ -2,7 +2,7 @@
 single = config['single']
 single_prefix = f"{pfix_rare}/single/{{wcard}}_{{wcard2}}"
 
-outfile_single = f"{single_prefix}.assoc.ok"
+outfile_single = f"{pfix_rare}/single/.{{wcard}}_{{wcard2}}.assoc.ok"
 
 rule rare_single_test:
     input: vcf = infile, pheno = pheno

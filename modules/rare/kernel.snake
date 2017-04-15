@@ -1,7 +1,7 @@
 
 kernel = config['kernel']
 kernel_prefix = f"{pfix_rare}/kernel/{{wcard}}_{{wcardK}}"
-outfile_kernel = f"{kernel_prefix}.assoc.ok"
+outfile_kernel = f"{pfix_rare}/kernel/.{{wcard}}_{{wcardK}}.assoc.ok"
 
 rule rare_kernel:
     input: vcf = infile, pheno = pheno
