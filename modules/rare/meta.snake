@@ -1,6 +1,7 @@
 
 meta = config['meta']
-meta_nocov = meta[:]
+if meta:
+    meta_nocov = meta[:]
 if "cov" in meta:
     meta_nocov.remove("cov")
 
