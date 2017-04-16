@@ -23,5 +23,25 @@
     {
 	"mem":"64g",
 	"cores":"16"
+    },
+    "rare_vt":
+    {
+	"mem":"64g",
+	"cores":"16"
+    },
+    "rare_burden":
+    {
+	"mem":"64g",
+	"cores":"16"
+    },
+    "rare_kernel":
+    {
+	"mem":"64g",
+	"cores":"16"
+    },
+    "rare_meta":
+    {
+	"mem":"64g",
+	"cores":"16"
     }
 }
