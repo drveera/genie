@@ -4,12 +4,13 @@ single_prefix = f"{pfix_rare}/single/{{wcard}}_{{wcard2}}"
 
 outfile_single = f"{pfix_rare}/single/.{{wcard}}_{{wcard2}}.assoc.ok"
 
+
 rule rare_single_test:
     input: vcf = infile, pheno = phenocov
     output: outfile_single
     params: script = rvtest, out = single_prefix
     shell:
-        "{{params.script}} --inVcf {{input.vcf}} --pheno {pheno} \
+        "{{params.script}} --inVcf {{input.vcf}} --pheno {pheno} --numThread 16 \
 	--out {{params.out}} --single {{wildcards.wcard2}} {covar} {covarName} {pheno_name} \
         && touch {{output}}"
         .format(
@@ -18,3 +19,4 @@ rule rare_single_test:
 	    covarName = "--covar-name " + covarName if covarName else "",
             pheno_name = "--pheno-name " + pheno_name if pheno_name else ""
         )
+        

@@ -9,10 +9,11 @@ include: f"{methoddir}/vt.snake"
 include: f"{methoddir}/kernel.snake"
 include: f"{methoddir}/meta.snake"
 include: f"{methoddir}/metal.snake"
+include: f"{methoddir}/single.manhattan.snake"
 
 outfiles = []
 if config['--single']:
-    outfiles.append(expand(outfile_single, wcard = vcf, wcard2 = single))
+    outfiles.append(expand(outfile_single_mplot, wcard = vcf))
 if config['--burden']:
     outfiles.append(expand(outfile_burden, wcard = vcf, wcardB = burden))
 if config['--vt']:

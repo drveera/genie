@@ -1,0 +1,12 @@
+
+
+outfile_single_man = config['pfix_rare'] + "{{wcard}}/single/.{{wcard}}_{wcard2}.assoc.ok"
+outfile_single_mplot = f"{pfix_rare}/single/{{wcard}}.single.combined.manhattan.pdf"
+
+        
+rule rare_single_manhattan:
+    input: expand(outfile_single_man, wcard2 = single)
+    output: outfile_single_mplot
+    params: script = manscript
+    shell: 
+        "Rscript {params.script} {input[0]} {output}"

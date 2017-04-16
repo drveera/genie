@@ -18,5 +18,10 @@
     {
 	"mem":"128g",
 	"cores":"16"
+    },
+    "rare_single_test":
+    {
+	"mem":"64g",
+	"cores":"16"
     }
 }
