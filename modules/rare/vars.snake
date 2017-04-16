@@ -21,7 +21,7 @@ covarName = config['--covar-name']
 
 if covar and not covarName:
     c = open(covar,"r").readline().strip()
-    c = re.split(' |\t',a)
+    c = re.split(' |\t',c)
     d = c[3:]
     covarName = ",".join(d)
 print("Covarnames:",covarName)
