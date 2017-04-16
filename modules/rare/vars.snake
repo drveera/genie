@@ -21,10 +21,10 @@ covarName = config['--covar-name']
 
 if covar and not covarName:
     c = open(covar,"r").readline().strip()
-    c = c.split("\t")
+    c = re.split(' |\t',a)
     d = c[3:]
     covarName = ",".join(d)
-
+print("Covarnames:",covarName)
 if covar:
     covar = covar + ".rarecov"
     phenocov = [pheno,covar]
