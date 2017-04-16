@@ -1,3 +1,4 @@
+```
 usage:
  genie rare [options] (--vcf=FILE|--bfile=PLINKFILE) (--pheno=FILE|--fam=FILE)
  
@@ -45,3 +46,4 @@ options:
  --nojob                    front end
  --njobs=NUMBER             number of parallel jobs if running in front end
  --dry-run                  dry run
+```
