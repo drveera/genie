@@ -8,7 +8,7 @@ rule rare_burden:
     output: outfile_burden
     params: script = rvtest, out = burden_prefix, geneflat = geneflat
     shell:
-        "{{params.script}} --inVcf {{input.vcf}} --pheno {pheno} \
+        "{{params.script}} --inVcf {{input.vcf}} --pheno {pheno} --numThread 16 \
         --out {{params.out}} --geneFile {{params.geneflat}} \
         --burden {{wildcards.wcardB}} {covar} {covarName} {gene} {geneFile} {pheno_name} \
         && touch {{output}}"
