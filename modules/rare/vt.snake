@@ -7,11 +7,12 @@ rule rare_vt:
     output: outfile_vt
     params: script = rvtest, out = vt_prefix, geneflat = geneflat
     shell:
-        "{{params.script}} --inVcf {{input.vcf}} --pheno {{input.pheno}} \
+        "{{params.script}} --inVcf {{input.vcf}} --pheno {pheno} \
         --out {{params.out}} --geneFile {{params.geneflat}} \
         --vt {{wildcards.wcardV}} {covar} {covarName} {gene} {geneFile} {pheno_name} \
         && touch {{output}}"
         .format(
+            pheno = pheno,
             covar = "--covar " + covar if covar else "",
 	    covarName = "--covar-name " + covarName if covarName else "",
             gene = "--gene " + gene if gene else "",
