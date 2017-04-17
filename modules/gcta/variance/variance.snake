@@ -7,6 +7,7 @@ pfix = config["pfix_variance"]
 
 ########USER PARAMS##########
 grm = config['--grm']
+grm = process_list(grm)
 covar = config['--covar']
 qcovar = config['--qcovar']
 keep = config['--keep']
@@ -17,27 +18,26 @@ mpheno = config['--mpheno']
 ########WILD CARD##########
 phenolist = config["--pheno"]
 phenolist = process_list(phenolist)
-outfile = f"{pfix}{{pheno}}.hsq"
-outfile_base = f"{pfix}{{pheno}}"
+outfile = f"{pfix}{{grm}}_{{pheno}}.hsq"
+outfile_base = f"{pfix}{{grm}}_{{pheno}}"
 
 
 rule gcta_variance_all:
-    input: expand(outfile, pheno = phenolist)
+    input: expand(outfile, pheno = phenolist, grm = grm)
 
 rule gcta_variance_one:
     input:
-        a = f"{grm}.grm.bin",
-        b = f"{grm}.grm.id",
-        c = f"{grm}.grm.N.bin",
+        a = f"{{grm}}.grm.bin",
+        b = f"{{grm}}.grm.id",
+        c = f"{{grm}}.grm.N.bin",
         d = lambda wildcards: phenolist[wildcards.pheno]
     params: a = outfile_base
     output: outfile
     run:
-        shell("gcta64 --reml --grm {grm} --pheno {{input.d}} \
+        shell("gcta64 --reml --grm {{wildcards.grm}} --pheno {{input.d}} \
         --out {{params.a}} --thread-num 16 \
         {mpheno} {covar} {qcovar} {keep} {prevalence} {gxe} {lrt}"
-        .format(grm = grm,
-                mpheno = "--mpheno " + mpheno if mpheno is not None else "",
+        .format(mpheno = "--mpheno " + mpheno if mpheno is not None else "",
                 covar = "--covar " + covar if covar is not None else "",
                 qcovar = "--qcovar " + qcovar if qcovar is not None else "",
                 keep = "--keep " + keep if keep is not None else "",
