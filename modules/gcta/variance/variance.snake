@@ -27,14 +27,14 @@ rule gcta_variance_all:
 
 rule gcta_variance_one:
     input:
-        a = f"{{grm}}.grm.bin",
-        b = f"{{grm}}.grm.id",
-        c = f"{{grm}}.grm.N.bin",
+        a = lambda wildcards: grm[wildcards.grm][0] + ".grm.bin",
+        b = lambda wildcards: grm[wildcards.grm][0] + ".grm.id",
+        c = lambda wildcards: grm[wildcards.grm][0] + ".grm.N.bin",
         d = lambda wildcards: phenolist[wildcards.pheno]
-    params: a = outfile_base
+    params: grm = lambda wildcards: grm[wildcards.grm], a = outfile_base
     output: outfile
     run:
-        shell("gcta64 --reml --grm {{wildcards.grm}} --pheno {{input.d}} \
+        shell("gcta64 --reml --grm {{params.grm}} --pheno {{input.d}} \
         --out {{params.a}} --thread-num 16 \
         {mpheno} {covar} {qcovar} {keep} {prevalence} {gxe} {lrt}"
         .format(mpheno = "--mpheno " + mpheno if mpheno is not None else "",
