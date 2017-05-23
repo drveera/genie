@@ -79,23 +79,25 @@ dfm$pheno <- basename(outname)
 fwrite(dfm,paste0(outname,"results.txt"),sep = "\t", na = "NA")
 r2max = max(dfm$R2, na.rm = TRUE)
 dfm_best <- dfm[dfm$R2 == r2max,]
+dfm_best <- dfm_best[! is.na(dfm_best$pvalue),]
 if (r2max > 0.1){
     r2ymax = r2max + 0.01
 } else {
     r2ymax = 0.1
 }
+
 ##plot r squared
 
 p1 <- ggplot(dfm, aes(threshold,as.numeric(R2))) + geom_point() + geom_line(aes(group = 1),alpha = 0.1) +
     geom_point(data = dfm_best, colour = "red") +
     geom_text_repel(aes(label = format(pvalue,scientific = TRUE)), size = 2) +
     geom_text(data = dfm_best,
-              aes(y = min(dfm$R2, na.rm = TRUE)-0.01, label = paste0("best_threshold:",threshold)), colour = "blue") +
+              aes(x = "S1" , label = paste0("best_threshold:",threshold)), colour = "blue") +
     theme(axis.text.x=element_text(angle=90, hjust=1)) +
     labs(x = "P Value Thresholds", y = "Nagelkerke-R-Squared", title = paste0(basename(outname),"r2.plot")) +
     scale_x_discrete(labels = c("S1" = "<5e-8","S2" = "<1e-6","S3" = "<1e-4","S4" = "<0.001","S5" = "<0.01","S6" = "0.05","S7" = "0.1","S8" = "0.2",
                                 "S9" = "0.5","S10" = "1")) +
-    theme(axis.text.x = element <- text(angle = 90, hjust = 1))
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
 plotslist[[1]] <- p1
 ggsave(paste0(outname,"rsquaredValues.pdf"))
 
