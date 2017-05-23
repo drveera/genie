@@ -90,7 +90,7 @@ p1 <- ggplot(dfm, aes(threshold,as.numeric(R2))) + geom_point() + geom_line(aes(
     geom_point(data = dfm_best, colour = "red") +
     geom_text_repel(aes(label = format(pvalue,scientific = TRUE)), size = 2) +
     geom_text(data = dfm_best,
-                    aes(y = 0, label = paste0("best_threshold:",threshold)), colour = "blue") +
+              aes(y = min(dfm$R2, na.rm = TRUE)-0.01, label = paste0("best_threshold:",threshold)), colour = "blue") +
     theme(axis.text.x=element_text(angle=90, hjust=1)) +
     labs(x = "P Value Thresholds", y = "Nagelkerke-R-Squared", title = paste0(basename(outname),"r2.plot")) 
 plotslist[[1]] <- p1
