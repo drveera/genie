@@ -97,7 +97,7 @@ plotslist[[1]] <- p1
 ggsave(paste0(outname,"rsquaredValues.pdf"))
 
 ## determine the best fit score
-best_threshold <- as.character(dfm[dfm$R2 == max(dfm$R2),"threshold"])
+best_threshold <- as.character(dfm[dfm$R2 == max(dfm$R2, na.rm = TRUE),"threshold"])
 bscolumn <- names(m2)[names(m2) %in% best_threshold][1]
 m2$bestscore <- m2[,bscolumn,with=F]
 
