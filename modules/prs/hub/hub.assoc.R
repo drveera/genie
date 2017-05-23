@@ -52,10 +52,10 @@ library(BaylorEdPsych)
 dfmlist <- list()
 for (i in 1:length(ts)){
     f <- as.formula(paste0("pheno1~",ts[i],"+",paste(covariables,collapse = "+")))
-    res <- glm(f, data = m2, family = "binomial")    
-    r2 <- PseudoR2(res)["Nagelkerke"]
-    res <- summary(res)$coefficients
-    if (! is.na(coef(res)[ts[i]])){
+    mres <- glm(f, data = m2, family = "binomial")    
+    r2 <- PseudoR2(mres)["Nagelkerke"]
+    res <- summary(mres)$coefficients
+    if (! is.na(coef(mres)[ts[i]])){
         threshold <- rownames(res)[2]
         res <- res[2,]
         res <- c(res,r2,threshold)
