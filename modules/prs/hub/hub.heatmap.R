@@ -18,6 +18,7 @@ for(i in 1:length(sumfiles)){
 }
 #sumlist <- lapply(sumlist, function(x) x[x$R2 == max(x$R2),])
 sumdfm <- do.call(rbind, sumlist)
+sumdfm <- sumdfm[! is.na(sumdfm$pvalue),]
 threshold <- as.character(sumdfm$threshold)
 threshold <- threshold[!duplicated(threshold)]
 sumdfm$threshold <- factor(sumdfm$threshold, levels = threshold[mixedorder(threshold)])
