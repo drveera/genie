@@ -92,7 +92,9 @@ p1 <- ggplot(dfm, aes(threshold,as.numeric(R2))) + geom_point() + geom_line(aes(
     geom_text(data = dfm_best,
               aes(y = min(dfm$R2, na.rm = TRUE)-0.01, label = paste0("best_threshold:",threshold)), colour = "blue") +
     theme(axis.text.x=element_text(angle=90, hjust=1)) +
-    labs(x = "P Value Thresholds", y = "Nagelkerke-R-Squared", title = paste0(basename(outname),"r2.plot")) 
+    labs(x = "P Value Thresholds", y = "Nagelkerke-R-Squared", title = paste0(basename(outname),"r2.plot")) +
+    scale_x_discrete(labels = c("<5e-8","<1e-6","<1e-4","<0.001","<0.01","0.05","0.1","0.2","0.5","1"))+
+    theme(axis.text.x = element <- text(angle = 90, hjust = 1))
 plotslist[[1]] <- p1
 ggsave(paste0(outname,"rsquaredValues.pdf"))
 
