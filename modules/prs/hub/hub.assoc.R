@@ -48,23 +48,29 @@ if(nrow(m2) == 0){
     stop("mismatch of IDs between pheno/covar and score filese")
 }
 
-
+library(BaylorEdPsych)
 dfmlist <- list()
 for (i in 1:length(ts)){
     f <- as.formula(paste0("pheno1~",ts[i],"+",paste(covariables,collapse = "+")))
-    res <- glm(f, data = m2, family = "binomial")
-    r2 <- NagelkerkeR2(res)
+    res <- glm(f, data = m2, family = "binomial")    
+    r2 <- PseudoR2(res)["Nagelkerke"]
     res <- summary(res)$coefficients
-    threshold <- rownames(res)[2]
-    res <- res[2,]
-    res <- c(res,r2,threshold)
-    dfmlist[[i]] <- res
+    if (! is.na(coef(res)[ts[i]])){
+        threshold <- rownames(res)[2]
+        res <- res[2,]
+        res <- c(res,r2,threshold)
+        dfmlist[[i]] <- res
+    } else {
+        dfmlist[[i]] <- NA
+        dfmlist[[i]][length(dfmlist[[i]])] <- ts[i]
+    }
+
 }
 
 dfm <- do.call(rbind,dfmlist)
 dfm <- as.data.frame(dfm)
-names(dfm) <- c("Estimate","SE","Z_score","pvalue","N","R2","threshold")
-dfm$R2 <- as.numeric(dfm$R2)
+names(dfm) <- c("Estimate","SE","Z_score","pvalue","R2","threshold")
+dfm$R2 <- as.numeric(as.character(dfm$R2))
 dfm$threshold <- as.character(dfm$threshold)
 dfm$threshold <- factor(dfm$threshold, levels = dfm$threshold[mixedorder(dfm$threshold)])
 dfm$pvalue <- as.numeric(as.character(dfm$pvalue))
