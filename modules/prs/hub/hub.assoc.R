@@ -92,7 +92,7 @@ p1 <- ggplot(dfm, aes(threshold,as.numeric(R2))) + geom_point() + geom_line(aes(
     geom_point(data = dfm_best, colour = "red") +
     geom_text_repel(aes(label = format(pvalue,scientific = TRUE)), size = 2) +
     geom_text(data = dfm_best,
-              aes(x = "S1" , label = paste0("best_threshold:",threshold)), colour = "blue") +
+              aes(x = "S2" , label = paste0("best_threshold:",threshold)), colour = "blue") +
     theme(axis.text.x=element_text(angle=90, hjust=1)) +
     labs(x = "P Value Thresholds", y = "Nagelkerke-R-Squared", title = paste0(basename(outname),"r2.plot")) +
     scale_x_discrete(labels = c("S1" = "<5e-8","S2" = "<1e-6","S3" = "<1e-4","S4" = "<0.001","S5" = "<0.01","S6" = "0.05","S7" = "0.1","S8" = "0.2",
@@ -158,8 +158,5 @@ quantile_analysis <- function(m2,n,xlab="Quantiles"){
 
 quantile_analysis(m2,10,"Deciles")
 quantile_analysis(m2,5,"Quintiles")
-pdf(paste0(outname,"summary.pdf"))
-for (i in 1:length(plotslist)){
-    print(plotslist[[i]])
-}
-dev.off()
+
+saveRDS(plotslist,paste0(outname,"plots.RDS"))
