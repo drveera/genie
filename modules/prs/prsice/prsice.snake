@@ -5,70 +5,61 @@ from os.path import basename
 
 pfix = config['pfix_prsice']
 train = config['--base']
-train = process_list(train)
+pfix = f"{pfix}/{basename(train)}/"
 target = config['--target']
+target = process_list(target)
 slower = config['--slower']
 supper = config['--supper']
 sinc = config['--sinc']
-covar = config['--covar']
+#covar = config['--covar']
 clump = config['--clump']
 clump_p1 = config['--clump_p1']
 clump_p2 = config['--clump_p2']
 clump_r2 = config['--clump_r2']
 clump_kb = config['--clump_kb']
-pheno = config['--pheno']
-ped = config['--ped']
-pcs = config['--pcs']
-#allscores = config['--all_scores']
+#pheno = config['--pheno']
+#ped = config['--ped']
+#pcs = config['--pcs']
 
 ####if quantitative target 
-if config['--quantitative']:
-    binary = 'F'
-else:
-    binary = 'T'
+#if config['--quantitative']:
+#    binary = 'F'
+#else:
+#    binary = 'T'
 #####if covariates to be used
-if config['--nocov']:
-    covary = False
-else:
-    covary = True
+#if config['--nocov']:
+#    covary = False
+#else:
+#    covary = True
     
-
 prsice_r = sys.path[0] + '/../../../resources/prs/prsice/PRSice_v1.25.R'
 plink = '/com/extra/plink/1.90-beta-2016-03/bin/plink'
 
-#workdir: config['of_prsice']
+
 rule all:
     input:
-        #expand(pfix + "{train}_BARPLOT_.png", train = train),
-        #base + "{train}_HIGH-RES_PLOT_.png",
-        #base + "{train}_RAW_RESULTS_DATA.txt",
-        #base + "{train}_SCORES_AT_BEST-FIT-PRS.txt"
-        #expand(pfix + "{train}_HIGH-RES_PLOT_.png", train = train),
-        #expand(pfix + "{train}_RAW_RESULTS_DATA.txt", train = train),
-        expand(pfix + "{train}_SCORES_AT_ALL_THRESHOLDS.txt", train = train)
+        expand(f"{pfix}{{target}}_SCORES_AT_ALL_THRESHOLDS.txt", target = target)
         
 rule prs:
     input:
-        train_summary = lambda wildcards: train[wildcards.train],
-        target_plink = expand(target + '.{ext}', ext = ['bed','bim','fam'])
+        train_summary = train,
+        target_plink_bed = lambda wildcards: target[wildcards.target][0] + ".bed",
+        target_plink_bim = lambda wildcards: target[wildcards.target][0] + ".bim",
+        target_plink_fam = lambda wildcards: target[wildcards.target][0] + ".fam"
+        #target_plink = expand(target + '.{ext}', ext = ['bed','bim','fam'])
     output:
-        #pfix + "{train}_BARPLOT_.png",
-        #pfix + "{train}_HIGH-RES_PLOT_.png",
-        #pfix + "{train}_RAW_RESULTS_DATA.txt",
-        pfix + "{train}_SCORES_AT_ALL_THRESHOLDS.txt",
+        pfix + "{target}_SCORES_AT_ALL_THRESHOLDS.txt",
     shadow: "shallow"
     shell:
         "Rscript {prsice_r} -q --args plink {plink} \
-        base {{input.train_summary}} target {target} binary.target {binary} \
-        slower {slower} supper {supper} sinc {sinc} covary {covary} {covar} {pcs} \
+        base {{input.train_summary}} target {{wildcards.target}} binary.target T \
+        slower {slower} supper {supper} sinc {sinc} \
         clump.snps {clump} clump.p1 {clump_p1} clump.p2 {clump_p2} clump.r2 {clump_r2} \
-        clump.kb {clump_kb} figname {pfix}{{wildcards.train}} {allscores}"
+        clump.kb {clump_kb} figname {pfix}{{wildcards.target}} {allscores}"
         .format(
             prsice_r = prsice_r, plink = plink,
-            target = target, binary = binary, slower = slower, supper = supper,
-            sinc = sinc, covary = covary,
-            covar = "user.covariate.file " + {covar} if covar else "",
-            pcs = "covariates" + {pcs} if pcs else "",
+            slower = slower, supper = supper,
+            sinc = sinc, 
             clump = clump, clump_p1 = clump_p1,
             clump_p2 = clump_p2, clump_r2 = clump_r2, clump_kb = clump_kb,
             pfix = pfix,

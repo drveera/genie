@@ -6,19 +6,12 @@ usage:
  prs prsice [options] --base=FILE --target=FILE 
 
 options:
- --base=FILE             training sample
- --target=FILE           target sample
- --ped                   if the target sample is in ped format 
- --pheno=FILE            external pheno file
- --quantitative          if using quantitative target 
+ --base=FILE             training sample file or file.list
+ --target=FILE           target sample file or file.list
  --slower=NUMBER         lower limit  [default: 0]
  --supper=NUMBER         upper limit [default: 0.5]
- --sinc=NUMBER           p-value increments  [default: 0.01]
+ --sinc=NUMBER           p-value increments  [default: 0.1]
  --out=PREFIX            outname prefix [default: prs]
- --nocov                 if covariates not to be used
- --covar=FILE            if you have own covariate file 
- --pcs=IDS               If you have not provided covariate file, the script will calculate PCs.
-                         In that case, which all pcs you'd like to adjust for, default will be C1,C2
  --clump                 if clumping need to be done
  --clump_p1=NUMBER       clump p1 threshold [default: 1]
  --clump_p2=NUMBER       clump p2 threshold [default: 1]
