@@ -19,7 +19,7 @@ clump_kb = config['--clump_kb']
 pheno = config['--pheno']
 ped = config['--ped']
 pcs = config['--pcs']
-allscores = config['--all_scores']
+#allscores = config['--all_scores']
 
 ####if quantitative target 
 if config['--quantitative']:
