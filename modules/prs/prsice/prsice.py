@@ -19,6 +19,7 @@ options:
  --clump_kb=NUMBER       clump distance [default: 250]
  --remove_mhc            If you want to remove MHC region 
  --nojob                 if should be run in front end
+ --njobs=NUMBER          Number of parallel jobs when running in front end
  --dry-run               dry run
 
 '''
