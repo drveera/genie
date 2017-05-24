@@ -22,6 +22,7 @@ plot2 = f"{pfix_hub}oddsratio_Deciles.pdf"
 plot3 = f"{pfix_hub}oddsratio_Quintiles.pdf"
 plot4 = f"{pfix_hubMain}heatmap.pdf"
 sumplot =f"{pfix_hub}summary.pdf"
+plotRDS = f"{pfix_hub}plots.RDS"
 r2_list = f"{pfix_hubMain}r2.list"
 
 script1 = sys.path[0] + "/hub.assoc.R"
@@ -39,7 +40,7 @@ rule hub_all:
 rule hub_one:
     input: score = lambda wildcards: score[wildcards.score],
            pheno = pheno, covar = covar
-    output: outfile1, plot1, plot2, plot3, sumplot
+    output: outfile1, plot1, plot2, plot3, plotRDS
     params: script = script1, out = pfix_hub
     shell:
         "Rscript {params.script} {input.score} {input.pheno} {input.covar} {params.out}"
@@ -53,7 +54,7 @@ rule hub_create_list:
 
 rule hub_combine:
     input: r2_list
-    output: plot1a
+    output: plot1a, sumplot
     params: script = script2, out = pfix_hub
     shell:
         "Rscript {params.script} {input} {params.out}"
