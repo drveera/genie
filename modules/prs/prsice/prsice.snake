@@ -5,7 +5,7 @@ from os.path import basename
 
 pfix = config['pfix_prsice']
 train = config['--base']
-pfix = f"{pfix}/{basename(train)}/"
+pfix = f"{pfix}{basename(train)}/"
 target = config['--target']
 target = process_list(target)
 slower = config['--slower']
