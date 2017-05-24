@@ -39,12 +39,12 @@ plink = '/com/extra/plink/1.90-beta-2016-03/bin/plink'
 #workdir: config['of_prsice']
 rule all:
     input:
-        expand(pfix + "{train}_BARPLOT_.png", train = train),
+        #expand(pfix + "{train}_BARPLOT_.png", train = train),
         #base + "{train}_HIGH-RES_PLOT_.png",
         #base + "{train}_RAW_RESULTS_DATA.txt",
         #base + "{train}_SCORES_AT_BEST-FIT-PRS.txt"
-        expand(pfix + "{train}_HIGH-RES_PLOT_.png", train = train),
-        expand(pfix + "{train}_RAW_RESULTS_DATA.txt", train = train),
+        #expand(pfix + "{train}_HIGH-RES_PLOT_.png", train = train),
+        #expand(pfix + "{train}_RAW_RESULTS_DATA.txt", train = train),
         expand(pfix + "{train}_SCORES_AT_ALL_THRESHOLDS.txt", train = train)
         
 rule prs:
@@ -52,9 +52,9 @@ rule prs:
         train_summary = lambda wildcards: train[wildcards.train],
         target_plink = expand(target + '.{ext}', ext = ['bed','bim','fam'])
     output:
-        pfix + "{train}_BARPLOT_.png",
-        pfix + "{train}_HIGH-RES_PLOT_.png",
-        pfix + "{train}_RAW_RESULTS_DATA.txt",
+        #pfix + "{train}_BARPLOT_.png",
+        #pfix + "{train}_HIGH-RES_PLOT_.png",
+        #pfix + "{train}_RAW_RESULTS_DATA.txt",
         pfix + "{train}_SCORES_AT_ALL_THRESHOLDS.txt",
     shadow: "shallow"
     shell:
@@ -72,5 +72,5 @@ rule prs:
             clump = clump, clump_p1 = clump_p1,
             clump_p2 = clump_p2, clump_r2 = clump_r2, clump_kb = clump_kb,
             pfix = pfix,
-            allscores = "report.best.score.only F " if allscores else ""
+            allscores = "report.best.score.only F "
         )

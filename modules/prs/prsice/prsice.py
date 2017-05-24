@@ -24,7 +24,6 @@ options:
  --clump_p2=NUMBER       clump p2 threshold [default: 1]
  --clump_r2=NUMBER       clump r2 threshold [default: 0.1]
  --clump_kb=NUMBER       clump distance [default: 250]
- --all_scores            if you need all the scores at all thresholds used
  --remove_mhc            If you want to remove MHC region 
  --nojob                 if should be run in front end
  --dry-run               dry run
