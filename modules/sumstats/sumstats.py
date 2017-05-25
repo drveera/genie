@@ -9,7 +9,8 @@ The following methods are available:
 
 COMMAND     DESCRIPTION
 dbsnp       update snp names with dbsnp rsids 
-munge       munge using ldsc munge script
+clump       clump the snps 
+
 
 type 'genie sumstats <method> --help' for more information on specific method
 For example, type 'genie sumstats --help'
@@ -27,7 +28,7 @@ argv = [arguments['<method>']] + arguments['<args>']
 
 # CHECK IF METHOD IS VALID
 method = arguments['<method>']
-methods = ['dbsnp','-h','--help']
+methods = ['dbsnp','clump','-h','--help']
 if method not in methods:
     exit("The sumstats method " + method +  " is not available")
 
