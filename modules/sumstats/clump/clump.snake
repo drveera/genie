@@ -1,0 +1,15 @@
+#!/bin/env snakemake
+
+sys.path.insert(1, sys.path[0] + '/../../../library')
+from md import process_list
+
+pfix = config['pfix_clump']
+
+ld=config['--ld']
+sumstats=config['--sumstats']
+sumstats = process_list(sumstats)
+
+outfile = f"{pfix}{{sum}}"
+
+rule clump_all:
+    input: expand(outfile, sum= sumstats)
