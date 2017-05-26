@@ -18,7 +18,11 @@ p1 = config['--p1']
 p2 = config['--p2']
 r2 = config['--r2']
 dist = config['--distance']
+
 other = config['--other']
+if not other:
+    other=""
+    
 
 rule clump_all:
     input: expand(outfile, wcard = sumstats)
