@@ -72,7 +72,7 @@ def run_job(debugdir, outname, scmds):
 
     cmds = f"#!/bin/sh \n {scmds} " \
            f"--jobname {outname}.{{rulename}}.{{jobid}} " \
-           f"--cluster 'sbatch -e {debugdir}/error/{{jobid}}.error -o {debugdir}/out/{{jobid}}.out " \
+           f"--cluster 'sbatch -e {debugdir}/error/slurm-%A_%a.out.error -o {debugdir}/out/slurm-%A_%a.out.out " \
            f"--mem={{cluster.mem}} --time={{cluster.time}} -c {{cluster.cores}}' " 
 
     jobscript = debugdir + '/jobscript.sh'
