@@ -24,6 +24,8 @@ def main(args, methods):
     debugdir = f"_debug/{outfolder}"
 
     os.makedirs(debugdir, exist_ok=True)
+    os.makedirs(debugdir + '/out', exist_ok=True)
+    os.makedirs(debugdir + '/error', exist_ok=True)
     os.makedirs(outfolder, exist_ok=True)
 
     write_config(args, debugdir)
