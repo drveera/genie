@@ -35,12 +35,14 @@ clump_kb = config['--clump_kb']
 prsice_r = sys.path[0] + '/../../../resources/prs/prsice/PRSice_v1.25.R'
 plink = '/com/extra/plink/1.90-beta-2016-03/bin/plink'
 
+outfile1=f"{pfix}individual_files/{{target}}_SCORES_AT_ALL_THRESHOLDS.txt"
+outfile2= f"{pfix}merged_file/{train}_SCORES_AT_ALL_THRESHOLDS.txt"
 
 rule all:
     input:
-        expand(f"{pfix}{{target}}_SCORES_AT_ALL_THRESHOLDS.txt", target = target)
+        outfile2
         
-rule prs:
+rule prs_one:
     input:
         train_summary = train,
         target_plink_bed = lambda wildcards: target[wildcards.target][0] + ".bed",
@@ -48,14 +50,14 @@ rule prs:
         target_plink_fam = lambda wildcards: target[wildcards.target][0] + ".fam"
         #target_plink = expand(target + '.{ext}', ext = ['bed','bim','fam'])
     output:
-        pfix + "{target}_SCORES_AT_ALL_THRESHOLDS.txt",
+        outfile1
     shadow: "shallow"
     shell:
         "Rscript {prsice_r} -q --args plink {plink} \
         base {{input.train_summary}} target {{wildcards.target}} binary.target T \
         slower {slower} supper {supper} sinc {sinc} \
         clump.snps {clump} clump.p1 {clump_p1} clump.p2 {clump_p2} clump.r2 {clump_r2} \
-        clump.kb {clump_kb} figname {pfix}{{wildcards.target}} {allscores}"
+        clump.kb {clump_kb} figname {pfix}individual_files/{{wildcards.target}} {allscores}"
         .format(
             prsice_r = prsice_r, plink = plink,
             slower = slower, supper = supper,
@@ -65,3 +67,15 @@ rule prs:
             pfix = pfix,
             allscores = "report.best.score.only F "
         )
+
+rule prs_combine1:
+    input: expand(outfile1, target = target)
+    output: outfile2
+    params:
+    run:
+        shell("head -1 {input[0]} > {output}")
+        for i in input:
+            shell("sed 1d {i} >> {output}")
+
+
+        
