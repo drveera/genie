@@ -13,6 +13,8 @@ sumstats = process_list(sumstats)
 
 outfile_base = f"{pfix}ld_from_{basename(ld)}/{{wcard}}"
 outfile = f"{outfile_base}.clumped"
+outfile2 = f"{outfile_base}.clumped.formatted"
+
 
 p1 = config['--p1']
 p2 = config['--p2']
@@ -22,10 +24,10 @@ dist = config['--distance']
 other = config['--other']
 if not other:
     other=""
-    
+rscript = sys.path[0] + "/add.alleles.R"
 
 rule clump_all:
-    input: expand(outfile, wcard = sumstats)
+    input: expand(outfile, wcard = sumstats), expand(outfile2, wcard = sumstats)
 
 rule clump_one:
     input: ld = expand(f"{ld}.{{ext}}", ext = ['bed','bim','fam']), sumstats = lambda wildcards: sumstats[wildcards.wcard]
@@ -33,3 +35,9 @@ rule clump_one:
     params: outfile_base
     shell: "plink --bfile {ld} --clump {input.sumstats} --out {params} --clump-p1 {p1} --clump-p2 {p2} "
            "--clump-r2 {r2} --clump-kb {dist} {other} "
+
+rule clump_two:
+    input: clump = outfile, sumstats = lambda wildcards: sumstats[wildcards.wcard]
+    output: outfile2
+    params: rscript= rscript, 
+    shell: "Rscript {params.rscript} {input.sumstats} {input.clump} {output}"
