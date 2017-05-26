@@ -49,12 +49,13 @@ rule prs_one:
         target_plink_bim = lambda wildcards: target[wildcards.target][0] + ".bim",
         target_plink_fam = lambda wildcards: target[wildcards.target][0] + ".fam"
         #target_plink = expand(target + '.{ext}', ext = ['bed','bim','fam'])
+    params: target = lambda wildcards: target[wildcards.target],
     output:
         outfile1
     shadow: "shallow"
     shell:
         "Rscript {prsice_r} -q --args plink {plink} \
-        base {{input.train_summary}} target {{wildcards.target}} binary.target T \
+        base {{input.train_summary}} target {{params.target}} binary.target T \
         slower {slower} supper {supper} sinc {sinc} \
         clump.snps {clump} clump.p1 {clump_p1} clump.p2 {clump_p2} clump.r2 {clump_r2} \
         clump.kb {clump_kb} figname {pfix}individual_files/{{wildcards.target}} {allscores}"
