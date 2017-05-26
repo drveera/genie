@@ -7,7 +7,7 @@ usage:
 
 options:
  --sumstats=FILE     munged summary statistics file 
- --out=PREFIX        output name prefix [default: clumped]
+ --out=PREFIX        output name prefix [default: clump_out]
  --ld=PLINKFILE      plink file without extension
  --p1=NUMBER         pvalue threshold 1 [default: 1]
  --p2=NUMBER         pvalue threshold 2 [default: 1]
@@ -16,6 +16,7 @@ options:
  --nojob             if should run in front end
  --njobs=NUMBER      Number of parallel jobs when running in front end
  --dry-run           dry run snakemake
+ --other=ARGS        other arguments to pass to plink with quotes
 
 '''
 
