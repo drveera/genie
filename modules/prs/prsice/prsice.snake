@@ -5,7 +5,8 @@ from os.path import basename
 
 pfix = config['pfix_prsice']
 train = config['--base']
-pfix = f"{pfix}{basename(train)}/"
+train = process_list(train)
+#pfix = f"{pfix}{basename(train)}/"
 target = config['--target']
 target = process_list(target)
 slower = config['--slower']
@@ -35,16 +36,17 @@ clump_kb = config['--clump_kb']
 prsice_r = sys.path[0] + '/../../../resources/prs/prsice/PRSice_v1.25.R'
 plink = '/com/extra/plink/1.90-beta-2016-03/bin/plink'
 
-outfile1=f"{pfix}individual_files/{{target}}_SCORES_AT_ALL_THRESHOLDS.txt"
-outfile2= f"{pfix}merged_file/{train}_SCORES_AT_ALL_THRESHOLDS.txt"
+outfile1=f"{pfix}{{train}}/individual_files/{{target}}_SCORES_AT_ALL_THRESHOLDS.txt"
+outfile1a = pfix + "{{train}}/individual_files/{target}_SCORES_AT_ALL_THRESHOLDS.txt" 
+outfile2= f"{pfix}{{train}}/merged_file/{{train}}_SCORES_AT_ALL_THRESHOLDS.txt"
 
 rule all:
     input:
-        outfile2
+        expand(outfile2, train = train)
         
 rule prs_one:
     input:
-        train_summary = train,
+        train_summary = lambda wildcards: train[wildcards.train],
         target_plink_bed = lambda wildcards: target[wildcards.target][0] + ".bed",
         target_plink_bim = lambda wildcards: target[wildcards.target][0] + ".bim",
         target_plink_fam = lambda wildcards: target[wildcards.target][0] + ".fam"
@@ -58,7 +60,7 @@ rule prs_one:
         base {{input.train_summary}} target {{params.target}} binary.target T \
         slower {slower} supper {supper} sinc {sinc} \
         clump.snps {clump} clump.p1 {clump_p1} clump.p2 {clump_p2} clump.r2 {clump_r2} \
-        clump.kb {clump_kb} figname {pfix}individual_files/{{wildcards.target}} {allscores}"
+        clump.kb {clump_kb} figname {pfix}{{wildcards.train}}/individual_files/{{wildcards.target}} {allscores}"
         .format(
             prsice_r = prsice_r, plink = plink,
             slower = slower, supper = supper,
@@ -70,7 +72,7 @@ rule prs_one:
         )
 
 rule prs_combine1:
-    input: expand(outfile1, target = target)
+    input: expand(outfile1a, target = target)
     output: outfile2
     params:
     run:
