@@ -34,7 +34,7 @@ clump_kb = config['--clump_kb']
 #    covary = True
     
 prsice_r = sys.path[0] + '/../../../resources/prs/prsice/PRSice_v1.25.R'
-plink = sys.path[0] + '/../../../resources/prs/prsice/plink/'
+plink = sys.path[0] + '/../../../resources/prs/prsice/plink/plink'
 
 outfile1=f"{pfix}{{train}}/individual_files/{{target}}_SCORES_AT_ALL_THRESHOLDS.txt"
 outfile1a = pfix + "{{train}}/individual_files/{target}_SCORES_AT_ALL_THRESHOLDS.txt" 
