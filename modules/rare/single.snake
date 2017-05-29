@@ -1,13 +1,18 @@
 
 single = config['single']
-single_prefix = f"{pfix_rare}/single/{{wcard}}_{{wcard2}}"
+single_prefix = f"{pfix_rare}{{wcard2}}/individual_files/{{wcard}}_{{wcard2}}"
+outfile_single_ok = f"{pfix_rare}{{wcard2}}/individual_files/.{{wcard}}_{{wcard2}}.assoc.ok"
+outfile_single_ok2 = pfix_rare + "{{wcard2}}/individual_files/.{wcard}_{{wcard2}}.assoc.ok"
 
-outfile_single = f"{pfix_rare}/single/.{{wcard}}_{{wcard2}}.assoc.ok"
+##combined OKs
+outfile_single_combined = f"{pfix_rare}{{wcard2}}/merged_file/{{wcard2}}.assoc.merged.txt"
 
+##lists
+single_list = f"{pfix_rare}{{wcard2}}/merged_file/{{wcard2}}.list"
 
-rule rare_single_test:
+rule rare_single_one:
     input: vcf = infile, pheno = phenocov
-    output: outfile_single
+    output: outfile_single_ok
     params: script = rvtest, out = single_prefix
     shell:
         "{{params.script}} --inVcf {{input.vcf}} --pheno {pheno} --numThread 16 \
@@ -19,4 +24,17 @@ rule rare_single_test:
 	    covarName = "--covar-name " + covarName if covarName else "",
             pheno_name = "--pheno-name " + pheno_name if pheno_name else ""
         )
-        
+
+rule rare_single_list:
+    input: a = expand(outfile_single_ok2, wcard = vcf)
+    params: folder = f"{pfix_rare}{{wcard2}}/individual_files/"
+    output: single_list
+    run:
+        shell("ls {params.folder}/*{wildcards.wcard2}*assoc > {output}")
+    
+rule rare_single_combine:
+    input: single_list
+    output: outfile_single_combined
+    params: rscript = rscript, 
+    shell:
+        "Rscript {params.rscript} {input} {output}"

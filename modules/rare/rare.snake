@@ -13,7 +13,7 @@ include: f"{methoddir}/single.manhattan.snake"
 
 outfiles = []
 if config['--single']:
-    outfiles.append(expand(outfile_single_mplot, wcard = vcf))
+    outfiles.append(expand(outfile_single_combined, wcard2 = single))
 if config['--burden']:
     outfiles.append(expand(outfile_burden, wcard = vcf, wcardB = burden))
 if config['--vt']:

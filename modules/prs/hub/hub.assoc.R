@@ -52,6 +52,7 @@ library(BaylorEdPsych)
 dfmlist <- list()
 for (i in 1:length(ts)){
     f <- as.formula(paste0("pheno1~",ts[i],"+",paste(covariables,collapse = "+")))
+    f <- as.formula(paste0("pheno1~",ts[i],"+",paste(covariables,collapse = "+")))
     mres <- glm(f, data = m2, family = "binomial")    
     r2 <- PseudoR2(mres)["Nagelkerke"]
     res <- summary(mres)$coefficients

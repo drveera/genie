@@ -26,7 +26,8 @@ if covar and not covarName:
     covarName = ",".join(d)
 
 if covar:
-    covar = covar + ".rarecov"
+    #covar = covar + ".rarecov"
+    covar = covar
     phenocov = [pheno,covar]
 else:
     phenocov = pheno
@@ -37,13 +38,12 @@ geneFile = config['--geneFile']
 
 pfix_rare = config['pfix_rare']
 pfix_raremetal = f"{pfix_rare}RAREMETAL"
-pfix_rare = f"{pfix_rare}{{wcard}}"
 
 
 ##scripts
 rvtest = f"{maindir}/resources/rare/software/rvtests/executable/rvtest"
 raremetal = f"{maindir}/resources/rare/software/Raremetal/bin/raremetal"
 manscript = f"{methoddir}/manhattan.R"
-
+rscript = f"{methoddir}/combine.scores.R"
 ##files
 geneflat = f"{maindir}/resources/rare/refFlat_hg19.txt.gz"
