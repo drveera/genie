@@ -1,0 +1,30 @@
+#!/bin/env snakemake
+
+import sys
+methoddir = sys.path[0]
+maindir = re.search(r'.*genie/',methoddir).group()
+sys.path.insert(1,maindir + "/library")
+import md
+from md import process_list
+
+pheno = config['--pheno']
+covar = config['--covar']
+geno = config['--geno']
+geno = process_list(geno)
+pfix_abel = config['pfix_genabel']
+
+##scripts
+pheno_rscript = f"{methoddir}/prepare.pheno.R"
+assoc_rscript = f"{methoddir}/genabel.assoc.R"
+
+## outfiles
+formatted_pheno = f"{pfix_abel}individual_files/{{wcard}}.formatted.pheno"
+rule abel_all:
+    input: expand(formatted_pheno, wcard = geno)
+
+rule abel_prepare_pheno:
+    input: geno = lambda wildcards: geno[wildcards.wcard], pheno = pheno, covar = covar
+    output: formatted_pheno
+    params: rscript = pheno_rscript
+    shell:
+        "Rscript {params.rscript} {input.geno} {input.pheno} {input.covar} {output}"

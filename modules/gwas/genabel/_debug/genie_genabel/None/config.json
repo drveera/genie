@@ -1,0 +1,12 @@
+{
+    "genabel": true,
+    "--covar": "covar.txt",
+    "--nojob": true,
+    "--dry-run": false,
+    "--njobs": null,
+    "--out": null,
+    "--geno": "new.gbl.out",
+    "--pheno": "plink.pheno.txt",
+    "pfix_genabel": "genie_genabel/None/None_",
+    "--outfolder": "genie_genabel/None"
+}
