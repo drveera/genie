@@ -43,7 +43,7 @@ f <- as.formula(paste0(trait,"~",paste(covars,collapse = "+")))
 print(f)
 
 ##rslt <- mlreg(f, data = geno, trait.type = "guess")
-rslt <- qtscore(f, data = geni, trait.type = "binomial")
+rslt <- qtscore(f, data = geno, trait.type = "binomial")
 
 cat("done \n")
 rslt <- data.table(results(rslt))
