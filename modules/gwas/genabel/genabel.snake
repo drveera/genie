@@ -19,12 +19,14 @@ assoc_rscript = f"{methoddir}/genabel.assoc.R"
 
 ## outfiles
 formatted_pheno = f"{pfix_abel}individual_files/{{wcard}}.formatted.pheno"
+outfile = f"{pfix_abel}individual_files/{{wcard}}.gbl.summary"
 rule abel_all:
-    input: expand(formatted_pheno, wcard = geno)
+    input: expand(formatted_pheno, wcard = geno),
+           expand(outfile, wcard = geno)
 
 rule abel_prepare_pheno:
     input: geno = lambda wildcards: geno[wildcards.wcard], pheno = pheno, covar = covar
-    output: formatted_pheno
+    output: a = formatted_pheno, b = outfile
     params: rscript = pheno_rscript
     shell:
-        "Rscript {params.rscript} {input.geno} {input.pheno} {input.covar} {output}"
+        "Rscript {params.rscript} {input.geno} {input.pheno} {input.covar} {output.a} {output.b}"
