@@ -41,7 +41,10 @@ cat("Running association analysis \n")
 f <- as.formula(paste0(trait,"~",paste(covars,collapse = "+")))
 #f <- as.formula(paste0(trait,"~1"))
 print(f)
-rslt <- mlreg(f, data = geno, trait.type = "guess")
+
+##rslt <- mlreg(f, data = geno, trait.type = "guess")
+rslt <- qtscore(f, data = geni, trait.type = "binomial")
+
 cat("done \n")
 rslt <- data.table(results(rslt))
 cat("writing the results \n")
