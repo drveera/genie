@@ -1,1 +1,0 @@
-Rscript /faststorage/home/veera/pipelines/genie/modules/gwas/genabel/prepare.pheno.R new.gbl.out plink.pheno.txt covar.txt genie_genabel/test1/test1_individual_files/new.gbl.out.formatted.pheno genie_genabel/test1/test1_individual_files/new.gbl.out.gbl.summary
