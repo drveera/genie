@@ -46,7 +46,9 @@ print(f)
 rslt <- qtscore(f, data = geno, trait.type = "binomial")
 
 cat("done \n")
-rslt <- data.table(results(rslt))
+rslt <- results(rslt)
+rslt$SNP <- row.names(rslt)
+rslt <- data.table(rslt)
 cat("writing the results \n")
 fwrite(rslt,outfile.summary,sep="\t",na  = "NA")
 
