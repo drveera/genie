@@ -56,8 +56,8 @@ for (i in 1:length(ts)){
     mres.full <- glm(f, data = m2, family = "binomial")
     mres.null <- glm(f1, data = m2, family = "binomial")
     r2 <- PseudoR2(mres.full)["Nagelkerke"] - PseudoR2(mres.null)["Nagelkerke"]
-    res <- summary(mres)$coefficients
-    if (! is.na(coef(mres)[ts[i]])){
+    res <- summary(mres.full)$coefficients
+    if (! is.na(coef(mres.full)[ts[i]])){
         threshold <- rownames(res)[2]
         res <- res[2,]
         res <- c(res,r2,threshold)
