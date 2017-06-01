@@ -3,9 +3,10 @@
 args <- commandArgs(trailingOnly = TRUE)
 
 rslt <- args[1]
+map <- args[2]
 outfile <- args[3]
 
-map <- gsub(".gbl",".map",rslt)
+map <- gsub(".gbl",".bim",map)
 library(data.table)
 
 rslt <- fread(rslt)

@@ -42,11 +42,11 @@ rule abel_assoc:
     shell:
         "Rscript {params.rscript} {input.geno} {input.pheno} {input.covar} {output.a} {output.b}"
 rule abel_updateallele:
-    input: a = outfile
+    input: a = outfile, b = lambda wildcards: geno[wildcards.wcard]
     output: outfile1
     params: rscript = map_script
     shell:
-        "Rscript {params.rscript} {input.a} {output}"
+        "Rscript {params.rscript} {input.a} {input.b} {output}"
 rule abel_list:
     input: expand(outfile1, wcard = geno)
     output: slist
