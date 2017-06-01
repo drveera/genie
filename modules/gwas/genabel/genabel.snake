@@ -17,10 +17,12 @@ pfix_abel = config['pfix_genabel']
 pheno_rscript = f"{methoddir}/prepare.pheno.R"
 assoc_rscript = f"{methoddir}/genabel.assoc.R"
 merge_script = f"{methoddir}/merge.summary.R"
+map_script = f"{methoddir}/update.allele.R"
 
 ## outfiles
 formatted_pheno = f"{pfix_abel}individual_files/{{wcard}}.formatted.pheno"
 outfile = f"{pfix_abel}individual_files/{{wcard}}.gbl.summary"
+outfile1 = f"{pfix_abel}individual_files/{{wcard}}.gbl.summary.with.alleles"
 slist = f"{pfix_abel}summary.list"
 outfile2 = f"{pfix_abel}merged.summary.txt"
 rule abel_all:
@@ -34,15 +36,20 @@ rule abel_assoc:
     params: rscript = pheno_rscript
     shell:
         "Rscript {params.rscript} {input.geno} {input.pheno} {input.covar} {output.a} {output.b}"
-
+rule abel_updateallele:
+    input: a = outfile
+    output: outfile1
+    params: rscript = map_script
+    shell:
+        "Rscript {params.rscript} {input.a} {output}"
 rule abel_list:
-    input: expand(outfile, wcard = geno)
+    input: expand(outfile1, wcard = geno)
     output: slist
     run:
         for i in input:
             shell("ls {i} >> {output}")
 rule abel_merge:
-    input: genos = expand(outfile, wcard = geno), slist = slist
+    input: genos = expand(outfile1, wcard = geno), slist = slist
     output: outfile2
     params: rscript = merge_script
     shell:
