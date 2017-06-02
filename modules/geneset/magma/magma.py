@@ -11,6 +11,8 @@ options:
  --nsamples=NUMBER  number of samples [default: 10000]
  --genesets=FILE    genesets file in gmt format [default: |resources/magma/h.all.v5.2.symbols.gmt]
  --nojob            run on the front end
+ --dry-run          dry run
+ --njobs=NUMBER     number of parallel jobs [default: 1]
  <summary-file>     a single summary file or a text file(with extension .list) containing the list of summary files
 
 

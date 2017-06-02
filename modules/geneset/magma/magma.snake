@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(1, sys.path[0] + '/../../library')
+sys.path.insert(1, sys.path[0] + '/../../../library')
 from md import process_list
 gwas = config['<summary-file>']
 gwas = process_list(gwas)
