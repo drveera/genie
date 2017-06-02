@@ -40,8 +40,9 @@ rule magma_annot:
         geneloc = geneloc, bim = bim
     output:
         annot
+    params: base = pfix_magma
     shell:
-        "magma --annotate --snp-loc {input.bim} --gene-loc {input.geneloc} --out {output}"
+        "magma --annotate --snp-loc {input.bim} --gene-loc {input.geneloc} --out {params.base}"
 
 
 rule magma_gene:
@@ -52,7 +53,7 @@ rule magma_gene:
     output:
         raw = raw,
         genes = genes
-    params: base = pfix_magma
+    params: base = raw_base
     shell:
         "magma --bfile {ldfile} --pval {input.gwas} N={nsamples} --gene-annot {input.annot} --out {params.base}"
 
