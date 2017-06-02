@@ -15,6 +15,7 @@ options:
  --nojob               nojob
  --dry-run             dry run
  --njobs=NUMBER    number of parallel jobs if running in front node [default: 1]
+ --other=ARGS      other arguments to pass to munge
  
 '''
 
