@@ -9,7 +9,7 @@ options:
  --geneloc=FILE     geneloc file [default: |resources/magma/NCBI37.3.gene.loc.symbols]
  --ldfile=FILE      reference file in plink format [default: |resources/magma/g1000_eur]
  --nsamples=NUMBER  number of samples [default: 10000]
- --genesets=FILE    genesets file in gmt format [default: |resources/magma/h.all.v5.2.symbols.gmt]
+ --genesets=FILE    genesets file in gmt format [default: |resources/magma/gmt.list]
  --nojob            run on the front end
  --dry-run          dry run
  --njobs=NUMBER     number of parallel jobs [default: 1]

@@ -9,11 +9,12 @@ geneloc = config['--geneloc']
 ldfile = config['--ldfile']
 nsamples = config['--nsamples']
 genesets = config['--genesets']
+genesets = process_list(genesets)
 
 base = f"{outfolder}/{outname}"
 annot = f"{base}.genes.annot"
 raw = expand(base + "{summary}.genes.raw", summary = gwas)
-outfile = expand(base + ".{summary}.sets.out", summary = gwas)
+outfile = expand(base + ".{summary}.{gset}.sets.out", summary = gwas, gset = genesets)
 genes = expand(base + ".{summary}.genes.out", summary = gwas)
 ldfiles = expand(ldfile + ".{ext}", ext=["bim", "bed", "fam"])
 bim = f"{ldfile}.bim"
@@ -50,7 +51,7 @@ rule magma_geneset:
         raw = base + ".{summary}.genes.raw",
         genesets = genesets
     output:
-        base + ".{summary}.sets.out"
+        base + ".{summary}.{gset}.sets.out"
     shell:
-        "magma --gene-results {input.raw} --set-annot {input.genesets} --out {base}.{wildcards.summary}"
+        "magma --gene-results {input.raw} --set-annot {input.genesets} --out {base}.{wildcards.summary}.{wildcards.gset}"
 
