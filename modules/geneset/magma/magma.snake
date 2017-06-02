@@ -3,55 +3,66 @@ sys.path.insert(1, sys.path[0] + '/../../../library')
 from md import process_list
 gwas = config['<summary-file>']
 gwas = process_list(gwas)
-outname = config['--out']
-outfolder = config['--outfolder']
+#outname = config['--out']
+#outfolder = config['--outfolder']
+
 geneloc = config['--geneloc']
 ldfile = config['--ldfile']
 nsamples = config['--nsamples']
+
 genesets = config['--genesets']
 genesets = process_list(genesets)
+pfix_magma = config['pfix_magma']
+#base = f"{outfolder}/{outname}"
+annot = f"{pfix_magma}genes.annot"
+raw_base = f"{pfix_magma}.{{summary}}/{{summary}}"
+raw = raw_base + ".genes.raw",
 
-base = f"{outfolder}/{outname}"
-annot = f"{base}.genes.annot"
-raw = expand(base + "{summary}.genes.raw", summary = gwas)
-outfile = expand(base + ".{summary}.{gset}.sets.out", summary = gwas, gset = genesets)
-genes = expand(base + ".{summary}.genes.out", summary = gwas)
+genes_base = f"{pfix_magma}.{{summary}}/{{summary}}"
+genes = genes_base + ".genes.out"
+
+outfile_base = f"{pfix_magma}.{{summary}}/{{summary}}_{{gset}}"
+outfile = outfile_base + ".sets.out"
+
 ldfiles = expand(ldfile + ".{ext}", ext=["bim", "bed", "fam"])
 bim = f"{ldfile}.bim"
 
 
 rule all:
     input:
-        expand(base + ".{summary}.sets.out", summary = gwas)
+        expand(outfile, summary = gwas, gset = genesets),
+        expand(raw, summary = gwas),
+        expand(genes, summary = gwas)
 
 
 rule magma_annot:
     input:
-        geneloc, bim
+        geneloc = geneloc, bim = bim
     output:
         annot
     shell:
-        "magma --annotate --snp-loc {bim} --gene-loc {geneloc} --out {base}"
+        "magma --annotate --snp-loc {input.bim} --gene-loc {input.geneloc} --out {output}"
 
 
 rule magma_gene:
     input:
         annot = annot,
-        gwas = "{summary}",
+        gwas = lambda wildcards: gwas[wildcards.summary],
         ldfiles = ldfiles
     output:
-        raw = base + ".{summary}.genes.raw",
-        genes = base + ".{summary}.genes.out"
+        raw = raw,
+        genes = genes
+    params: base = raw_base
     shell:
-        "magma --bfile {ldfile} --pval {input.gwas} N={nsamples} --gene-annot {input.annot} --out {base}.{wildcards.summary}"
+        "magma --bfile {ldfile} --pval {input.gwas} N={nsamples} --gene-annot {input.annot} --out {params.base}"
 
 
 rule magma_geneset:
     input:
-        raw = base + ".{summary}.genes.raw",
-        genesets = genesets
-    output:
-        base + ".{summary}.{gset}.sets.out"
+        raw = raw,
+        genesets = lambda wildcards: genesets[wildcards.gset]
+    output: outfile
+    params: base = outfile_base
     shell:
-        "magma --gene-results {input.raw} --set-annot {input.genesets} --out {base}.{wildcards.summary}.{wildcards.gset}"
+        "magma --gene-results {input.raw} --set-annot {input.genesets} --out {params.base}"
 
