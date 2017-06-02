@@ -21,7 +21,6 @@ if daner:
     ann_sumstats = f"{pfix_dbsnp}{{wcard}}.ann"
 else:
     ann_sumstats = lambda wildcards: sumstats[wildcards.wcard]
-    
 munge_sumstats = f"{pfix_munge}{{wcard}}.munged.sumstats"
 munge_sumstats_pre = f"{pfix_munge}{{wcard}}.munged"
 ##scripts
@@ -32,10 +31,10 @@ rule genie_munge_all:
 
 rule genie_munge_one:
     input: ann_sumstats
-    output: munge_sumstats            
+    output: munge_sumstats
     params: script = mungescript, pre = munge_sumstats_pre
     conda: f"{maindir}/resources/ldsc/env/p2.yaml"
-    shell:        
+    shell:
         "{{params.script}} --sumstats {{input}} {daner} {Nsamples} --out {{params.pre}} {other}"
         .format(
             daner = "--daner" if daner else "",
