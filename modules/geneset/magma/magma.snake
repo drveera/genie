@@ -14,7 +14,7 @@ genesets = config['--genesets']
 genesets = process_list(genesets)
 pfix_magma = config['pfix_magma']
 #base = f"{outfolder}/{outname}"
-annot = f"{pfix_magma}genes.annot"
+annot = f"{pfix_magma}.genes.annot"
 raw_base = f"{pfix_magma}.{{summary}}/{{summary}}"
 raw = raw_base + ".genes.raw",
 
@@ -52,7 +52,7 @@ rule magma_gene:
     output:
         raw = raw,
         genes = genes
-    params: base = raw_base
+    params: base = pfix_magma
     shell:
         "magma --bfile {ldfile} --pval {input.gwas} N={nsamples} --gene-annot {input.annot} --out {params.base}"
 
