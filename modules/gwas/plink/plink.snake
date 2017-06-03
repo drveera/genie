@@ -21,8 +21,10 @@ bcovar = basename(covar)
 
 ##outfiles
 chunkfam = f"{pfix_plink}_chunks/{{chunk}}.fam"
+chunkout_base = f"{pfix_plink}_chunks/{{chunk}}"
 chunkout = f"{pfix_plink}_chunks/{{chunk}}.assoc"
-mergeout = f"{pfix_plink}_chunks//{bpheno}_{bcovar}.summary.txt"
+chunk_list = f"{pfix_plink}_merged/merge.list"
+mergeout = f"{pfix_plink}_merged/{bpheno}_{bcovar}.summary.txt"
 
 ##scripts
 famscript = f"{methoddir}/famscript.R"
@@ -59,4 +61,4 @@ rule plink_merge_chunks:
     output: mergeout
     params: rscript = mergescript
     shell:
-        "Rscript {input.rscript} {chunk_list}"
+        "Rscript {params.rscript} {chunk_list}"
