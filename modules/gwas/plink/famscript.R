@@ -8,7 +8,7 @@ outfile <- args[3]
 outfilemap <- args[4]
 
 fam.file <- gsub(".gz$",".fam",geno.file)
-map.file <- gsub(".gz$",".fam",geno.file)
+map.file <- gsub(".gz$",".map",geno.file)
 library(data.table)
 
 fam <- fread(fam.file, header=FALSE)
