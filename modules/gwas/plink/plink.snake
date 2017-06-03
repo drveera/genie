@@ -23,7 +23,7 @@ bcovar = basename(covar)
 chunkfam = f"{pfix_plink}_chunks/{{chunk}}.fam"
 chunkmap = f"{pfix_plink}_chunks/{{chunk}}.map"
 chunkout_base = f"{pfix_plink}_chunks/{{chunk}}"
-chunkout = f"{pfix_plink}_chunks/{{chunk}}.assoc"
+chunkout = f"{pfix_plink}_chunks/{{chunk}}.assoc.dosage"
 chunk_list = f"{pfix_plink}_merged/merge.list"
 mergeout = f"{pfix_plink}_merged/{bpheno}_{bcovar}.summary.txt"
 
