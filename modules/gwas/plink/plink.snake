@@ -41,12 +41,12 @@ rule plink_prepare_fampheno:
     shell: "Rscript {params.rscript} {input.pheno} {input.geno} {output.famfile} {output.mapfile}"
 
 rule plink_chunk_assoc:
-    input: fam = chunkfam, covar = covar, chunk = lambda wildcards: geno[wildcards.chunk]
+    input: fam = chunkfam, covar = covar, chunk = lambda wildcards: geno[wildcards.chunk], mapfile = chunkmap
     output: chunkout
     params: out = chunkout_base
     run:
         shell("plink --dosage {input.chunk} format=2 case-control-freqs \
-        --fam {input.fam} --map {input.map}  \
+        --fam {input.fam} --map {input.mapfile}  \
         --covar {input.covar} --covar-name {input.covarname} --out {params.out} \
         --allow-no-sex ")
 
