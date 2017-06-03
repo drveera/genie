@@ -1,0 +1,62 @@
+#!/bin/env snakemake
+
+import sys
+methoddir = sys.path[0]
+maindir = re.search(r'.*genie/',methoddir).group()
+sys.path.insert(1,maindir + "/library")
+import md
+from md import process_list
+from os.path import basename
+
+pheno = config['--pheno']
+covar = config['--covar']
+geno = process_list(config['--geno'])
+pfix_plink = config['pfix_plink']
+
+
+
+##variables to use in the outnames
+bpheno = basename(pheno)
+bcovar = basename(covar)
+
+##outfiles
+chunkfam = f"{pfix_plink}_chunks/{{chunk}}.fam"
+chunkout = f"{pfix_plink}_chunks/{{chunk}}.assoc"
+mergeout = f"{pfix_plink}_chunks//{bpheno}_{bcovar}.summary.txt"
+
+##scripts
+famscript = f"{methoddir}/famscript.R"
+mergescript = f"{methoddir}/merge.chunks.R"
+
+rule plink_all:
+    input: mergeout
+
+rule plink_prepare_fampheno:
+    input: pheno = pheno, geno = lambda wildcards: geno[wildcards.chunk]
+    output: temp(chunkfam)
+    params: rscript = famscript
+    shell: "Rscript {params.rscript} {input.pheno} {input.geno} {output}"
+
+rule plink_chunk_assoc:
+    input: fam = chunkfam, covar = covar, chunk = lambda wildcards: geno[wildcards.chunk]
+    output: chunkout
+    params: out = chunkout_base
+    run:
+        shell("plink --dosage {input.chunk} format=2 case-control-freqs \
+        --fam {input.fam} --map {input.map}  \
+        --covar {input.covar} --covar-name {input.covarname} --out {params.out} \
+        --allow-no-sex ")
+
+rule plink_chunk_list:
+    input: expand(chunkout, chunk = geno)
+    output: temp(chunk_list)
+    run:
+        for i in input:
+            shell("ls {i} >> {output}")
+
+rule plink_merge_chunks:
+    input: chunk_list
+    output: mergeout
+    params: rscript = mergescript
+    shell:
+        "Rscript {input.rscript} {chunk_list}"

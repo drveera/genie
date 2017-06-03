@@ -32,8 +32,8 @@ argv = [arguments['<method>']] + arguments['<args>']
 ########################################################################################################
 # CHECK IF METHOD IS VALID
 method = arguments['<method>']
-prsmethods = ['genabel','-h','--help']
-if method not in prsmethods:
+gwasmethods = ['genabel','plink','-h','--help']
+if method not in gwasmethods:
     exit(method + " is not valid")
 ########################################################################################################
 
