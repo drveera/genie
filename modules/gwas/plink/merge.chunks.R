@@ -6,6 +6,7 @@ chunklist <- args[1]
 outfile <- args[2]
 chunkfiles <- readLines(chunklist)
 
+library(data.table)
 mlist <- list()
 for(i in 1:length(chunkfiles)){
   mlist[[i]] <- fread(chunkfiles[i])
