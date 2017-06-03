@@ -12,5 +12,6 @@ for(i in 1:length(chunkfiles)){
   mlist[[i]] <- fread(chunkfiles[i])
 }
 mdfm <- do.call(rbind,mlist)
-mdfm <- data.table(mdfm)
+mdfm <- data.table(as.data.frame(mdfm))
 fwrite(mdfm,outfile,sep="\t",na="NA")
+
