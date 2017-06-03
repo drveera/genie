@@ -21,6 +21,7 @@ bcovar = basename(covar)
 
 ##outfiles
 chunkfam = f"{pfix_plink}_chunks/{{chunk}}.fam"
+chunkmap = f"{pfix_plink}_chunks/{{chunk}}.map"
 chunkout_base = f"{pfix_plink}_chunks/{{chunk}}"
 chunkout = f"{pfix_plink}_chunks/{{chunk}}.assoc"
 chunk_list = f"{pfix_plink}_merged/merge.list"
@@ -35,9 +36,9 @@ rule plink_all:
 
 rule plink_prepare_fampheno:
     input: pheno = pheno, geno = lambda wildcards: geno[wildcards.chunk]
-    output: temp(chunkfam)
-    params: rscript = famscript
-    shell: "Rscript {params.rscript} {input.pheno} {input.geno} {output}"
+    output: famfile = chunkfam, mapfile = chunkmap
+    params: rscript = famscript, 
+    shell: "Rscript {params.rscript} {input.pheno} {input.geno} {output.famfile} {output.mapfile}"
 
 rule plink_chunk_assoc:
     input: fam = chunkfam, covar = covar, chunk = lambda wildcards: geno[wildcards.chunk]
