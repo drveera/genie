@@ -5,6 +5,7 @@ args <- commandArgs(trailingOnly = TRUE)
 pheno.file <- args[1]
 geno.file <- args[2]
 outfile <- args[3]
+outfilemap <- args[4]
 
 fam.file <- gsub(".gz$",".fam",geno.file)
 map.file <- gsub(".gz$",".fam",geno.file)
@@ -29,4 +30,4 @@ fampheno <- merge(fam,pheno,by=c("FID","IID"), sort = FALSE, all.x = TRUE)
 print(head(fampheno))
 fampheno <- fampheno[,c("FID","IID","V3","V4","V5","pheno")]
 fwrite(fampheno,outfile,sep="\t",na="NA")
-system(paste0("ln -s ", map.file, " ", dirname(outfile),"/."))
+system(paste0("ln -s ", map.file, " ", outfilemap))
