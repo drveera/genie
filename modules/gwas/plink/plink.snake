@@ -62,4 +62,4 @@ rule plink_merge_chunks:
     output: mergeout
     params: rscript = mergescript
     shell:
-        "Rscript {params.rscript} {chunk_list}"
+        "Rscript {params.rscript} {chunk_list} {output}"
