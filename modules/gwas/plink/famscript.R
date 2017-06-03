@@ -13,7 +13,7 @@ fam <- fread(fam.file, header=FALSE)
 names(fam)[1:2] <- c("FID","IID")
                                         #reading pheno
 pheno <- fread(pheno.file, header = TRUE,nrows = 10)
-if(grepl("FID",names(pheno))){
+if("FID" %in% names(pheno)){
   pheno <- fread(pheno.file,header=TRUE)
   names(pheno)[3] <- "pheno"
 } else {
