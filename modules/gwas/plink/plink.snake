@@ -47,7 +47,7 @@ rule plink_chunk_assoc:
     run:
         shell("plink --dosage {input.chunk} format=2 case-control-freqs \
         --fam {input.fam} --map {input.mapfile}  \
-        --covar {input.covar} --covar-name {input.covarname} --out {params.out} \
+        --covar {input.covar}  --out {params.out} \
         --allow-no-sex ")
 
 rule plink_chunk_list:
