@@ -29,4 +29,4 @@ fampheno <- merge(fam,pheno,by=c("FID","IID"), sort = FALSE, all.x = TRUE)
 print(head(fampheno))
 fampheno <- fampheno[,c("FID","IID","V3","V4","V5","pheno")]
 fwrite(fampheno,outfile,sep="\t",na="NA")
-system(paste0("ln -s ", map.file, " ", dirname(outfile)))
+system(paste0("ln -s ", map.file, " ", dirname(outfile),"/."))
