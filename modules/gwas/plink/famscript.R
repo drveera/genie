@@ -7,6 +7,7 @@ geno.file <- args[2]
 outfile <- args[3]
 
 fam.file <- gsub(".gz$",".fam",geno.file)
+map.file <- gsub(".gz$",".fam",geno.file)
 library(data.table)
 
 fam <- fread(fam.file, header=FALSE)
@@ -28,3 +29,4 @@ fampheno <- merge(fam,pheno,by=c("FID","IID"), sort = FALSE, all.x = TRUE)
 print(head(fampheno))
 fampheno <- fampheno[,c("FID","IID","V3","V4","V5","pheno")]
 fwrite(fampheno,outfile,sep="\t",na="NA")
+system(paste0("ln -s ", map.file, " ", dirname(outfile)))
