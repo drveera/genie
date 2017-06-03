@@ -6,7 +6,7 @@ pheno.file <- args[1]
 geno.file <- args[2]
 outfile <- args[3]
 
-fam.file <- gsub(".gz$",".fam",pheno.file)
+fam.file <- gsub(".gz$",".fam",geno.file)
 library(data.table)
 
 fam <- fread(fam.file, header=FALSE)
