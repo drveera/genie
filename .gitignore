@@ -3,6 +3,8 @@
 library/__pycache__/
 *resources*
 modules/eqtl/predixcan
+modules/eqtl/gtx
 modules/ldsc/annotate
 modules/ldsc/partition
+
 
