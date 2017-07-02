@@ -27,7 +27,7 @@ argv = [arguments['<method>']] + arguments['<args>']
 
 # CHECK IF METHOD IS VALID
 method = arguments['<method>']
-methods = ['fusion','predixcan','metaxcan','-h','--help']
+methods = ['fusion','predixcan','metaxcan','gtx','-h','--help']
 if method not in methods:
     exit("The eqtl method " + method +  " is not available")
 
