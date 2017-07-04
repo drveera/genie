@@ -7,5 +7,6 @@ modules/eqtl/gtx
 modules/eqtl/metaxcan
 modules/ldsc/annotate
 modules/ldsc/partition
+modules/gwas/plink
 
 
