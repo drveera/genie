@@ -26,9 +26,9 @@ if covar and not covarName:
     covarName = ",".join(d)
 
 if covar:
-    #covar = covar + ".rarecov"
+    covar = covar + ".rarecov"
     #covar = covar
-    phenocov = [pheno,rareCov]
+    phenocov = [rarePheno,covar]
 else:
     phenocov = pheno
     
