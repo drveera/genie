@@ -13,7 +13,7 @@ infile = lambda wildcards: vcf[wildcards.wcard]
 if config['--fam']:
     pheno = config['--fam']
 else:
-    pheno = config['--pheno']+".rpheno"
+    pheno = config['--pheno']
 pheno_name = config['--pheno-name']
 
 covar = config['--covar']
