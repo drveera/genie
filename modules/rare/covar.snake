@@ -1,14 +1,14 @@
 import sys
 covar = ['file']
-rareCov = "{cov}.rarecov"
+rareCov = "{covar}.rarecov"
 covarScript = f"{sys.path[0]}/convert.rareCov.R"
 
 rule rare_cov_all:
-    input: expand(rareCov, cov = covar)
+    input: expand(rareCov, covar = covar)
 
 rule rare_covar:
-    input: "{cov}"
+    input: "{covar}"
     output: rareCov
     params: script = covarScript
     shell:
-        "Rscript {params.script} {wildcards.cov} {output}"
+        "Rscript {params.script} {wildcards.covar} {output}"
