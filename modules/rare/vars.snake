@@ -27,8 +27,9 @@ if covar and not covarName:
 
 if covar:
     covar = covar + ".rarecov"
+    pheno = pheno + ".rpheno"
     #covar = covar
-    phenocov = [rarePheno,covar]
+    phenocov = [pheno,covar]
 else:
     phenocov = pheno
     
