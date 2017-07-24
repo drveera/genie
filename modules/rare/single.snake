@@ -11,7 +11,7 @@ outfile_single_combined = f"{pfix_rare}{{wcard2}}/merged_file/{{wcard2}}.assoc.m
 single_list = f"{pfix_rare}{{wcard2}}/merged_file/{{wcard2}}.list"
 
 rule rare_single_one:
-    input: vcf = infile, pheno = rarePheno, covar = rareCov
+    input: vcf = infile, pheno = phenocov
     output: outfile_single_ok
     params: script = rvtest, out = single_prefix
     shell:
@@ -19,8 +19,8 @@ rule rare_single_one:
 	--out {{params.out}} --single {{wildcards.wcard2}} {covar} {covarName} {pheno_name} \
         && touch {{output}}"
         .format(
-            pheno = rarePheno,
-            covar = "--covar " + rareCov if covar else "",
+            pheno = pheno,
+            covar = "--covar " + covar if covar else "",
 	    covarName = "--covar-name " + covarName if covarName else "",
             pheno_name = "--pheno-name " + pheno_name if pheno_name else ""
         )
