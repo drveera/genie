@@ -20,7 +20,7 @@ rule rare_single_one:
         && touch {{output}}"
         .format(
             pheno = pheno,
-            covar = "--covar " + covar if covar else "",
+            covar = "--covar " + rareCov if covar else "",
 	    covarName = "--covar-name " + covarName if covarName else "",
             pheno_name = "--pheno-name " + pheno_name if pheno_name else ""
         )
