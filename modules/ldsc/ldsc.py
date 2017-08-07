@@ -26,7 +26,7 @@ argv = [arguments['<method>']] + arguments['<args>']
 
 # CHECK IF METHOD IS VALID
 method = arguments['<method>']
-methods = ['munge','-h','--help']
+methods = ['munge','annotate','partition','-h','--help']
 if method not in methods:
     exit("The ldsc method " + method +  " is not available")
 
