@@ -2,12 +2,12 @@
 *~
 library/__pycache__/
 *resources*
-modules/eqtl/predixcan
-modules/eqtl/gtx
-modules/eqtl/metaxcan
-modules/ldsc/annotate
-modules/ldsc/partition
-modules/gwas/plink
-modules/impute
+modules/eqtl/predixcan/
+modules/eqtl/gtx/
+modules/eqtl/metaxcan/
+modules/ldsc/annotate/
+modules/ldsc/partition/
+modules/gwas/plink/
+modules/impute/
 
 
