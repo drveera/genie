@@ -9,5 +9,6 @@ modules/ldsc/annotate/
 modules/ldsc/partition/
 modules/gwas/plink/
 modules/impute/
+modules/exome/
 
 
