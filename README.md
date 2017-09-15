@@ -5,18 +5,29 @@ GEnomic Integrated suitE
 ## INSTRUCTIONS FOR GENOME.DK USERS
 ### Installation
 
-*You need to do this only once*
+## first download and install latest Anaconda package (don't source from /com/extra/Anaconda..)
 
-Download this script and run it
+```
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+sh Miniconda3-latest-Linux-x86_64.sh
+```
+Just accept the defaults 
+
+after installing miniconda,
+
+open a new window and type `conda --version` and see if you have version > 4.0
+
+then install genie by downloading the installer script 
+
 ```
 wget https://raw.githubusercontent.com/drveera/genie/master/library/ipsych_installer.sh
 sh ipsych_installer.sh
 ```
-Once you run this script, then everytime when u want to run genie, you should activate the genie environment by
-
+open a new window and type 
 ```
 source activate genie
 ```
+
 and you'll be good to go. Type `genie -h` and you'll see help message like this.
 
 ```
