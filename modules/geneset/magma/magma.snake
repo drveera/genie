@@ -8,7 +8,12 @@ gwas = process_list(gwas)
 
 geneloc = config['--geneloc']
 ldfile = config['--ldfile']
-nsamples = config['--nsamples']
+if nsamples in config:
+    nsamples = f"N = {config['--nsamples']}"
+elif '--ncol' in config:
+    nsamples = f"ncol = {config['--ncol']}"
+else:
+    nsamples = 'ncol = Neff'
 
 genesets = config['--genesets']
 genesets = process_list(genesets)
@@ -55,7 +60,7 @@ rule magma_gene:
         genes = genes
     params: base = raw_base
     shell:
-        "magma --bfile {ldfile} --pval {input.gwas} N={nsamples} --gene-annot {input.annot} --out {params.base}"
+        "magma --bfile {ldfile} --pval {input.gwas} {nsamples} --gene-annot {input.annot} --out {params.base}"
 
 
 rule magma_geneset:
