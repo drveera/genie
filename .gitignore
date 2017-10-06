@@ -10,5 +10,6 @@ modules/ldsc/partition/
 modules/gwas/plink/
 modules/impute/
 modules/exome/
+modules/prs/ldpred
 
 
