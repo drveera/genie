@@ -14,9 +14,8 @@ def main(args, methods):
     method = next(arg for arg in methods if arg in args and args[arg])
 
     args = process_arguments(args)
-
     outfolder = f"genie_{method}/{args['--out']}"
-    pfix = f"{outfolder}/{args['--out']}_"
+    pfix = f"{outfolder}/{args['--out']}"
 
     args[f"pfix_{method}"] = pfix
     args['--outfolder'] = outfolder
@@ -51,7 +50,7 @@ def main(args, methods):
           f"-s {methoddir}/{method}.snake"
 
     if args['--dry-run']:
-        os.system(cmds + " -n")
+        os.system(cmds + " --printshellcmds")
     elif args['--nojob']:
         os.system(cmds)
     else:
