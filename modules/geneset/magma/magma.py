@@ -8,7 +8,8 @@ options:
  --out=PREFIX       outname prefix[default: output]
  --geneloc=FILE     geneloc file [default: |resources/magma/NCBI37.3.gene.loc.symbols]
  --ldfile=FILE      reference file in plink format [default: |resources/magma/g1000_eur]
- --nsamples=NUMBER  number of samples [default: 10000]
+ --ncol=NAME        name of the column containing the sample size [default: Neff]
+ --nsamples=NUMBER  alternatively, the number of samples can be assigned like this
  --genesets=FILE    genesets file in gmt format [default: |resources/magma/gmt.list]
  --nojob            run on the front end
  --dry-run          dry run

@@ -1,0 +1,42 @@
+#!/bin/env snakemake
+
+res = sys.path[0] + '/../../resources/'
+sdir = sys.path[0] + '/scripts/'
+
+chroms = range(1, 23)
+sumstats = f"{config['<sumstat>']}"
+partitions = f"{res}/EUR/fourier_ls-chr{{chrom}}.bed"
+ref_s = f"{res}/refpanel/1kg_phase3_chr{{chrom}}_eur_5pct"
+ref_legends = f"{ref_s}_legend.txt.gz"
+ref_genos = f"{ref_s}_gen.txt.gz"
+outf = f"{config['--outfolder']}/"
+step1_n = f"{outf}/step1"
+step1_s = f"{step1_n}_chr{{chrom}}"
+step1_o = [f"{step1_s}.{ext}" for ext in ["info.gz", "eig.gz", "prjsq.gz"]]
+step2 = f"{outf}/step2"
+
+
+rule all:
+	input:
+		step2
+
+rule step_a:
+	input:
+		sumstats, partitions, ref_genos, ref_legends
+	params:
+		"{chrom}",
+	output:
+		step1_o
+	shell:
+		"python {sdir}/hess.py --h2g {input[0]} --chrom {params[0]} --partition-file {input[1]} \
+		--reference-panel {input[2]} --legend-file {input[3]} --out {step1_n}"
+
+
+rule step_b:
+	input:
+		expand(step1_o, chrom=chroms)
+	output:
+		step2
+	shell:
+		"python {sdir}/hess.py --prefix {step1_n} --k 50 --out {step2}"
+
