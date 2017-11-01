@@ -8,9 +8,9 @@ gwas = process_list(gwas)
 
 geneloc = config['--geneloc']
 ldfile = config['--ldfile']
-if nsamples in config:
+if config['--nsamples']:
     nsamples = f"N = {config['--nsamples']}"
-elif '--ncol' in config:
+elif config['--ncol']:
     nsamples = f"ncol = {config['--ncol']}"
 else:
     nsamples = 'ncol = Neff'
@@ -18,7 +18,7 @@ else:
 genesets = config['--genesets']
 genesets = process_list(genesets)
 pfix_magma = config['pfix_magma']
-#base = f"{outfolder}/{outname}"
+
 annot = f"{pfix_magma}.genes.annot"
 raw_base = f"{pfix_magma}.{{summary}}/{{summary}}"
 raw = raw_base + ".genes.raw",
