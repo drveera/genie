@@ -1,0 +1,73 @@
+#!/bin/env snakemake
+
+outf = config['--outfolder']
+sdir = sys.path[0] + '/scripts/'
+f1_s, f2_s = config['<sum1>'], config['<sum2>']
+f1i, f2i = f"{f1_s}.sumstats", f"{f2_s}.sumstats"
+f1 = f"{outf}/{f1_s}"
+clumps = f"{f1}.clumped"
+merged_s = f"{outf}/merged"
+merged_sumstats = f"{merged_s}.sumstats"
+merged_allele = f"{merged_s}.allele"
+md_s = f"{outf}/md"
+md_matrix = f"{md_s}.xmat.gz"
+g1k = sys.path[0] + '/../../resources/g1000_eur'
+g1k_bim = sys.path[0] + '/../../resources/g1000_eur.bim'
+ld = "a"
+
+
+rule all:
+	input:
+		#md_matrix
+		#merged_allele
+		ld
+
+rule clumping:
+	input:
+		f1i
+	output:
+		clumps
+	shell:
+		"plink --bfile {g1k} --clump {f1i} --clump-p1 0.05 --clump-kb 1000 --clump-r2 0.05 --out {f1}"
+
+rule merge:
+	input:
+		f1i, f2i, g1k_bim, clumps
+	output:
+		merged_allele, merged_sumstats
+	shell:
+		"python {sdir}/merge.py {f1i} {f2i} {clumps} {g1k_bim} {merged_s}"
+
+
+rule geno:
+	input:
+		merged_allele
+	output:
+		md_matrix
+	shell:
+		"source /com/extra/gcta/1.26.0/load.sh\n" +
+		"gcta64 --bfile {g1k} --extract {merged_allele} --update-ref-allele {merged_allele} --recode --out {md_s}"
+
+
+rule ld:
+	input:
+		md_matrix, merged_sumstats
+	output:
+		ld
+	shell:
+		"Rscript {sdir}/ld.R {merged_sumstats} {md_matrix}"
+
+
+"""
+
+rule ld:
+	
+rule ld:
+	input:
+		f"{o}.xmat.gz"
+	output:
+		ld
+	shell:
+		"Rscript {pth}/ld.R {o}"
+"""
+
